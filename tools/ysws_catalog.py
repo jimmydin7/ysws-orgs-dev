@@ -13,3 +13,5 @@ def generate_yml(name, description, website, slack, slackChannel, status, deadli
   status: {status}
   deadline: {deadline}
 """
+    
+    return yml_snippet
