@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Login</title>
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="static/css/index.css" />
+</head>
+<body>
+  <div class="container">
+    <div class="content">
+      <p>Welcome back! Please log in with your username and password.</p>
+      {% if error %}
+        <p class="error">{{ error }}</p>
+      {% endif %}
+    </div>
+    <form action="/login" class="form" method="POST">
+      <input type="text" name="username" placeholder="enter your username" class="search-box" required />
+      <input type="password" name="password" placeholder="enter your password" class="search-box" required />
+      <button class="btn" type="submit">Login</button>
+    </form>
+    <div class="links">
+      <a href="/new">New user? Sign up here</a>
+    </div>
+  </div>
+
+  <footer>
+    made with <3 by <a href="https://hackclub.slack.com/team/U07G0C6JZME"><b>jim</b></a>
+  </footer>
+</body>
+</html>

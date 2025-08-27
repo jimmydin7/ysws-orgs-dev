@@ -1,0 +1,294 @@
+body {
+  margin: 0;
+  min-height: 100vh; 
+  display: flex;
+  flex-direction: column; 
+  font-family: 'Fira Code', monospace;
+  background-color: #111;
+  color: #eee;
+}
+
+.container {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+}
+
+.container .search-box {
+  padding: 12px 20px;
+  font-size: 1.1rem;
+  background-color: #222;
+  color: #eee;
+  width: min(100%, 700px); 
+}
+
+footer {
+  text-align: center;
+  padding: 10px 0;
+  font-size: 0.9rem;
+  color: gray;
+}
+footer a {
+  color: gray;
+  text-decoration: none;
+}
+footer a:hover {
+  text-decoration: underline;
+}
+
+.content {
+  margin-bottom: 30px;
+  font-size: 1.2rem;
+  background-color: #000;
+  padding: 30px;
+  border: 1px solid #333;
+  max-width: 800px;
+  width: 100%;
+}
+
+.content h2 {
+  margin-top: 0;
+  color: #4ecdc4;
+  text-align: center;
+}
+
+.content h3 {
+  color: #4ecdc4;
+  margin-bottom: 10px;
+}
+
+.error {
+  color: #ff6b6b;
+  background-color: #2d1b1b;
+  padding: 10px;
+  border: 1px solid #ff6b6b;
+  border-radius: 4px;
+  margin-top: 10px;
+}
+
+.links {
+  margin-top: 20px;
+  text-align: center;
+}
+
+.links a {
+  color: #4ecdc4;
+  text-decoration: none;
+  font-size: 0.9rem;
+}
+
+.links a:hover {
+  text-decoration: underline;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  align-items: center;
+  width: 100%;
+  max-width: 700px;
+}
+
+.search-section {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  width: 100%;
+}
+
+.form-options {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  width: 100%;
+}
+
+.sort-options, .date-range {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.sort-options label, .date-range label {
+  font-weight: bold;
+  color: #4ecdc4;
+  min-width: 80px;
+}
+
+.sort-select {
+  padding: 8px 12px;
+  background-color: #222;
+  color: #eee;
+  border: 1px solid #444;
+  border-radius: 4px;
+  font-family: 'Fira Code', monospace;
+}
+
+.date-input {
+  padding: 8px 12px;
+  background-color: #222;
+  color: #eee;
+  border: 1px solid #444;
+  border-radius: 4px;
+  font-family: 'Fira Code', monospace;
+}
+
+.date-range span {
+  color: #888;
+  font-weight: bold;
+}
+
+.search-box {
+  padding: 12px 20px;
+  font-size: 1.1rem;
+  background-color: #222;
+  border: 1px solid #444;
+  color: #eee;
+  width: 100%;
+}
+
+.search-box:focus {
+  outline: none;
+  border: 1px solid #444;
+}
+
+.admin-input {
+  border: 1px solid red;
+}
+
+.admin-input:focus {
+  border: 1px solid red;
+  outline: none;
+}
+
+.btn {
+  padding: 12px 20px;
+  font-size: 1.1rem;
+  background-color: #fff;
+  color: #000;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  text-decoration: none;
+  display: inline-block;
+  text-align: center;
+}
+
+.btn:hover {
+  background-color: #ddd;
+}
+
+.btn-secondary {
+  background-color: #666;
+  color: #fff;
+}
+
+.btn-secondary:hover {
+  background-color: #555;
+}
+
+.btn-billy {
+  background-color: #4ecdc4;
+  color: #000;
+  font-weight: bold;
+}
+
+.btn-billy:hover {
+  background-color: #3db8b0;
+}
+
+/* Results page styles */
+.sort-info {
+  text-align: center;
+  margin-bottom: 20px;
+  padding: 10px;
+  background-color: #1a1a1a;
+  border-radius: 6px;
+}
+
+.sort-info p {
+  margin: 0;
+  color: #888;
+}
+
+.sort-info strong {
+  color: #4ecdc4;
+}
+
+.user-info {
+  display: flex;
+  gap: 20px;
+  margin-bottom: 30px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.info-box {
+  background-color: #222;
+  padding: 20px;
+  border: 1px solid #444;
+  border-radius: 8px;
+  min-width: 200px;
+  text-align: center;
+}
+
+.info-box h3 {
+  margin-top: 0;
+  color: #4ecdc4;
+}
+
+.info-box p {
+  font-size: 1.1rem;
+  margin: 0;
+  word-break: break-all;
+}
+
+.billy-section {
+  text-align: center;
+  margin: 25px 0;
+}
+
+.projects-section {
+  margin-top: 30px;
+}
+
+.projects-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 20px;
+  margin-top: 20px;
+}
+
+.project-box {
+  background-color: #222;
+  padding: 20px;
+  border: 1px solid #444;
+  border-radius: 8px;
+  text-align: center;
+}
+
+.project-box h4 {
+  margin-top: 0;
+  color: #4ecdc4;
+  word-break: break-word;
+}
+
+.hours {
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: #ffd93d;
+  margin: 0;
+}
+
+.actions {
+  display: flex;
+  gap: 15px;
+  margin-top: 30px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
