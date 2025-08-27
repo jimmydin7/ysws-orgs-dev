@@ -1,6 +1,7 @@
 from flask import Flask, render_template, request, redirect, url_for, session
 from config import SECRET_KEY, KEYS_FILE, USERS_FILE
 from utils import load_json_file, save_json_file, login_required
+from tools.ysws_catalog import generate_yml
 
 app = Flask(__name__)
 app.secret_key = SECRET_KEY
@@ -9,6 +10,31 @@ app.secret_key = SECRET_KEY
 @login_required
 def main():
     return render_template('index.html', username=session['username'])
+
+@app.route("/ysws-catalog", methods=['GET', 'POST'])
+@login_required
+def ysws_catalog():
+    if request.method == 'POST':
+        name = request.form.get('name')
+        description = request.form.get('description')
+        website = request.form.get('website')
+        slack = request.form.get('slack')
+        slack_channel = request.form.get('slack_channel')
+        status = request.form.get('status')
+        deadline = request.form.get('deadline')
+        
+        if all([name, description, website, slack, slack_channel, status, deadline]):
+            yml_code = generate_yml(name, description, website, slack, slack_channel, status, deadline)
+            return render_template('ysws_catalog.html', 
+                                username=session['username'],
+                                yml_code=yml_code,
+                                show_result=True)
+        else:
+            return render_template('ysws_catalog.html', 
+                                username=session['username'],
+                                error="Please fill in all fields")
+    
+    return render_template('ysws_catalog.html', username=session['username'])
 
 @app.route("/new", methods=['POST', 'GET'])
 def new():

@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>YSWS Catalog - {{ username }}</title>
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="static/css/index.css" />
+  <style>
+    .form-container {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+    .form-group {
+      margin-bottom: 20px;
+    }
+    .form-group label {
+      display: block;
+      margin-bottom: 5px;
+      font-weight: bold;
+    }
+    .form-group input, .form-group select, .form-group textarea {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      font-family: 'Fira Code', monospace;
+    }
+    .form-group textarea {
+      height: 100px;
+      resize: vertical;
+    }
+    .btn-primary {
+      background-color: #007bff;
+      color: white;
+      padding: 12px 24px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 16px;
+    }
+    .btn-primary:hover {
+      background-color: #0056b3;
+    }
+    .result-section {
+      margin-top: 30px;
+      padding: 20px;
+      background-color: #f8f9fa;
+      border-radius: 8px;
+      border: 1px solid #dee2e6;
+    }
+    .yml-code {
+      background-color: #2d3748;
+      color: #e2e8f0;
+      padding: 20px;
+      border-radius: 8px;
+      font-family: 'Fira Code', monospace;
+      white-space: pre-wrap;
+      overflow-x: auto;
+    }
+    .instructions {
+      margin-top: 20px;
+      padding: 15px;
+      background-color: #e7f3ff;
+      border-left: 4px solid #007bff;
+      border-radius: 4px;
+    }
+    .error {
+      color: #dc3545;
+      background-color: #f8d7da;
+      padding: 10px;
+      border-radius: 4px;
+      margin-bottom: 20px;
+    }
+    .nav-links {
+      margin-bottom: 30px;
+    }
+    .nav-links a {
+      margin-right: 15px;
+      color: #007bff;
+      text-decoration: none;
+    }
+    .nav-links a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+  <div class="form-container">
+    <div class="nav-links">
+      <a href="/">← Back to Home</a>
+      <a href="/logout">Logout</a>
+    </div>
+
+    <h1>YSWS Catalog YML Generator</h1>
+    <p>Generate YML, merge it, and see your project on ysws.hackclub.com!<p>
+
+    {% if error %}
+      <div class="error">{{ error }}</div>
+    {% endif %}
+
+    {% if not show_result %}
+      <form method="POST" action="/ysws-catalog">
+        <div class="form-group">
+          <label for="name">YSWS Name *</label>
+          <input type="text" id="name" name="name" required placeholder="Authly">
+        </div>
+
+        <div class="form-group">
+          <label for="description">Description *</label>
+          <textarea id="description" name="description" required placeholder="Build the weirdest and never-before-seen authentication system, get yubikeys, programmable nfc tags, antivirus giftcards and more!"></textarea>
+        </div>
+
+        <div class="form-group">
+          <label for="website">Website *</label>
+          <input type="url" id="website" name="website" required placeholder="https://authly.hackclub.com">
+        </div>
+
+        <div class="form-group">
+          <label for="slack">Slack Channel Link *</label>
+          <input type="text" id="slack" name="slack" required placeholder="https://hackclub.slack.com/archives/C0963JU3CSD">
+        </div>
+
+        <div class="form-group">
+          <label for="slack_channel">Slack Channel Name *</label>
+          <input type="text" id="slack_channel" name="slack_channel" required placeholder="#authly">
+        </div>
+
+        <div class="form-group">
+          <label for="status">Status *</label>
+          <select id="status" name="status" required>
+            <option value="">Select status...</option>
+            <option value="active">active</option>
+            <option value="draft">draft</option>
+            <option value="ended">ended</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="deadline">Deadline *</label>
+          <input type="date" id="deadline" name="deadline" required>
+        </div>
+
+        <button type="submit" class="btn-primary">Generate YAML Code</button>
+      </form>
+    {% else %}
+      <div class="result-section">
+        <h2 style="color: #000000;">Generated YAML Code</h2>
+        <p style="color: #000000;">Copy the code below and add it to the YSWS catalog:</p>
+        
+        <div class="yml-code">{{ yml_code }}</div>
+        
+        <div class="instructions">
+          <h3 style="color: #000000;">Next Steps:</h3>
+          <ol style="color: #000000;">
+            <li><strong>Copy the YAML code above</strong></li>
+            <li><strong>Go to the YSWS Catalog repository:</strong> <a href="https://github.com/hackclub/YSWS-Catalog" target="_blank">https://github.com/hackclub/YSWS-Catalog</a></li>
+            <li><strong>Edit the data.yml file</strong> and paste your code</li>
+            <li><strong>Create a pull request</strong> to merge your changes</li>
+            <li><strong>Wait for review and approval</strong> from the maintainers (beg rushil)</li>
+          </ol>
+          
+        </div>
+        
+      </div>
+    {% endif %}
+  </div>
+</body>
+</html>
