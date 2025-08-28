@@ -1,4 +1,5 @@
 from flask import Flask, render_template, request, redirect, url_for, session
+import requests
 from config import SECRET_KEY, KEYS_FILE, USERS_FILE
 from utils import load_json_file, save_json_file, login_required
 from tools.ysws_catalog import generate_yml
@@ -42,6 +43,34 @@ def ysws_catalog():
                                 error="Please fill in all fields")
     
     return render_template('ysws_catalog.html', username=session['username'])
+
+@app.route("/hour_finder", methods=['GET', 'POST'])
+@login_required
+def find_hackatime():
+    hackatime_data = None
+    if request.method == 'POST':
+        user_id = request.form.get('id')
+        projectname = request.form.get('projectname')
+
+        if not user_id:
+            return render_template('hour_finder.html', 
+                                   username=session['username'],
+                                   error="Please fill in the user ID")
+
+        url = f"https://hackatime.hackclub.com/api/v1/users/{user_id}/stats?features=projects"
+        if projectname:
+            url += f"&filter_by_project={projectname}"
+
+        response = requests.get(url)
+        if response.status_code == 200:
+            hackatime_data = response.json()
+        else:
+            hackatime_data = {"error": f"HTTP {response.status_code}"}
+
+    return render_template('hour_finder.html', 
+                           username=session['username'],
+                           hackatime_data=hackatime_data,
+                           show_result=hackatime_data is not None)
 
 @app.route("/new", methods=['POST', 'GET'])
 def new():
