@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>YSWS Catalog - {{ username }}</title>
+  <title>YSWS Catalog - YSWS Organizer Panel</title>
   <link href="https://fonts.googleapis.com/css2?family=Fira+Code&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="static/css/index.css" />
   <link rel="stylesheet" href="static\css\catalog.css">
@@ -61,7 +61,7 @@
 
         <div class="form-group">
           <label for="deadline">Deadline *</label>
-          <input type="date" id="deadline" name="deadline" required>
+          <input type="datetime-local" id="deadline" name="deadline" required>
         </div>
 
         <button type="submit" class="btn-primary">Generate YAML Code</button>
