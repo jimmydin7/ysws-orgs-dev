@@ -2,6 +2,7 @@ from flask import Flask, render_template, request, redirect, url_for, session
 from config import SECRET_KEY, KEYS_FILE, USERS_FILE
 from utils import load_json_file, save_json_file, login_required
 from tools.ysws_catalog import generate_yml
+from datetime import datetime
 
 app = Flask(__name__)
 app.secret_key = SECRET_KEY
@@ -22,9 +23,15 @@ def ysws_catalog():
         slack_channel = request.form.get('slack_channel')
         status = request.form.get('status')
         deadline = request.form.get('deadline')
-        
+
+        # Switch it to right format your the .yml thingy
+        dt = datetime.fromisoformat(deadline)
+        dt = dt.replace(second=59)
+        deadline = dt.isoformat()
+
         if all([name, description, website, slack, slack_channel, status, deadline]):
-            yml_code = generate_yml(name, description, website, slack, slack_channel, status, deadline)
+            yml_code = generate_yml(name, description, website, slack, slack_channel, status, dt.isoformat())
+            print(yml_code)
             return render_template('ysws_catalog.html', 
                                 username=session['username'],
                                 yml_code=yml_code,
