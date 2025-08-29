@@ -48,6 +48,7 @@ def ysws_catalog():
 @login_required
 def find_hackatime():
     hackatime_data = None
+    trust_value = None
     if request.method == 'POST':
         user_id = request.form.get('id')
         projectname = request.form.get('projectname')
@@ -64,18 +65,58 @@ def find_hackatime():
         response = requests.get(url)
         if response.status_code == 200:
             hackatime_data = response.json()
+            trust_value_int = hackatime_data.get('trust_factor', {}).get('trust_value', 0)
+            trust_value = True if trust_value_int == 1 else False
         else:
             hackatime_data = {"error": f"HTTP {response.status_code}"}
 
     return render_template('hour_finder.html', 
                            username=session['username'],
                            hackatime_data=hackatime_data,
+                           trust_value=trust_value,
+                           show_result=hackatime_data is not None)
+
+@app.route("/fraud_checker", methods=['GET', 'POST'])
+@login_required
+def fraud_checker():
+    hackatime_data = None
+    trust_value = None
+    if request.method == 'POST':
+        user_id = request.form.get('id')
+
+        if not user_id:
+            return render_template('fraud_checker.html', 
+                                   username=session['username'],
+                                   error="Please fill in the user ID")
+
+        url = f"https://hackatime.hackclub.com/api/v1/users/{user_id}/stats"
+
+        response = requests.get(url)
+        if response.status_code == 200:
+            hackatime_data = response.json()
+            trust_value_int = hackatime_data.get('trust_factor', {}).get('trust_value', 0)
+            if trust_value_int == 1:
+                trust_value = True
+            else:
+                trust_value = False
+            print(trust_value)
+            if trust_value_int == None:
+                trust_value_int = "Failure To get"
+        else:
+            hackatime_data = {"error": f"HTTP {response.status_code}"}
+    print(trust_value if trust_value is not None else "No trust value found")
+    return render_template('fraud_checker.html', 
+                           username=session['username'],
+                           hackatime_data=hackatime_data,
+                           trust_value=trust_value,
                            show_result=hackatime_data is not None)
 
 @app.route("/new", methods=['POST', 'GET'])
 def new():
     if request.method == 'POST':
         username = request.form.get('username')
+        name = username
+        username = username.lower()
         admin_key = request.form.get('admin_key')
         
         if username and admin_key:
@@ -93,7 +134,7 @@ def new():
                 users.append(user_data)
                 save_json_file(USERS_FILE, users)
                 
-                session['username'] = username
+                session['username'] = name
                 return redirect(url_for('main'))
             else:
                 return render_template('new.html', error="Invalid admin key!")
@@ -104,9 +145,11 @@ def new():
 def login():
     if request.method == 'POST':
         username = request.form.get('username')
+        name = username
+        username = username.lower()
         password = request.form.get('password')
         
-        print(f"Login attempt - Username: {username}, Password: {password}")
+        print(f"Login attempt - Username: {name}, Password: {password}")
         
         if username and password:
             users = load_json_file(USERS_FILE)
@@ -116,7 +159,7 @@ def login():
             print(f"User exists: {user_exists}")
             
             if user_exists:
-                session['username'] = username
+                session['username'] = name
                 print(f"Session set: {session}")
                 return redirect(url_for('main'))
             else:
@@ -132,7 +175,7 @@ def debug():
 @app.route("/logout")
 def logout():
     session.pop('username', None)
-    return redirect(url_for('new'))
+    return redirect(url_for('login'))
 
 if __name__ == "__main__":
     app.run(debug=True)
