@@ -388,7 +388,10 @@ def debug():
 def logout():
     session.pop('username', None)
     return redirect(url_for('login'))
-
+@app.route("/terminology")
+@login_required 
+def terminology():
+    return render_template('terminology.html', username=session['username'])
 
 
 @app.route("/airtable-automation-hackatime")
@@ -398,3 +401,4 @@ def automation_hackatime():
 if __name__ == "__main__":
     
     app.run(debug=True, port=44195)
+
