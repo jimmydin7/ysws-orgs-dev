@@ -1,7 +1,7 @@
 import requests
 
 def get_commit_count(github_url):
-    # Extract owner and repo from URL
+
     try:
         parts = github_url.rstrip("/").split("/")
         owner = parts[-2]
@@ -9,25 +9,21 @@ def get_commit_count(github_url):
     except IndexError:
         return "Invalid GitHub URL"
 
-    # GitHub API endpoint for commits
+
     api_url = f"https://api.github.com/repos/{owner}/{repo}/commits?per_page=1"
     
-    # Get response headers only (for total count)
+ 
     response = requests.get(api_url)
     if response.status_code != 200:
         return f"Error: {response.status_code}"
 
-    # GitHub provides total count in the Link header if there are multiple pages
     if 'Link' in response.headers:
         link = response.headers['Link']
-        # Extract last page number
         import re
         match = re.search(r'&page=(\d+)>; rel="last"', link)
         if match:
             return int(match.group(1))
-    # If no pagination, just count the returned commits
+
     return len(response.json())
 
-# Example usage
-url = input("Enter GitHub repo URL: ")
-print("Total commits:", get_commit_count(url))
+

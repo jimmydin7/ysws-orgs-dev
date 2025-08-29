@@ -3,6 +3,7 @@ import requests
 from config import SECRET_KEY, KEYS_FILE, USERS_FILE
 from utils import load_json_file, save_json_file, login_required
 from tools.ysws_catalog import generate_yml
+from tools.commits import get_commit_count
 from datetime import datetime
 
 app = Flask(__name__)
@@ -27,7 +28,6 @@ def ysws_catalog():
         status = request.form.get('status')
         deadline = request.form.get('deadline')
 
-        # Switch it to right format your the .yml thingy
         dt = datetime.fromisoformat(deadline)
         dt = dt.replace(second=59)
         deadline = dt.isoformat()
@@ -45,6 +45,20 @@ def ysws_catalog():
                                 error="Please fill in all fields")
     
     return render_template('ysws_catalog.html', username=session['username'])
+
+@app.route("/github-commits", methods=['GET', 'POST'])
+@login_required
+def github_commits():
+    commit_count = None
+    if request.method == 'POST':
+        github_url = request.form.get('github_url')
+        if github_url:
+            commit_count = get_commit_count(github_url)
+    
+    return render_template('github_commits.html', 
+                          username=session['username'],
+                          commit_count=commit_count,
+                          show_result=commit_count is not None)
 
 @app.route("/hour_finder", methods=['GET', 'POST'])
 @login_required
