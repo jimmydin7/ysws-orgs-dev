@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>README AI Check - YSWS Organizer Panel</title>
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="static/css/index.css">
+  <link rel="stylesheet" href="static/css/catalog.css">
+  <style>
+    .ai-score {
+      font-size: 2rem;
+      font-weight: bold;
+      text-align: center;
+      padding: 15px;
+      border-radius: 8px;
+      margin: 15px 0;
+    }
+    .score-20 { background-color: #4ade80; color: white; }
+    .score-30 { background-color: #22c55e; color: white; }
+    .score-35 { background-color: #16a34a; color: white; }
+    .score-40 { background-color: #fbbf24; color: black; }
+    .score-50 { background-color: #f59e0b; color: black; }
+    .score-60 { background-color: #ea580c; color: white; }
+    .score-70 { background-color: #dc2626; color: white; }
+    .score-80 { background-color: #b91c1c; color: white; }
+    .score-90 { background-color: #991b1b; color: white; }
+    .score-100 { background-color: #7f1d1d; color: white; }
+    .content-preview {
+      background-color: #f8f9fa;
+      padding: 15px;
+      border-radius: 6px;
+      border: 1px solid #dee2e6;
+      margin: 15px 0;
+      font-family: 'Fira Code', monospace;
+      white-space: pre-wrap;
+      max-height: 200px;
+      overflow-y: auto;
+      font-size: 0.9rem;
+    }
+    .probability-info {
+      text-align: center;
+      margin: 10px 0;
+      color: #666;
+      font-size: 0.9rem;
+    }
+  </style>
+</head>
+<body>
+  <div class="form-container">
+    <div class="nav-links">
+      <a href="/">← Back to Home</a>
+      <a href="/logout">Logout</a>
+    </div>
+
+    <h1>README AI Check Tool</h1>
+    <p>Analyze GitHub repository README files for AI-generated content</p>
+
+    <form method="POST" action="/readme-ai-check">
+      <div class="form-group">
+        <label for="github_url">GitHub Repository URL *</label>
+        <input type="url" id="github_url" name="github_url" required placeholder="https://github.com/username/repository">
+      </div>
+
+      <button type="submit" class="btn-primary">Check README</button>
+    </form>
+
+    {% if show_result %}
+      <div class="result-section">
+        <h2>AI Analysis Result</h2>
+        
+        {% if ai_result.error %}
+          <div class="error">{{ ai_result.error }}</div>
+        {% else %}
+          {% set score = ai_result.score %}
+          {% if score <= 20 %}
+            {% set score_class = 'score-20' %}
+          {% elif score <= 30 %}
+            {% set score_class = 'score-30' %}
+          {% elif score <= 35 %}
+            {% set score_class = 'score-35' %}
+          {% elif score <= 40 %}
+            {% set score_class = 'score-40' %}
+          {% elif score <= 50 %}
+            {% set score_class = 'score-50' %}
+          {% elif score <= 60 %}
+            {% set score_class = 'score-60' %}
+          {% elif score <= 70 %}
+            {% set score_class = 'score-70' %}
+          {% elif score <= 80 %}
+            {% set score_class = 'score-80' %}
+          {% elif score <= 90 %}
+            {% set score_class = 'score-90' %}
+          {% else %}
+            {% set score_class = 'score-100' %}
+          {% endif %}
+          
+          <div class="ai-score {{ score_class }}">
+            {{ score }}% AI Generated
+          </div>
+          
+          <div class="probability-info">
+            Raw AI probability: {{ ai_result.probability }}
+          </div>
+          
+        {% endif %}
+        
+        <div style="margin-top: 15px;">
+          <a href="/readme-ai-check" class="btn-primary">Check Another README</a>
+        </div>
+      </div>
+    {% endif %}
+  </div>
+</body>
+</html>

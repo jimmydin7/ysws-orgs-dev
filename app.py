@@ -4,6 +4,7 @@ from config import SECRET_KEY, KEYS_FILE, USERS_FILE
 from utils import load_json_file, save_json_file, login_required
 from tools.ysws_catalog import generate_yml
 from tools.commits import get_commit_count
+from tools.aicheck import get_readme_from_github, detect_ai_probability
 from datetime import datetime
 
 app = Flask(__name__)
@@ -59,6 +60,50 @@ def github_commits():
                           username=session['username'],
                           commit_count=commit_count,
                           show_result=commit_count is not None)
+
+@app.route("/readme-ai-check", methods=['GET', 'POST'])
+@login_required
+def readme_ai_check():
+    ai_result = None
+    if request.method == 'POST':
+        github_url = request.form.get('github_url')
+        if github_url:
+            try:
+                readme_content = get_readme_from_github(github_url)
+                
+                if readme_content:
+                    ai_probability = detect_ai_probability(readme_content)
+                    
+                    try:
+                        if '<think>' in ai_probability and '</think>' in ai_probability:
+                            parts = ai_probability.split('</think>')
+                            if len(parts) > 1:
+                                probability_str = parts[1].strip()
+                                probability_float = float(probability_str)
+                            else:
+                                probability_float = 0.0
+                        else:
+                            probability_float = float(ai_probability)
+                        
+                        percentage = int(probability_float * 100)
+                    except:
+                        percentage = 0
+                    
+                    ai_result = {
+                        'score': percentage,
+                        'probability': ai_probability,
+                        'content': readme_content[:300] + "..." if len(readme_content) > 300 else readme_content
+                    }
+                else:
+                    ai_result = {'error': 'Could not fetch README from this repository'}
+                    
+            except Exception as e:
+                ai_result = {'error': f'Error: {str(e)}'}
+    
+    return render_template('readme_ai_check.html', 
+                          username=session['username'],
+                          ai_result=ai_result,
+                          show_result=ai_result is not None)
 
 @app.route("/commits-hours-ratio", methods=['GET', 'POST'])
 @login_required
@@ -165,7 +210,7 @@ def fraud_checker():
                                    username=session['username'],
                                    error="Please fill in the user ID")
 
-        url = f"https://hackatime.hackclub.com/api/v1/users/{slack_id}/stats"
+        url = f"https://hackatime.hackclub.com/api/v1/users/{user_id}/stats"
 
         response = requests.get(url)
         if response.status_code == 200:
