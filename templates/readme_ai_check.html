@@ -67,7 +67,7 @@
 
     {% if show_result %}
       <div class="result-section">
-        <h2>AI Analysis Result</h2>
+        <h2 style="color: black;">AI Analysis Result</h2>
         
         {% if ai_result.error %}
           <div class="error">{{ ai_result.error }}</div>
@@ -97,11 +97,11 @@
           
           <div class="ai-score {{ score_class }}">
             {{ score }}% AI Generated
-          </div>
+          </div><br>
           
-          <div class="probability-info">
+          <!-- <div class="probability-info">
             Raw AI probability: {{ ai_result.probability }}
-          </div>
+          </div> -->
           
         {% endif %}
         
