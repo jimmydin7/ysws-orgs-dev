@@ -144,13 +144,13 @@
   }
 
   th, td {
-    border: 1px solid #000; 
+    border: 1px solid #4ecdc4; 
     padding: 8px 12px;
     text-align: left;
   }
 
   th {
-    background-color: #f2f2f2;
+    background-color: #4ecdc4;
   }
 
   td, th {
