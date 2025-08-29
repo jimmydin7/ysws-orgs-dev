@@ -35,6 +35,7 @@
         <div class="result-section">
             <h2 style="color: #000000;">User: {{ hackatime_data.data.username }}</h2>
             <h3 style="color: #000000;">Banned: {{ "Yes" if hackatime_data.trust_factor.trust_value == 1 else "No" }}</h3>
+            <h5 style="color: #686868;">Think someone did fraud? Report them <a href="https://hackclub.slack.com/archives/D09CKJZS1U1">here</a>.</h5>
         </div>
         {% endif %}
     </div>
