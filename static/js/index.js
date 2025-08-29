@@ -11,3 +11,13 @@ function filterTools() {
         }
       });
     }
+
+    document.querySelectorAll('.tool-card').forEach(card => {
+  card.style.cursor = 'pointer'; 
+  card.addEventListener('click', () => {
+    const url = card.dataset.url;
+    if (url) {
+      window.location.href = url;
+    }
+  });
+});
