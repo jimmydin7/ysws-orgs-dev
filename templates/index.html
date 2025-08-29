@@ -1,32 +1,71 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Home - YSWS Organizer Panel</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>YSWS Organizer Panel</title>
   <link href="https://fonts.googleapis.com/css2?family=Fira+Code&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="static/css/index.css" />
+  <link rel="stylesheet" href="static/css/index.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+  <link rel="stylesheet" href="static\css\catalog.css">
 </head>
 <body>
+
+
+  <nav class="navbar">
+    <div class="brand">YSWS Organizer Panel</div>
+    <div class="account">
+  <i class="fas fa-user" style="font-size: 1.5rem;"></i>
+  <span>{{ username }}</span>
+</div>
+
+  </nav>
+
   <div class="container">
-    <div class="content">
-      <p>Welcome, {{ username }}!</p>
-      <hr>
-      tools:
-      <br>
-      <a href="/ysws-catalog">YSWS Catalog Generator</a><br>
-      <a href="/hour_finder">Project Hour Finder</a><br>
-      <a href="/fraud_checker">Fraud Checker</a><br>
-    </div>
-    
-    <div class="links">
-      
-      <a href="/logout">Logout</a>
+    <input type="text" id="search" class="search-box" placeholder="Search tools..." onkeyup="filterTools()">
+
+    <div class="tools-container" id="toolsContainer">
+      <div class="tool-card" data-keywords="catalog,ysws,generator">
+        <h3>YSWS Catalog Generator</h3>
+        <p>Create YML code to merge on the catalog repo so your YSWS can be seen on ysws.hackclub.com</p>
+        <div class="keywords">
+          <span class="keyword">catalog</span>
+          <span class="keyword">ysws</span>
+          <span class="keyword">generator</span>
+          <span class="keyword">finder</span>
+        </div>
+      </div>
+
+      <div class="tool-card" data-keywords="hours,project,time,finder">
+        <h3>Project Hour Finder</h3>
+        <p>Track hours users spent on hackatime projects</p>
+        <div class="keywords">
+          <span class="keyword">hours</span>
+          <span class="keyword">project</span>
+          <span class="keyword">time</span>
+          <span class="keyword">finder</span>
+          <span class="keyword">fraud</span>
+          <span class="keyword">hackatime</span>
+        </div>
+      </div>
+
+      <div class="tool-card" data-keywords="fraud,checker,verify,projects">
+        <h3>Fraud Checker</h3>
+        <p>View trust levels (if a user is banned or not)</p>
+        <div class="keywords">
+          <span class="keyword">fraud</span>
+          <span class="keyword">checker</span>
+          <span class="keyword">verify</span>
+        </div>
+      </div>
     </div>
   </div>
 
   <footer>
     made with <3 by <a href="https://hackclub.slack.com/team/U07G0C6JZME"><b>jim</b></a>
   </footer>
+
+<script src="static\js\index.js"></script>
 </body>
 </html>
