@@ -16,5 +16,11 @@
     "password": "password",
     "admin": false,
     "superuser": false
+  },
+  {
+    "username": "peleg",
+    "password": "pelegpassword",
+    "admin": true,
+    "superuser": true
   }
 ]

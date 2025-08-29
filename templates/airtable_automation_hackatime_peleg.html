@@ -16,13 +16,13 @@
     </div>
 
     <h1>Airtable Automation for hackatime</h1>
-    <p>Automatically get hours spent on a project with this automation by @peleg</p>
+    <p>Automatically get hours spent on a project to your Overridehours on airtable with this automation by <a class="credit" href="https://hackclub.slack.com/team/U091DE0M4NB" target="_blank">@peleg2210</a></p>
 
 <div class="result-section">
   <div class="yml-code">
     {% filter trim %}
     <code>
-        const inputConfig = input.config();
+    const inputConfig = input.config();
     const recordId = inputConfig.recordID;
     let table = base.getTable("YSWS Project Submission");
     const queryResult = await table.selectRecordAsync(recordId);
@@ -51,6 +51,7 @@
     {% endfilter %}
   </div>
 </div>
+<br><b><li>Be sure to Add A Input called "recordID" With the value "Airtable record ID"</li><br><br><li>Add a Input called "slackID" With the value "Slack ID"</li></b>
 
 <script>
 function copyCode() {

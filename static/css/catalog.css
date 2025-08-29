@@ -72,6 +72,9 @@
   color: #4ecdc4;
   text-decoration: none;
 }
+.credit {
+  color: #4ecdc4;
+}
 .nav-links a:hover {
   text-decoration: underline;
 }
