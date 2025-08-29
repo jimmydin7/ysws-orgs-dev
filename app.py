@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for, session
+from flask import Flask, render_template, request, redirect, url_for, session, flash
 import requests
 from config import SECRET_KEY, KEYS_FILE, USERS_FILE
 from utils import load_json_file, save_json_file, login_required
@@ -15,7 +15,9 @@ NEST_PORT = 44195
 @app.route("/", methods=['GET', 'POST'])
 @login_required
 def main():
-    return render_template('index.html', username=session['username'])
+    print(session['is_admin'])
+    error = None
+    return render_template('index.html', username=session['username'], is_admin=session.get('is_admin', False), error=error)
 
 @app.route("/ysws-catalog", methods=['GET', 'POST'])
 @login_required
@@ -244,8 +246,9 @@ def new():
             available_keys = load_json_file(KEYS_FILE)
             users = load_json_file(USERS_FILE)
 
-            if username.lower() not in users:
+            if any(u["username"] == username for u in users):
                 return render_template('new.html', error="User already exists!")
+
 
             if admin_key in available_keys:
                 available_keys.remove(admin_key)
@@ -270,27 +273,98 @@ def new():
 def login():
     if request.method == 'POST':
         username = request.form.get('username')
-        name = username
+        raw_name = username
         username = username.lower()
         password = request.form.get('password')
         
-        print(f"Login attempt - Username: {name}, Password: {password}")
+        print(f"Login attempt - Username: {raw_name}, Password: {password}")
         
         if username and password:
             users = load_json_file(USERS_FILE)
             print(f"Loaded users: {users}")
             
-            user_exists = any(user['username'] == username and user['password'] == password for user in users)
-            print(f"User exists: {user_exists}")
+            user = next((u for u in users if u['username'] == username and u['password'] == password), None)
             
-            if user_exists:
-                session['username'] = name
+            if user:
+                session['username'] = raw_name
+                session['is_admin'] = user.get('admin', False)
+                session['is_superuser'] = user.get('superuser', False)
                 print(f"Session set: {session}")
                 return redirect(url_for('main'))
             else:
                 return render_template('login.html', error="Invalid username or password!")
     
     return render_template('login.html')
+
+@app.route("/admin", methods=['POST', 'GET'])
+@login_required
+def admin():
+    name = session['username']
+    users = load_json_file(USERS_FILE)
+    is_admin = session.get('is_admin', False)
+
+
+    if not is_admin:
+        flash("You must be an admin to access this page!", "error")
+        return redirect(url_for('main'))
+
+# POST
+
+    if request.method == 'POST':
+        action = request.form.get('action')
+        username = request.form.get('username')
+
+        if action == "remove":
+            users = load_json_file(USERS_FILE)
+            new_users = [u for u in users if u["username"] != username]
+            if len(new_users) < len(users):
+                save_json_file(USERS_FILE, new_users)
+                flash(f"User {username} removed.", "success")
+            else:
+                flash(f"User {username} not found!", "error")
+            return redirect(url_for('admin'))
+
+        if action == "update":
+            username = request.form.get('username')
+
+            password = request.form.get('password')
+            is_admin = True if request.form.get('is_admin') == "true" else False
+            for user in users:
+                if user["username"] == username:
+                    user["password"] = password
+                    user["admin"] = is_admin
+                    user["superuser"] = user.get("superuser", False)
+                    break
+            save_json_file(USERS_FILE, users)
+        
+        return redirect(url_for('admin'))
+
+#GET
+
+    is_superuser = session.get('is_superuser', False)
+    return render_template('admin.html',
+                           username=name,
+                           users=users,
+                           is_admin=is_admin,
+                           is_superuser=is_superuser)
+
+
+@app.route("/admin/remove", methods=["POST"])
+@login_required
+def remove_user():
+    print("Running remove_user")
+    users = load_json_file(USERS_FILE)
+    username = request.form.get("username")
+
+    new_users = [user for user in users if user["username"] != username]
+
+    if len(new_users) < len(users):
+        save_json_file(USERS_FILE, new_users)
+        flash(f"User {username} removed.", "success")
+    else:
+        flash(f"User {username} not found!", "error")
+
+    return redirect(url_for("admin"))
 
 @app.route("/debug")
 def debug():

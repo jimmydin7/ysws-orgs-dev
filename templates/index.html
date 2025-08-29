@@ -10,16 +10,31 @@
 
   <link rel="stylesheet" href="static\css\catalog.css">
 </head>
+<script>
+  setTimeout(() => {
+    document.querySelectorAll('.flash').forEach(el => {
+      el.style.transition = "opacity 0.3s ease";
+      el.style.opacity = "0";
+      setTimeout(() => el.remove(), 300); 
+    });
+  }, 3000);
+</script>
 <body>
-
-
   <nav class="navbar">
     <div class="brand">YSWS Organizer Panel</div>
     <div class="account">
   <i class="fas fa-user" style="font-size: 1.5rem;"></i>
   <span>{{ username }}</span>
 </div>
-
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        <div class="flash-messages">
+          {% for category, message in messages %}
+            <div class="flash {{ category }}">{{ message }}</div>
+          {% endfor %}
+        </div>
+      {% endif %}
+    {% endwith %}
   </nav>
 
   <div class="container">
@@ -94,6 +109,17 @@
   </div>
 </div>
 
+{% if is_admin %}
+<div class="tool-card" data-url="/admin" data-keywords="admin,hidden,management">
+  <h3>Admin Panel</h3>
+  <p>Access the admin panel for advanced user management</p>
+  <div class="keywords">
+    <span class="keyword">admin</span>
+    <span class="keyword">user</span>
+    <span class="keyword">management</span>
+  </div>
+</div>
+{% endif %}
 
 </div>
 
