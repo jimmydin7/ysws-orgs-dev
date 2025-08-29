@@ -302,5 +302,12 @@ def logout():
     session.pop('username', None)
     return redirect(url_for('login'))
 
+
+
+@app.route("/airtable-automation-hackatime")
+@login_required
+def automation_hackatime():
+    return render_template('airtable_automation_hackatime_peleg.html', username=session['username'])
 if __name__ == "__main__":
+    
     app.run(debug=True, port=44195)
