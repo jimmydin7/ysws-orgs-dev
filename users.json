@@ -1,10 +1,20 @@
 [
   {
     "username": "jim",
-    "password": "jimlikessurfing"
+    "password": "jimlikessurfing",
+    "admin": true,
+    "superuser": true
   },
   {
     "username": "superninjacat5",
-    "password": "meow123"
+    "password": "meow123",
+    "admin": true,
+    "superuser": true
+  },
+  {
+    "username": "nico",
+    "password": "123456789",
+    "admin": false,
+    "superuser": false
   }
 ]

@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>YSWS Project Finder</title>
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="static/css/index.css" />
+  <link rel="stylesheet" href="static\css\catalog.css">
+</head>
+{% if is_admin %}
+<body>
+  <div class="form-container">
+    <div class="nav-links">
+      <a href="/">← Back to Home</a>
+      <a href="/logout">Logout</a>
+    </div>
+
+    <h1>YSWS Admin Panel Users</h1>
+    <p>Check, change, and view users admin keys. This is the users page. More options may be added.</p>
+
+    {% if error %}
+      <div class="error">{{ error }}</div>
+    {% else %}
+        <div class="result-section">
+            <h2 style="color: #000000;">User: {{ username }}</h2>  
+        <table>
+          <tr>
+            <th style="color: #000000;">User</th>
+            <th style="color: #000000;">Login Key</th>
+            <th style="color: #000000;">Actions</th>
+          </tr>
+          {% for user in users %}
+            <tr>
+              <td style="color: #000000;">
+                <form method="POST" action="/admin" style="display:inline;">
+                  <input type="hidden" name="username" value="{{ user.username }}">
+                  {{ user.username }}
+              </td>
+              <td>
+                  <input type="text" name="password" value="{{ user.password }}">
+                  {% if is_superuser %}
+                  <input type="checkbox" name="is_admin" value="true" {% if user.admin %}checked{% endif %}>
+                  {% endif %}
+              </td>
+              <td>
+                  <button type="submit" name="action" value="update">Update</button>
+                  <button type="submit" name="action" value="remove">Remove</button>
+                </form>
+              </td>
+            </tr>
+            {% endfor %}
+        </table>
+        </div>
+        {% endif %}
+    </div>
+</body>
+</html>
+{% else %}
+<body>
+  <h1>Access Denied</h1>
+  <p>You do not have permission to view this page.</p>
+</body>
+{% endif %}

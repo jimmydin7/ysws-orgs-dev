@@ -292,3 +292,13 @@ footer a:hover {
   flex-wrap: wrap;
   justify-content: center;
 }
+
+.error {
+  background-color: #ffdddd;
+  color: #a94442;
+  border: 1px solid #f5c6cb;
+  padding: 12px 16px;
+  margin: 12px 0;
+  border-radius: 6px;
+  font-weight: bold;
+}

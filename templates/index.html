@@ -7,9 +7,28 @@
   <link href="https://fonts.googleapis.com/css2?family=Fira+Code&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="static/css/index.css" />
 </head>
+<script>
+  setTimeout(() => {
+    document.querySelectorAll('.flash').forEach(el => {
+      el.style.transition = "opacity 0.3s ease";
+      el.style.opacity = "0";
+      setTimeout(() => el.remove(), 300); 
+    });
+  }, 3000);
+</script>
 <body>
   <div class="container">
     <div class="content">
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        <div class="flash-messages">
+          {% for category, message in messages %}
+            <div class="flash {{ category }}">{{ message }}</div>
+          {% endfor %}
+        </div>
+      {% endif %}
+    {% endwith %}
+      <h1>YSWS Organizer Panel</h1>
       <p>Welcome, {{ username }}!</p>
       <hr>
       tools:
@@ -18,6 +37,9 @@
         <a href="/ysws-catalog">YSWS Catalog Generator</a><br>
         <a href="/hour_finder">Project Hour Finder</a><br>
         <a href="/fraud_checker">Fraud Checker</a><br>
+        {% if is_admin %}
+        <a href="/admin">Admin</a><br>
+        {% endif %}
       </div>
     </div>
     
