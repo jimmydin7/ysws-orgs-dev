@@ -121,14 +121,18 @@ def new():
         
         if username and admin_key:
             available_keys = load_json_file(KEYS_FILE)
-            
+            users = load_json_file(USERS_FILE)
+
+            if username.lower() not in users:
+                return render_template('new.html', error="User already exists!")
+
             if admin_key in available_keys:
                 available_keys.remove(admin_key)
                 save_json_file(KEYS_FILE, available_keys)
                 
                 users = load_json_file(USERS_FILE)
                 user_data = {
-                    'username': username,
+                    'username': username.lower(),
                     'password': admin_key
                 }
                 users.append(user_data)
