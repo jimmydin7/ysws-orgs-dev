@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Commits/Hours Ratio - YSWS Organizer Panel</title>
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="static/css/index.css">
+  <link rel="stylesheet" href="static/css/catalog.css">
+</head>
+<body>
+  <div class="form-container">
+    <div class="nav-links">
+      <a href="/">← Back to Home</a>
+      <a href="/logout">Logout</a>
+    </div>
+
+    <h1>Commits / Hours Ratio Calculator</h1>
+    <p>Calculate the ratio between GitHub commits and HackaTime hours for a specific project</p>
+
+    <form method="POST" action="/commits-hours-ratio">
+      <div class="form-group">
+        <label for="slack_id">Slack ID *</label>
+        <input type="text" id="slack_id" name="slack_id" required placeholder="U091HKKKJRH">
+      </div>
+
+      <div class="form-group">
+        <label for="project_name">HackaTime Project Name *</label>
+        <input type="text" id="project_name" name="project_name" required placeholder="my-awesome-project">
+      </div>
+
+      <div class="form-group">
+        <label for="github_url">GitHub Repository URL *</label>
+        <input type="url" id="github_url" name="github_url" required placeholder="https://github.com/username/repository">
+      </div>
+
+      <button type="submit" class="btn-primary">Calculate Ratio</button>
+    </form>
+
+    {% if show_result %}
+      <div class="result-section">
+        <h2 style="color: black;">Ratio Calculation Result</h2>
+        
+        {% if ratio_data.error %}
+          <div class="error">{{ ratio_data.error }}</div>
+        {% else %}
+          <div class="yml-code">
+            <strong>Total Commits:</strong> {{ ratio_data.commits }}<br>
+            <strong>Total Hours:</strong> {{ ratio_data.hours }}<br>
+            <strong>User made</strong> {{ ratio_data.ratio }} commits per hour
+          </div>
+        {% endif %}
+        
+        <div style="margin-top: 20px;">
+          <a href="/commits-hours-ratio" class="btn-primary">Calculate Another Ratio</a>
+        </div>
+      </div>
+    {% endif %}
+  </div>
+</body>
+</html>

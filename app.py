@@ -60,6 +60,66 @@ def github_commits():
                           commit_count=commit_count,
                           show_result=commit_count is not None)
 
+@app.route("/commits-hours-ratio", methods=['GET', 'POST'])
+@login_required
+def commits_hours_ratio():
+    ratio_data = None
+    if request.method == 'POST':
+        slack_id = request.form.get('slack_id')
+        project_name = request.form.get('project_name')
+        github_url = request.form.get('github_url')
+        
+        if all([slack_id, project_name, github_url]):
+            try:
+                url = f"https://hackatime.hackclub.com/api/v1/users/{slack_id}/stats?features=projects"
+                response = requests.get(url)
+                
+                if response.status_code == 200:
+                    hackatime_data = response.json()
+                    print(f"HackaTime API response: {hackatime_data}")
+                    
+                    projects_array = hackatime_data.get('data', {}).get('projects', [])
+                    print(f"Projects array: {projects_array}")
+                    
+                    project_found = None
+                    for project in projects_array:
+                        if project.get('name') == project_name:
+                            project_found = project
+                            break
+                    
+                    if project_found:
+                        print(f"Project found: {project_found}")
+                        hours = project_found.get('total_seconds', 0) / 3600
+                        
+                        commit_count = get_commit_count(github_url)
+                        print(f"Commit count: {commit_count}")
+                        
+                        if isinstance(commit_count, int) and hours > 0:
+                            ratio = commit_count / hours
+                            ratio_data = {
+                                'commits': commit_count,
+                                'hours': round(hours, 2),
+                                'ratio': round(ratio, 2)
+                            }
+                        else:
+                            ratio_data = {'error': f'Invalid commit count ({commit_count}) or zero hours ({hours})'}
+                    else:
+                        available_projects = [p.get('name') for p in projects_array]
+                        ratio_data = {'error': f'Project "{project_name}" not found. Available projects: {available_projects}'}
+                else:
+                    ratio_data = {'error': f'HackaTime API error: {response.status_code} - {response.text}'}
+                    
+            except Exception as e:
+                ratio_data = {'error': f'Error: {str(e)}'}
+                print(f"Exception in commits_hours_ratio: {e}")
+        else:
+            ratio_data = {'error': 'Please fill in all fields'}
+    
+    return render_template('commits_hours_ratio.html', 
+                          username=session['username'],
+                          ratio_data=ratio_data,
+                          show_result=ratio_data is not None)
+
 @app.route("/hour_finder", methods=['GET', 'POST'])
 @login_required
 def find_hackatime():
@@ -105,7 +165,7 @@ def fraud_checker():
                                    username=session['username'],
                                    error="Please fill in the user ID")
 
-        url = f"https://hackatime.hackclub.com/api/v1/users/{user_id}/stats"
+        url = f"https://hackatime.hackclub.com/api/v1/users/{slack_id}/stats"
 
         response = requests.get(url)
         if response.status_code == 200:
