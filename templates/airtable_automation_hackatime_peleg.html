@@ -24,26 +24,38 @@
     <code>
     const inputConfig = input.config();
     const recordId = inputConfig.recordID;
+
     let table = base.getTable("YSWS Project Submission");
+
     const queryResult = await table.selectRecordAsync(recordId);
+
     if (queryResult == null) throw "owo >-<"
+
     const slackId = queryResult.getCellValue("Slack ID");
     const projectName = queryResult.getCellValue("Hackatime Exact project name");
     if (!slackId) throw "no slack ID"
     if (!projectName) throw "no project name"
+
     const hackatimeUsernameRequestUrl = "https://hackatime.hackclub.com/api/v1/users/" + encodeURIComponent(slackId) + "/stats";
+
     const hackatimeUsernameResponse = await fetch(hackatimeUsernameRequestUrl);
     const hackatimeUsernameData = await hackatimeUsernameResponse.json();
+
     const hackatimeId = hackatimeUsernameData.data?.user_id;
     const hackatimeUsername = hackatimeUsernameData.data?.username;
+
     const userProjectsListUrl = "https://hackatime.hackclub.com/api/v1/users/" + encodeURIComponent(hackatimeUsername) + "/projects";
     const userProjectsListResponse = await fetch(userProjectsListUrl);
     const userProjectsData = await userProjectsListResponse.json();
+
     if (!Array.isArray(userProjectsData.projects) || !userProjectsData.projects.includes(projectName)) throw "Couldn't get the user project";
+
     const projectUrl = "https://hackatime.hackclub.com/api/v1/users/" + encodeURIComponent(hackatimeUsername) + "/project/" + encodeURIComponent(projectName);
     const projectResponse = await fetch(projectUrl);
     const projectData = await projectResponse.json();
+
     const projectHours = projectData.total_seconds / 3600;
+
     await table.updateRecordAsync(recordId, {
         "Optional - Override Hours Spent": projectHours
     });
