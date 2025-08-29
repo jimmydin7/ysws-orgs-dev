@@ -9,7 +9,7 @@ def generate_yml(name, description, website, slack, slackChannel, status, deadli
   description: {description}
   website: {website}
   slack: {slack}
-  slackChannel: {slackChannel}
+  slackChannel: '{slackChannel}'
   status: {status}
   deadline: {deadline}
 """
