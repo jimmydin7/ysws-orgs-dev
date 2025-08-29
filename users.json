@@ -12,9 +12,9 @@
     "superuser": true
   },
   {
-    "username": "admin",
-    "password": "123456789",
-    "admin": true,
+    "username": "user1",
+    "password": "password1",
+    "admin": false,
     "superuser": false
   }
 ]

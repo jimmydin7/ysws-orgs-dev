@@ -8,9 +8,28 @@
   <link rel="stylesheet" href="static/css/index.css" />
   <link rel="stylesheet" href="static\css\catalog.css">
 </head>
+<script>
+  setTimeout(() => {
+    document.querySelectorAll('.flash').forEach(el => {
+      el.style.transition = "opacity 0.3s ease";
+      el.style.opacity = "0";
+      setTimeout(() => el.remove(), 300); 
+    });
+  }, 3000);
+</script>
 {% if is_admin %}
 <body>
   <div class="form-container">
+      {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+          <div class="flash-messages">
+            {% for category, message in messages %}
+              <div class="flash {{ category }}">{{ message }}</div>
+            {% endfor %}
+          </div>
+          <br>
+        {% endif %}
+      {% endwith %}
     <div class="nav-links">
       <a href="/">← Back to Home</a>
       <a href="/logout">Logout</a>
@@ -23,7 +42,6 @@
       <div class="error">{{ error }}</div>
     {% else %}
         <div class="result-section">
-            <h2 style="color: #000000;">User: {{ username }}</h2>  
         <table>
           <tr>
             <th style="color: #000000;">User</th>

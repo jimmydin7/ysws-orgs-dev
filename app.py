@@ -305,7 +305,7 @@ def admin():
 
 
     if not is_admin:
-        flash("You must be an admin to access this page!", "error")
+        flash("You must be an admin to access that page!", "error")
         return redirect(url_for('main'))
 
 # POST
@@ -336,7 +336,8 @@ def admin():
                     user["superuser"] = user.get("superuser", False)
                     break
             save_json_file(USERS_FILE, users)
-        
+            flash(f"Updated user {username}.", "success")
+
         return redirect(url_for('admin'))
 
 #GET
@@ -349,9 +350,21 @@ def admin():
                            is_superuser=is_superuser)
 
 
-@app.route("/admin/remove", methods=["POST"])
+@app.route("/admin/remove", methods=["GET", "POST"])
 @login_required
 def remove_user():
+    
+    if request.method == "GET":
+        name = session['username']
+        is_admin = session.get('is_admin', False)
+
+        if not is_admin:
+            flash("You must be an admin to access that page!", "error")
+            return redirect(url_for('main'))
+        else:
+            flash("Invalid request method!", "error")
+            return redirect(url_for('main'))
+
     print("Running remove_user")
     users = load_json_file(USERS_FILE)
     username = request.form.get("username")
