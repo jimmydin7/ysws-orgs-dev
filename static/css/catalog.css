@@ -23,7 +23,7 @@
   resize: vertical;
 }
 .btn-primary {
-  background-color: #007bff;
+  background-color: #3d9993;
   color: white;
   padding: 12px 24px;
   border: none;
@@ -32,7 +32,7 @@
   font-size: 16px;
 }
 .btn-primary:hover {
-  background-color: #0056b3;
+  background-color: #4ecdc4;
 }
 .result-section {
   margin-top: 30px;
@@ -54,7 +54,7 @@
   margin-top: 20px;
   padding: 15px;
   background-color: #e7f3ff;
-  border-left: 4px solid #007bff;
+  border-left: 4px solid #4ecdc4;
   border-radius: 4px;
 }
 .error {
@@ -69,7 +69,7 @@
 }
 .nav-links a {
   margin-right: 15px;
-  color: #007bff;
+  color: #4ecdc4;
   text-decoration: none;
 }
 .nav-links a:hover {
