@@ -368,14 +368,29 @@ def admin():
 def admin_logs():
     logs = load_logs()
     users = load_users()
+    admin_keys = load_admin_keys()
     
     log_activity(session['username'], 'accessed admin logs')
     
-    for log in logs:
-        user = next((u for u in users if u['username'] == log['username']), None)
-        log['is_superadmin'] = user.get('superadmin', False) if user else False
+    all_users = []
     
-    return render_template('admin_logs.html', username=session['username'], logs=logs, users=users)
+    for key_data in admin_keys:
+        user_info = {
+            'username': key_data['name'],
+            'is_superadmin': False
+        }
+        
+        user = next((u for u in users if u['username'] == key_data['name']), None)
+        if user and user.get('superadmin', False):
+            user_info['is_superadmin'] = True
+        
+        all_users.append(user_info)
+    
+    for log in logs:
+        user = next((u for u in all_users if u['username'] == log['username']), None)
+        log['is_superadmin'] = user.get('is_superadmin', False) if user else False
+    
+    return render_template('admin_logs.html', username=session['username'], logs=logs, users=all_users)
 
 @app.route("/admin/generate", methods=['POST'])
 @login_required
