@@ -321,12 +321,7 @@ def admin():
     # Sort: superadmins first (in red), then normal users
     user_list.sort(key=lambda x: (not x['is_superadmin'], x['username']))
     
-    if is_super:
-        # Superadmins see full key management + user list with promotion ability
-        return render_template('admin.html', username=session['username'], keys=keys, users=user_list, is_superadmin=True)
-    else:
-        # Normal users see only user list (no keys, no promotion)
-        return render_template('admin.html', username=session['username'], users=user_list, is_superadmin=False)
+    return render_template('admin.html', username=session['username'], keys=keys, users=user_list, is_superadmin=is_super)
 
 @app.route("/admin/generate", methods=['POST'])
 @login_required

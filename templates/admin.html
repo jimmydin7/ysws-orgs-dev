@@ -245,11 +245,7 @@
 
     <div class="admin-header">
       <h1>Admin Panel</h1>
-      {% if is_superadmin %}
-        <p>Wooop! Seems like you are a super admin! - Generate and manage admin keys for user access</p>
-      {% else %}
-        <p>View list of authorized users</p>
-      {% endif %}
+      <p>View all authorized users</p>
     </div>
 
     {% with messages = get_flashed_messages(with_categories=true) %}
