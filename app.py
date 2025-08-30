@@ -375,8 +375,6 @@ def admin_logs():
         user = next((u for u in users if u['username'] == log['username']), None)
         log['is_superadmin'] = user.get('superadmin', False) if user else False
     
-    logs.reverse()
-    
     return render_template('admin_logs.html', username=session['username'], logs=logs)
 
 @app.route("/admin/generate", methods=['POST'])

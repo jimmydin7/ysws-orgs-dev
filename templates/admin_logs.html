@@ -157,11 +157,19 @@
     
     <script>
         const logsContainer = document.querySelector('.logs-container');
-        logsContainer.scrollTop = logsContainer.scrollHeight;
+        
+        function scrollToBottom() {
+            logsContainer.scrollTop = logsContainer.scrollHeight;
+        }
+        
+        scrollToBottom();
         
         setInterval(() => {
             location.reload();
         }, 30000);
+        
+        window.addEventListener('load', scrollToBottom);
+        window.addEventListener('resize', scrollToBottom);
     </script>
 </body>
 </html>
