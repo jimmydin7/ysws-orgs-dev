@@ -25,8 +25,11 @@
     <div class="account">
   <i class="fas fa-user" style="font-size: 1.5rem;"></i>
   <span>{{ username }}</span>
-  <a href="/logout" class="logout-btn">Logout</a>
-  <a href="/admin" class="admin-btn">Admin</a>
+  <a href="/admin" class="admin-btn">
+  <i class="fas fa-shield-alt" style="margin-right: 8px; color: #fff;"></i>
+  <span style="color: #fff;">Admin</span>
+</a>
+
     {% with messages = get_flashed_messages(with_categories=true) %}
       {% if messages %}
         <div class="flash-messages">
