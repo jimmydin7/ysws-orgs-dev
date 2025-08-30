@@ -477,12 +477,45 @@ def automation_hackatime():
     log_activity(session['username'], 'accessed airtable automation hackatime')
     return render_template('airtable_automation_hackatime_peleg.html', username=session['username'])
 
+@app.route("/dns-github", methods=['GET', 'POST'])
+@login_required
+def dns_github():
+    if request.method == 'POST':
+        subdomain_name = request.form.get('name')
+        github_pages_url = request.form.get('website')
+        ttl = request.form.get('slack')
+        
+        if all([subdomain_name, github_pages_url, ttl]):
+            try:
+                yml_code = f"""# {subdomain_name}.hackclub.com
+{subdomain_name}:
+  - type: CNAME
+    value: {github_pages_url}.
+    ttl: {ttl}"""
+                
+                log_activity(session['username'], 'generated dns config', f'subdomain: {subdomain_name}.hackclub.com')
+                return render_template('dns_github.html', 
+                                    username=session['username'],
+                                    yml_code=yml_code,
+                                    show_result=True,subdomain_name=subdomain_name)
+            except Exception as e:
+                return render_template('dns_github.html', 
+                                    username=session['username'],
+                                    error=f"Error generating DNS: {str(e)}")
+        else:
+            return render_template('dns_github.html', 
+                                username=session['username'],
+                                error="Please fill in all fields")
+    
+    log_activity(session['username'], 'accessed dns github generator')
+    return render_template('dns_github.html', username=session['username'])
+
 if __name__ == "__main__":
     if not os.path.exists(KEYS_FILE):
         initial_keys = [
             {
                 'name': 'jim',
-                'key': '79d47d9bc2c7785396e12f104e3d96bf',
+                'key': 'ill-change-this-ofc',
                 'generated_by': 'system',
                 'generated_at': '2024-01-01'
             }
