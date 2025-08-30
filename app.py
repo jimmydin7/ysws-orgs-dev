@@ -9,6 +9,9 @@ from datetime import datetime
 import os
 import secrets
 import json
+from dotenv import load_dotenv
+
+load_dotenv()
 
 app = Flask(__name__)
 app.secret_key = SECRET_KEY
