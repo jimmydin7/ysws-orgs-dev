@@ -1,6 +1,6 @@
 from flask import Flask, render_template, request, redirect, url_for, session, flash
 import requests
-from config import SECRET_KEY, KEYS_FILE, USERS_FILE
+from config import SECRET_KEY, KEYS_FILE, USERS_FILE, SLACK_USERS_FILE
 from utils import load_json_file, save_json_file, login_required
 from tools.ysws_catalog import generate_yml
 from tools.commits import get_commit_count
@@ -28,6 +28,16 @@ def load_authorized_users():
             return data.get('authorized_users', {})
     except FileNotFoundError:
         return {}
+
+def load_slack_users():
+    return load_authorized_users()
+
+def save_slack_users(slack_users):
+    try:
+        with open('slack_users.json', 'w') as f:
+            json.dump({'authorized_users': slack_users}, f, indent=2)
+    except Exception as e:
+        print(f"Error saving slack users: {e}")
 
 @app.route("/", methods=['GET', 'POST'])
 @login_required
@@ -367,6 +377,60 @@ def admin():
                            is_superuser=is_superuser)
 
 
+@app.route("/admin-slack", methods=['POST', 'GET'])
+@login_required
+def admin_slack():
+    name = session['username']
+    slack_users = load_slack_users()
+    is_admin = session.get('is_admin', False)
+
+    if not is_admin:
+        flash("You must be an admin to access that page!", "error")
+        return redirect(url_for('main'))
+
+# POST
+
+    if request.method == 'POST':
+        action = request.form.get('action')
+        slack_id = request.form.get('slack_id')
+
+        if action == "remove":
+            slack_users = load_slack_users()
+            if slack_id in slack_users:
+                del slack_users[slack_id]
+                save_slack_users(slack_users)
+                flash(f"Slack user {slack_id} removed.", "success")
+            else:
+                flash(f"Slack user {slack_id} not found!", "error")
+            return redirect(url_for('admin_slack'))
+
+        if action == "update":
+            username = request.form.get('username')
+            is_admin = True if request.form.get('is_admin') == "true" else False
+            is_superuser = True if request.form.get('is_superuser') == "true" else False
+            
+            slack_users = load_slack_users()
+            if slack_id in slack_users:
+                slack_users[slack_id]['username'] = username
+                slack_users[slack_id]['admin'] = is_admin
+                slack_users[slack_id]['superuser'] = is_superuser
+                save_slack_users(slack_users)
+                flash(f"Updated Slack user {slack_id}.", "success")
+            else:
+                flash(f"Slack user {slack_id} not found!", "error")
+
+        return redirect(url_for('admin_slack'))
+
+#GET
+
+    is_superuser = session.get('is_superuser', False)
+    return render_template('admin-slack.html',
+                           username=name,
+                           slack_users=slack_users,
+                           is_admin=is_admin,
+                           is_superuser=is_superuser)
+
+
 @app.route("/admin/remove", methods=["GET", "POST"])
 @login_required
 def remove_user():
@@ -420,6 +484,8 @@ def automation_hackatime():
 def slack_auth():
     state = secrets.token_urlsafe(32)
     session['oauth_state'] = state
+    session.permanent = True
+    print(f"Generated state: {state}")
     
     slack_auth_url = (
         f"https://slack.com/openid/connect/authorize"
@@ -433,8 +499,19 @@ def slack_auth():
 
 @app.route('/auth/slack/callback')
 def slack_callback():
-    if request.args.get('state') != session.get('oauth_state'):
-        return "Invalid state parameter", 400
+    received_state = request.args.get('state')
+    session_state = session.get('oauth_state')
+    
+    print(f"Received state: {received_state}")
+    print(f"Session state: {session_state}")
+    print(f"Session contents: {dict(session)}")
+    
+    if not session_state:
+        return redirect(url_for('login') + '?error=session_expired')
+    
+    if received_state != session_state:
+        print(f"State mismatch! Received: {received_state}, Session: {session_state}")
+        return redirect(url_for('login') + '?error=invalid_state')
     
     code = request.args.get('code')
     if not code:
