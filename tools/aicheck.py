@@ -5,7 +5,6 @@ API_URL = "https://ai.hackclub.com/chat/completions"
 MODEL = "qwen/qwen3-32b"
 
 def get_readme_from_github(repo_url):
-
     parsed_url = urlparse(repo_url)
     path_parts = parsed_url.path.strip("/").split("/")
     if len(path_parts) < 2:
@@ -21,7 +20,6 @@ def get_readme_from_github(repo_url):
     return None
 
 def detect_ai_probability(readme_text):
-
     prompt = f"""
 You are an expert AI text detector. Your task is to analyze the provided text and determine the probability that it was written by an AI (0.0-1.0).
 
@@ -55,7 +53,6 @@ Text to analyze:
     
     response = requests.post(API_URL, json=payload)
     result = response.json()
-    
     return result['choices'][0]['message']['content'].strip()
 
 if __name__ == "__main__":
@@ -67,7 +64,20 @@ if __name__ == "__main__":
         print(f"Checking {url}...")
         readme = get_readme_from_github(url)
         if readme:
-            probability = detect_ai_probability(readme)
-            print(f"Estimated AI probability: {probability}\n")
+            scores = []
+            for i in range(10):  
+                probability = detect_ai_probability(readme)
+                try:
+                    prob_val = float(probability)
+                    scores.append(prob_val)
+                    print(f"Run {i+1}: {prob_val}")
+                except ValueError:
+                    print(f"Run {i+1}: Invalid response ({probability})")
+            
+            if scores:
+                avg = sum(scores) / len(scores)
+                print(f"\nAverage AI probability over {len(scores)} runs: {avg:.3f}\n")
+            else:
+                print("No valid probability values received.\n")
         else:
             print("No README found.\n")
