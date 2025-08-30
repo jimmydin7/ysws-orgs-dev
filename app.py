@@ -466,15 +466,13 @@ def slack_callback():
         
         user_info = authorized_users[slack_user_id]
         
-        session['user'] = {
-            'id': slack_user_id,
-            'username': user_info['username'],
-            'email': user_data.get('email'),
-            'admin': user_info['admin'],
-            'superuser': user_info['superuser']
-        }
-        session['logged_in'] = True
-        return redirect('/')
+        session['username'] = user_info['username']
+        session['is_admin'] = user_info['admin']
+        session['is_superuser'] = user_info['superuser']
+        
+        session.pop('oauth_state', None)
+        
+        return redirect(url_for('main'))
     
     return "Failed to get user info", 400
 
