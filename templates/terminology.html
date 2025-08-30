@@ -7,6 +7,64 @@
   <link href="https://fonts.googleapis.com/css2?family=Fira+Code&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="static/css/index.css" />
   <link rel="stylesheet" href="static/css/catalog.css">
+
+  <style>
+    body {
+      font-family: 'Fira Code', monospace;
+      background: #111;
+      margin: 0;
+      padding: 0;
+    }
+
+    .form-container {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 2rem;
+    }
+
+    .nav-links {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 1.5rem;
+    }
+
+    .nav-links a {
+      text-decoration: none;
+      color: cyan;
+      font-weight: bold;
+    }
+
+    h1 {
+      font-size: 2rem;
+      margin-bottom: 0.5rem;
+      color: cyan;
+    }
+
+    p {
+      margin-bottom: 1rem;
+      color: #ccc;
+    }
+
+    dl {
+      margin: 20px 0;
+      padding: 0;
+    }
+
+    dt {
+      font-weight: bold;
+      font-size: 1.2rem;
+      margin-top: 20px;
+      color: cyan;
+    }
+
+    dd {
+      margin-left: 20px;
+      margin-bottom: 15px;
+      line-height: 1.6;
+      color: white;
+    }
+
+  </style>
 </head>
 <body>
   <div class="form-container">
@@ -20,26 +78,26 @@
     <hr>
 
     <dl>
-      <dt><b>PoC</b></dt>
+      <dt>PoC</dt>
       <dd>The word PoC stands for "Point of Contact" and is basically the person (usually an intern) who connects you to a full-time HQ staff member who sponsors the YSWS.</dd>
 
-      <dt><b>Sponsor</b></dt>
-      <dd>The person who makes the YSWS possible, usually a full time HQ staff overlooking your PoC and providing funding through Hack Club Bank.</dd>
+      <dt>Sponsor</dt>
+      <dd>The person who makes the YSWS possible, usually a full-time HQ staff overlooking your PoC and providing funding through HCB.</dd>
 
-      <dt><b>Unified DB</b></dt>
+      <dt>Unified DB</dt>
       <dd>The Unified Database is an internal database where all YSWS submissions (only approved ones) are stored. You can add a reviewed project to the Unified DB through the Airtable automation tickbox.</dd>
 
-      <dt><b>Weighted Grants</b></dt>
+      <dt>Weighted Grants</dt>
       <dd>Weighted Grants are an internal performance metric to evaluate how many teenager coding hours someone brought to the table. A Weighted Grant represents 10 hours of work on an approved YSWS submission.</dd>
 
-      <dt><b>Override Hours Count</b></dt>
+      <dt>Override Hours Count</dt>
       <dd>How long you think it actually took to create the project (based on Hackatime or reviewer judgment). This replaces the automatic grant hours if adjusted.</dd>
 
-      <dt><b>Override Reason</b></dt>
+      <dt>Override Reason</dt>
       <dd>The justification for changing the default hours. Includes the # of hours chosen and an explanation of how the project was tested/evaluated.</dd>
 
-      <dt><b>Shadow Granting</b></dt>
-      <dd>When you send out the grant manually without it going into the Unified DB.</dd>
+      <dt>Shadow Granting</dt>
+      <dd>When you send out the grant manually, without it going into the Unified DB. (This is bad) </dd>
     </dl>
   </div>
 </body>
