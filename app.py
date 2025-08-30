@@ -14,6 +14,18 @@ app.secret_key = '6294d6140ad5b58e8352a1e620d2d845'
 # File paths
 KEYS_FILE = 'admin_keys.json'
 USERS_FILE = 'users.json'
+LOGS_FILE = 'activity_logs.json'
+
+def log_activity(username, action, details=None):
+    logs = load_json_file(LOGS_FILE)
+    log_entry = {
+        'timestamp': str(datetime.now()),
+        'username': username,
+        'action': action,
+        'details': details
+    }
+    logs.append(log_entry)
+    save_json_file(LOGS_FILE, logs)
 
 def load_json_file(filename):
     try:
@@ -31,6 +43,9 @@ def load_admin_keys():
 
 def load_users():
     return load_json_file(USERS_FILE)
+
+def load_logs():
+    return load_json_file(LOGS_FILE)
 
 def save_admin_keys(keys):
     save_json_file(KEYS_FILE, keys)
@@ -64,6 +79,7 @@ def main():
     if 'username' not in session:
         return redirect(url_for('login'))
     
+    log_activity(session['username'], 'opened the app')
     return render_template('index.html', username=session['username'])
 
 @app.route("/login", methods=['GET', 'POST'])
@@ -82,6 +98,7 @@ def login():
                 session['username'] = key_data['name']
                 session['admin_key'] = admin_key
                 print(f"Debug: Session username set to: {session['username']}")
+                log_activity(key_data['name'], 'logged in')
                 return redirect(url_for('main'))
             else:
                 flash('Invalid admin key', 'error')
@@ -107,6 +124,7 @@ def ysws_catalog():
         if all([name, description, website, slack, slack_channel, status, deadline]):
             yml_code = generate_yml(name, description, website, slack, slack_channel, status, dt.isoformat())
             print(yml_code)
+            log_activity(session['username'], 'generated ysws catalog entry', f'name: {name}')
             return render_template('ysws_catalog.html', 
                                 username=session['username'],
                                 yml_code=yml_code,
@@ -116,6 +134,7 @@ def ysws_catalog():
                                 username=session['username'],
                                 error="Please fill in all fields")
     
+    log_activity(session['username'], 'accessed ysws catalog')
     return render_template('ysws_catalog.html', username=session['username'])
 
 @app.route("/github-commits", methods=['GET', 'POST'])
@@ -126,6 +145,10 @@ def github_commits():
         github_url = request.form.get('github_url')
         if github_url:
             commit_count = get_commit_count(github_url)
+            log_activity(session['username'], 'searched github commits', f'url: {github_url}')
+    
+    if request.method == 'GET':
+        log_activity(session['username'], 'accessed github commits')
     
     return render_template('github_commits.html', 
                           username=session['username'],
@@ -165,11 +188,15 @@ def readme_ai_check():
                         'probability': ai_probability,
                         'content': readme_content[:300] + "..." if len(readme_content) > 300 else readme_content
                     }
+                    log_activity(session['username'], 'checked readme ai', f'url: {github_url}, score: {percentage}%')
                 else:
                     ai_result = {'error': 'Could not fetch README from this repository'}
                     
             except Exception as e:
                 ai_result = {'error': f'Error: {str(e)}'}
+    
+    if request.method == 'GET':
+        log_activity(session['username'], 'accessed readme ai check')
     
     return render_template('readme_ai_check.html', 
                           username=session['username'],
@@ -217,6 +244,7 @@ def commits_hours_ratio():
                                 'hours': round(hours, 2),
                                 'ratio': round(ratio, 2)
                             }
+                            log_activity(session['username'], 'checked commits hours ratio', f'slack_id: {slack_id}, project: {project_name}, ratio: {ratio}')
                         else:
                             ratio_data = {'error': f'Invalid commit count ({commit_count}) or zero hours ({hours})'}
                     else:
@@ -230,6 +258,9 @@ def commits_hours_ratio():
                 print(f"Exception in commits_hours_ratio: {e}")
         else:
             ratio_data = {'error': 'Please fill in all fields'}
+    
+    if request.method == 'GET':
+        log_activity(session['username'], 'accessed commits hours ratio')
     
     return render_template('commits_hours_ratio.html', 
                           username=session['username'],
@@ -259,8 +290,12 @@ def find_hackatime():
             hackatime_data = response.json()
             trust_value_int = hackatime_data.get('trust_factor', {}).get('trust_value', 0)
             trust_value = True if trust_value_int == 1 else False
+            log_activity(session['username'], 'searched up user on hour finder', f'user_id: {user_id}, project: {projectname or "all"}')
         else:
             hackatime_data = {"error": f"HTTP {response.status_code}"}
+
+    if request.method == 'GET':
+        log_activity(session['username'], 'accessed hour finder')
 
     return render_template('hour_finder.html', 
                            username=session['username'],
@@ -294,9 +329,14 @@ def fraud_checker():
             print(trust_value)
             if trust_value_int == None:
                 trust_value_int = "Failure To get"
+            log_activity(session['username'], 'searched up user on fraud checker', f'user_id: {user_id}')
         else:
             hackatime_data = {"error": f"HTTP {response.status_code}"}
     print(trust_value if trust_value is not None else "No trust value found")
+    
+    if request.method == 'GET':
+        log_activity(session['username'], 'accessed fraud checker')
+        
     return render_template('fraud_checker.html', 
                            username=session['username'],
                            hackatime_data=hackatime_data,
@@ -310,7 +350,8 @@ def admin():
     users = load_users()
     is_super = is_superadmin(session['username'])
     
-    # Create user list with superadmin status
+    log_activity(session['username'], 'accessed admin panel')
+    
     user_list = []
     for user in users:
         user_list.append({
@@ -318,10 +359,25 @@ def admin():
             'is_superadmin': user.get('superadmin', False)
         })
     
-    # Sort: superadmins first (in red), then normal users
     user_list.sort(key=lambda x: (not x['is_superadmin'], x['username']))
     
     return render_template('admin.html', username=session['username'], keys=keys, users=user_list, is_superadmin=is_super)
+
+@app.route("/admin/logs")
+@login_required
+def admin_logs():
+    logs = load_logs()
+    users = load_users()
+    
+    log_activity(session['username'], 'accessed admin logs')
+    
+    for log in logs:
+        user = next((u for u in users if u['username'] == log['username']), None)
+        log['is_superadmin'] = user.get('superadmin', False) if user else False
+    
+    logs.reverse()
+    
+    return render_template('admin_logs.html', username=session['username'], logs=logs)
 
 @app.route("/admin/generate", methods=['POST'])
 @login_required
@@ -345,6 +401,7 @@ def generate_admin_key():
         keys.append(key_data)
         save_admin_keys(keys)
         
+        log_activity(session['username'], 'generated admin key', f'for user: {name}')
         flash(f'New admin key generated for {name}: {new_key}', 'success')
     
     return redirect(url_for('admin'))
@@ -363,6 +420,7 @@ def promote_to_superadmin():
             if user['username'] == username:
                 user['superadmin'] = True
                 save_users(users)
+                log_activity(session['username'], 'promoted user to superadmin', f'user: {username}')
                 flash(f'{username} has been promoted to superadmin!', 'success')
                 break
         else:
@@ -382,27 +440,31 @@ def revoke_admin_key():
         keys = load_admin_keys()
         keys = [k for k in keys if k['key'] != key_to_revoke]
         save_admin_keys(keys)
+        log_activity(session['username'], 'revoked admin key', f'key: {key_to_revoke[:8]}...')
         flash('Admin key revoked successfully', 'success')
     
     return redirect(url_for('admin'))
 
 @app.route("/logout")
 def logout():
+    if 'username' in session:
+        log_activity(session['username'], 'logged out')
     session.clear()
     return redirect(url_for('login'))
 
 @app.route("/terminology")
 @login_required 
 def terminology():
+    log_activity(session['username'], 'accessed terminology')
     return render_template('terminology.html', username=session['username'])
 
 @app.route("/airtable-automation-hackatime")
 @login_required
 def automation_hackatime():
+    log_activity(session['username'], 'accessed airtable automation hackatime')
     return render_template('airtable_automation_hackatime_peleg.html', username=session['username'])
 
 if __name__ == "__main__":
-    # Initialize files if they don't exist
     if not os.path.exists(KEYS_FILE):
         initial_keys = [
             {
@@ -422,6 +484,10 @@ if __name__ == "__main__":
             }
         ]
         save_users(initial_users)
+    
+    if not os.path.exists(LOGS_FILE):
+        initial_logs = []
+        save_json_file(LOGS_FILE, initial_logs)
     
     app.run(debug=True, port=44195)
 
