@@ -292,32 +292,39 @@
         <div class="no-keys"><p>No admin keys found.</p></div>
       {% endif %}
     {% else %}
-      <div class="users-list-section">
-        <h3>Authorized Users</h3>
-        {% if users %}
-          <table class="keys-table">
-            <thead>
-              <tr>
-                <th>Username</th>
-                <th>Role</th>
-              </tr>
-            </thead>
-            <tbody>
-              {% for user in users %}
-                <tr class="{% if user.is_superadmin %}superadmin-row{% endif %}">
-                                    <td>{{ user.username }}</td>
-                  <td>{{ 'Superadmin' if user.is_superadmin else 'Viewer' }}</td>
-                </tr>
-              {% endfor %}
-            </tbody>
-          </table>
-        {% else %}
-          <div class="no-users">
-            <p>No authorized users found.</p>
-          </div>
-        {% endif %}
+  <div class="no-permission-message" style="margin: 2rem; padding: 1rem; background-color: #ffecec; border: 1px solid #ff4d4d; border-radius: 8px;">
+    <h3 style="color: #d8000c;">Oooops!</h3>
+    <p>Seems like you have no permission for superadmin, to add new users + monitor!</p>
+    <p>Dm <a href="https://hackclub.slack.com/team/U07G0C6JZME">@jim</a> if you think you must have it!</p>
+  </div>
+
+  <div class="users-list-section">
+    <h3>Authorized Users</h3>
+    {% if users %}
+      <table class="keys-table">
+        <thead>
+          <tr>
+            <th>Username</th>
+            <th>Role</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for user in users %}
+            <tr class="{% if user.is_superadmin %}superadmin-row{% endif %}">
+              <td>{{ user.username }}</td>
+              <td>{{ 'Superadmin' if user.is_superadmin else 'Viewer' }}</td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    {% else %}
+      <div class="no-users">
+        <p>No authorized users found.</p>
       </div>
     {% endif %}
+  </div>
+{% endif %}
+
   </div>
 
   <footer>
