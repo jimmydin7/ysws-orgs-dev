@@ -26,6 +26,7 @@
   <i class="fas fa-user" style="font-size: 1.5rem;"></i>
   <span>{{ username }}</span>
   <a href="/logout" class="logout-btn">Logout</a>
+  <a href="/admin" class="admin-btn">Admin</a>
     {% with messages = get_flashed_messages(with_categories=true) %}
       {% if messages %}
         <div class="flash-messages">
@@ -134,15 +135,7 @@
   </div>
 </div>
 
-<div class="tool-card" data-url="/admin" data-keywords="admin,hidden,management">
-  <h3>Admin Panel</h3>
-  <p>Generate and manage admin keys for user access (Superadmin only)</p>
-  <div class="keywords">
-    <span class="keyword">admin</span>
-    <span class="keyword">keys</span>
-    <span class="keyword">management</span>
-  </div>
-</div>
+
 
 </div>
 

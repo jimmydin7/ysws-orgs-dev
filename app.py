@@ -306,12 +306,15 @@ def fraud_checker():
 @app.route("/admin")
 @login_required
 def admin():
-    if not is_superadmin(session['username']):
-        flash('Access denied. Superadmin privileges required.', 'error')
-        return redirect(url_for('main'))
-    
     keys = load_admin_keys()
-    return render_template('admin.html', username=session['username'], keys=keys)
+    is_super = is_superadmin(session['username'])
+    
+
+        return render_template('admin.html', username=session['username'], keys=keys, is_superadmin=True)
+    else:
+
+        usernames = [key['name'] for key in keys]
+        return render_template('admin.html', username=session['username'], usernames=usernames, is_superadmin=False)
 
 @app.route("/admin/generate", methods=['POST'])
 @login_required
