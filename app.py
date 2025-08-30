@@ -8,26 +8,48 @@ import os
 import secrets
 import json
 
-
-
 app = Flask(__name__)
 app.secret_key = '6294d6140ad5b58e8352a1e620d2d845'
-SLACK_CLIENT_ID = "2210535565.9420943297447"
-SLACK_CLIENT_SECRET = "79d47d9bc2c7785396e12f104e3d96bf"
-SLACK_REDIRECT_URI = "https://ysws.jimdinias.dev/auth/slack/callback"
 
-def load_authorized_users():
+# File paths
+KEYS_FILE = 'admin_keys.json'
+USERS_FILE = 'users.json'
+
+def load_json_file(filename):
     try:
-        with open('slack_users.json', 'r') as f:
-            data = json.load(f)
-            return data.get('authorized_users', {})
+        with open(filename, 'r') as f:
+            return json.load(f)
     except FileNotFoundError:
-        return {}
+        return []
+
+def save_json_file(filename, data):
+    with open(filename, 'w') as f:
+        json.dump(data, f, indent=2)
+
+def load_admin_keys():
+    return load_json_file(KEYS_FILE)
+
+def load_users():
+    return load_json_file(USERS_FILE)
+
+def save_admin_keys(keys):
+    save_json_file(KEYS_FILE, keys)
+
+def save_users(users):
+    save_json_file(USERS_FILE, users)
+
+def generate_key():
+    return secrets.token_hex(16)
+
+def is_superadmin(username):
+    users = load_users()
+    user = next((u for u in users if u['username'] == username), None)
+    return user and user.get('superadmin', False)
 
 def login_required(f):
     def decorated_function(*args, **kwargs):
         if 'username' not in session:
-            return redirect(url_for('slack_auth'))
+            return redirect(url_for('login'))
         return f(*args, **kwargs)
     decorated_function.__name__ = f.__name__
     return decorated_function
@@ -39,10 +61,22 @@ def main():
     
     return render_template('index.html', username=session['username'])
 
-@app.route("/login")
+@app.route("/login", methods=['GET', 'POST'])
 def login():
-    if 'username' in session:
-        return redirect(url_for('main'))
+    if request.method == 'POST':
+        admin_key = request.form.get('admin_key')
+        
+        if admin_key:
+            keys = load_admin_keys()
+            key_data = next((k for k in keys if k['key'] == admin_key), None)
+            
+            if key_data:
+                session['username'] = key_data['name']
+                session['admin_key'] = admin_key
+                return redirect(url_for('main'))
+            else:
+                flash('Invalid admin key', 'error')
+    
     return render_template('login.html')
 
 @app.route("/ysws-catalog", methods=['GET', 'POST'])
@@ -238,7 +272,7 @@ def fraud_checker():
                                    username=session['username'],
                                    error="Please fill in the user ID")
 
-        url = f"https://hackatime.hackclub.com/api/v1/users/stats"
+        url = f"https://hackatime.hackclub.com/api/v1/users/{user_id}/stats"
 
         response = requests.get(url)
         if response.status_code == 200:
@@ -263,10 +297,54 @@ def fraud_checker():
 @app.route("/admin")
 @login_required
 def admin():
-    authorized_users = load_authorized_users()
-    return render_template('admin.html', 
-                          username=session['username'],
-                          authorized_users=authorized_users)
+    if not is_superadmin(session['username']):
+        flash('Access denied. Superadmin privileges required.', 'error')
+        return redirect(url_for('main'))
+    
+    keys = load_admin_keys()
+    return render_template('admin.html', username=session['username'], keys=keys)
+
+@app.route("/admin/generate", methods=['POST'])
+@login_required
+def generate_admin_key():
+    if not is_superadmin(session['username']):
+        flash('Access denied. Superadmin privileges required.', 'error')
+        return redirect(url_for('main'))
+    
+    name = request.form.get('name')
+    if name:
+        new_key = generate_key()
+        keys = load_admin_keys()
+        
+        key_data = {
+            'name': name,
+            'key': new_key,
+            'generated_by': session['username'],
+            'generated_at': str(datetime.now())
+        }
+        
+        keys.append(key_data)
+        save_admin_keys(keys)
+        
+        flash(f'New admin key generated for {name}: {new_key}', 'success')
+    
+    return redirect(url_for('admin'))
+
+@app.route("/admin/revoke", methods=['POST'])
+@login_required
+def revoke_admin_key():
+    if not is_superadmin(session['username']):
+        flash('Access denied. Superadmin privileges required.', 'error')
+        return redirect(url_for('main'))
+    
+    key_to_revoke = request.form.get('key')
+    if key_to_revoke:
+        keys = load_admin_keys()
+        keys = [k for k in keys if k['key'] != key_to_revoke]
+        save_admin_keys(keys)
+        flash('Admin key revoked successfully', 'success')
+    
+    return redirect(url_for('admin'))
 
 @app.route("/logout")
 def logout():
@@ -283,65 +361,27 @@ def terminology():
 def automation_hackatime():
     return render_template('airtable_automation_hackatime_peleg.html', username=session['username'])
 
-@app.route('/auth/slack')
-def slack_auth():
-    state = secrets.token_urlsafe(32)
-    session['oauth_state'] = state
-    
-    slack_auth_url = (
-        f"https://slack.com/openid/connect/authorize"
-        f"?response_type=code"
-        f"&scope=openid%20profile%20email"
-        f"&client_id={SLACK_CLIENT_ID}"
-        f"&redirect_uri={SLACK_REDIRECT_URI}"
-        f"&state={state}"
-    )
-    return redirect(slack_auth_url)
-
-@app.route('/auth/slack/callback')
-def slack_callback():
-    if request.args.get('state') != session.get('oauth_state'):
-        return "Invalid state parameter", 400
-    
-    code = request.args.get('code')
-    if not code:
-        return "No authorization code received", 400
-    
-    token_response = requests.post('https://slack.com/api/openid.connect.token', data={
-        'client_id': SLACK_CLIENT_ID,
-        'client_secret': SLACK_CLIENT_SECRET,
-        'code': code,
-        'redirect_uri': SLACK_REDIRECT_URI
-    })
-    
-    token_data = token_response.json()
-    if not token_data.get('ok'):
-        return "Failed to get access token", 400
-    
-    access_token = token_data['access_token']
-    
-    user_response = requests.get('https://slack.com/api/openid.connect.userInfo', 
-                                headers={'Authorization': f'Bearer {access_token}'})
-    user_data = user_response.json()
-    
-    if user_data.get('ok'):
-        slack_user_id = user_data['sub']
-        authorized_users = load_authorized_users()
-        
-        if slack_user_id not in authorized_users:
-            return "Access denied. You are not authorized to use this application.", 403
-        
-        user_info = authorized_users[slack_user_id]
-        
-        session['username'] = user_info['username']
-        session['slack_user_id'] = slack_user_id
-        
-        session.pop('oauth_state', None)
-        
-        return redirect(url_for('main'))
-    
-    return "Failed to get user info", 400
-
 if __name__ == "__main__":
+    # Initialize files if they don't exist
+    if not os.path.exists(KEYS_FILE):
+        initial_keys = [
+            {
+                'name': 'jim',
+                'key': '79d47d9bc2c7785396e12f104e3d96bf',
+                'generated_by': 'system',
+                'generated_at': '2024-01-01'
+            }
+        ]
+        save_admin_keys(initial_keys)
+    
+    if not os.path.exists(USERS_FILE):
+        initial_users = [
+            {
+                'username': 'jim',
+                'superadmin': True
+            }
+        ]
+        save_users(initial_users)
+    
     app.run(debug=True, port=44195)
 

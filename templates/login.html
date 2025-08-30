@@ -3,19 +3,28 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Login - YSWS Organizer</title>
+  <title>Login - YSWS Admin</title>
   <link href="https://fonts.googleapis.com/css2?family=Fira+Code&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="static/css/index.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <style>
+    body {
+      font-family: 'Fira Code', monospace;
+      background: #f5f5f5;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+    }
+    
     .login-container {
-      max-width: 400px;
-      margin: 100px auto;
-      padding: 40px;
       background: white;
+      padding: 40px;
       border-radius: 10px;
       box-shadow: 0 4px 20px rgba(0,0,0,0.1);
       text-align: center;
+      max-width: 400px;
+      width: 100%;
     }
     
     .login-header h1 {
@@ -28,42 +37,98 @@
       margin-bottom: 30px;
     }
     
-    .slack-login-btn {
-      display: inline-block;
-      padding: 15px 30px;
-      background: #4A154B;
+    .form-group {
+      margin-bottom: 20px;
+      text-align: left;
+    }
+    
+    .form-group label {
+      display: block;
+      margin-bottom: 5px;
+      color: #333;
+      font-weight: 500;
+    }
+    
+    .form-group input {
+      width: 100%;
+      padding: 12px;
+      border: 2px solid #ddd;
+      border-radius: 5px;
+      font-size: 16px;
+      font-family: 'Fira Code', monospace;
+      box-sizing: border-box;
+    }
+    
+    .form-group input:focus {
+      outline: none;
+      border-color: #007bff;
+    }
+    
+    .submit-btn {
+      width: 100%;
+      padding: 12px;
+      background: #007bff;
       color: white;
-      text-decoration: none;
-      border-radius: 8px;
+      border: none;
+      border-radius: 5px;
       font-size: 16px;
       font-weight: 500;
+      cursor: pointer;
       transition: background 0.3s;
     }
     
-    .slack-login-btn:hover {
-      background: #3a0f3a;
+    .submit-btn:hover {
+      background: #0056b3;
     }
     
-    .slack-icon {
-      margin-right: 10px;
+    .flash-messages {
+      margin-bottom: 20px;
+    }
+    
+    .flash {
+      padding: 10px;
+      border-radius: 5px;
+      margin-bottom: 10px;
+    }
+    
+    .flash.error {
+      background: #f8d7da;
+      color: #721c24;
+      border: 1px solid #f5c6cb;
+    }
+    
+    .flash.success {
+      background: #d4edda;
+      color: #155724;
+      border: 1px solid #c3e6cb;
     }
   </style>
 </head>
 <body>
   <div class="login-container">
     <div class="login-header">
-      <h1>YSWS Organizer</h1>
-      <p>Sign in with your Slack account to continue</p>
+      <h1>YSWS Admin Panel</h1>
+      <p>Enter your admin key to continue</p>
     </div>
     
-    <a href="/auth/slack" class="slack-login-btn">
-      <i class="fab fa-slack slack-icon"></i>
-      Sign in with Slack
-    </a>
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        <div class="flash-messages">
+          {% for category, message in messages %}
+            <div class="flash {{ category }}">{{ message }}</div>
+          {% endfor %}
+        </div>
+      {% endif %}
+    {% endwith %}
+    
+    <form method="POST">
+      <div class="form-group">
+        <label for="admin_key">Admin Key:</label>
+        <input type="text" id="admin_key" name="admin_key" required placeholder="Enter your admin key">
+      </div>
+      
+      <button type="submit" class="submit-btn">Login</button>
+    </form>
   </div>
-
-  <footer>
-    made with <3 by <a href="https://hackclub.slack.com/team/U07G0C6JZME"><b>jim</b></a>
-  </footer>
 </body>
 </html>
