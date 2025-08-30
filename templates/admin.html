@@ -171,6 +171,20 @@
       background: #990000;
     }
 
+    .promote-btn {
+      padding: 6px 12px;
+      background: #006600;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 12px;
+    }
+
+    .promote-btn:hover {
+      background: #004d00;
+    }
+
     .flash-messages .flash {
       padding: 10px;
       border-radius: 5px;
@@ -232,7 +246,7 @@
     <div class="admin-header">
       <h1>Admin Panel</h1>
       {% if is_superadmin %}
-        <p>Generate and manage admin keys for user access</p>
+        <p>Wooop! Seems like you are a super admin! - Generate and manage admin keys for user access</p>
       {% else %}
         <p>View list of authorized users</p>
       {% endif %}
@@ -291,41 +305,47 @@
       {% else %}
         <div class="no-keys"><p>No admin keys found.</p></div>
       {% endif %}
-    {% else %}
-        
-    <hr>
-    <h3 style="color: #d8000c;">Oooops!</h3>
-    <p>Seems like you have no permission for superadmin, to add new users + monitor!</p>
-    <p>Dm @jim if you think you must have it!</p>
-    <hr>
-
-
-  <div class="users-list-section">
-    <h3>Authorized Users</h3>
-    {% if users %}
-      <table class="keys-table">
-        <thead>
-          <tr>
-            <th>Username</th>
-            <th>Role</th>
-          </tr>
-        </thead>
-        <tbody>
-          {% for user in users %}
-            <tr class="{% if user.is_superadmin %}superadmin-row{% endif %}">
-              <td>{{ user.username }}</td>
-              <td>{{ 'Superadmin' if user.is_superadmin else 'Viewer' }}</td>
-            </tr>
-          {% endfor %}
-        </tbody>
-      </table>
-    {% else %}
-      <div class="no-users">
-        <p>No authorized users found.</p>
-      </div>
     {% endif %}
-  </div>
-{% endif %}
+
+    <!-- User List Section - Both superadmins and normal users can see this -->
+    <div class="users-list-section">
+      <h3>Authorized Users</h3>
+      {% if users %}
+        <table class="keys-table">
+          <thead>
+            <tr>
+              <th>Username</th>
+              <th>Role</th>
+              {% if is_superadmin %}
+                <th>Actions</th>
+              {% endif %}
+            </tr>
+          </thead>
+          <tbody>
+            {% for user in users %}
+              <tr class="{% if user.is_superadmin %}superadmin-row{% endif %}">
+                <td>{{ user.username }}</td>
+                <td>{{ 'Superadmin' if user.is_superadmin else 'Viewer' }}</td>
+                {% if is_superadmin and not user.is_superadmin %}
+                  <td>
+                    <form method="POST" action="/admin/promote" style="display: inline;">
+                      <input type="hidden" name="username" value="{{ user.username }}">
+                      <button type="submit" class="promote-btn" onclick="return confirm('Promote {{ user.username }} to superadmin?')">Promote</button>
+                    </form>
+                  </td>
+                {% elif is_superadmin %}
+                  <td><span style="color: #666;">Already Superadmin</span></td>
+                {% endif %}
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      {% else %}
+        <div class="no-users">
+          <p>No authorized users found.</p>
+        </div>
+      {% endif %}
+    </div>
 
   </div>
 

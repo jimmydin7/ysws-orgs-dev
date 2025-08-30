@@ -307,15 +307,26 @@ def fraud_checker():
 @login_required
 def admin():
     keys = load_admin_keys()
+    users = load_users()
     is_super = is_superadmin(session['username'])
     
+    # Create user list with superadmin status
+    user_list = []
+    for user in users:
+        user_list.append({
+            'username': user['username'],
+            'is_superadmin': user.get('superadmin', False)
+        })
+    
+    # Sort: superadmins first (in red), then normal users
+    user_list.sort(key=lambda x: (not x['is_superadmin'], x['username']))
+    
     if is_super:
-        # Superadmins see full key management
-        return render_template('admin.html', username=session['username'], keys=keys, is_superadmin=True)
+        # Superadmins see full key management + user list with promotion ability
+        return render_template('admin.html', username=session['username'], keys=keys, users=user_list, is_superadmin=True)
     else:
-        # Normal users see only usernames
-        usernames = [key['name'] for key in keys]
-        return render_template('admin.html', username=session['username'], usernames=usernames, is_superadmin=False)
+        # Normal users see only user list (no keys, no promotion)
+        return render_template('admin.html', username=session['username'], users=user_list, is_superadmin=False)
 
 @app.route("/admin/generate", methods=['POST'])
 @login_required
@@ -340,6 +351,27 @@ def generate_admin_key():
         save_admin_keys(keys)
         
         flash(f'New admin key generated for {name}: {new_key}', 'success')
+    
+    return redirect(url_for('admin'))
+
+@app.route("/admin/promote", methods=['POST'])
+@login_required
+def promote_to_superadmin():
+    if not is_superadmin(session['username']):
+        flash('Access denied. Superadmin privileges required.', 'error')
+        return redirect(url_for('admin'))
+    
+    username = request.form.get('username')
+    if username:
+        users = load_users()
+        for user in users:
+            if user['username'] == username:
+                user['superadmin'] = True
+                save_users(users)
+                flash(f'{username} has been promoted to superadmin!', 'success')
+                break
+        else:
+            flash(f'User {username} not found.', 'error')
     
     return redirect(url_for('admin'))
 
