@@ -6,164 +6,165 @@
     <title>Admin Logs - YSWS</title>
     <style>
         body {
-            background-color: #0a0a0a;
-            color: #00ff00;
-            font-family: 'Courier New', monospace;
-            margin: 0;
-            padding: 20px;
-            overflow-x: auto;
-        }
-        
-        .terminal-header {
-            border-bottom: 2px solid #00ff00;
-            padding-bottom: 10px;
-            margin-bottom: 20px;
-        }
-        
-        .terminal-header h1 {
-            margin: 0;
-            color: #00ff00;
-            font-size: 24px;
-        }
-        
-        .terminal-header p {
-            margin: 5px 0 0 0;
-            color: #00aa00;
-        }
-        
-        .logs-container {
-            background-color: #000000;
-            border: 1px solid #00ff00;
-            padding: 20px;
-            border-radius: 5px;
-            max-height: 70vh;
-            overflow-y: auto;
-        }
-        
-        .log-entry {
-            margin-bottom: 15px;
-            padding: 10px;
-            border-left: 3px solid #00ff00;
-            background-color: #0a0a0a;
-        }
-        
-        .log-timestamp {
-            color: #00aa00;
-            font-size: 12px;
-            margin-bottom: 5px;
-        }
-        
-        .log-username {
-            font-weight: bold;
-            margin-right: 10px;
-        }
-        
-        .log-username.superadmin {
-            color: #ff0000;
-        }
-        
-        .log-username.normal {
-            color: #0088ff;
-        }
-        
-        .log-action {
-            color: #00ff00;
-        }
-        
-        .log-details {
-            color: #00aa00;
-            font-style: italic;
-            margin-top: 5px;
-            margin-left: 20px;
-        }
-        
-        .back-button {
-            background-color: #00ff00;
-            color: #000000;
-            border: none;
-            padding: 10px 20px;
-            font-family: 'Courier New', monospace;
-            font-weight: bold;
-            cursor: pointer;
-            border-radius: 3px;
-            margin-bottom: 20px;
-        }
-        
-        .back-button:hover {
-            background-color: #00aa00;
-        }
-        
-        .filter-section {
-            margin-bottom: 20px;
-            padding: 15px;
-            background-color: #000000;
-            border: 1px solid #00ff00;
-            border-radius: 5px;
-        }
-        
-        .filter-section label {
-            font-weight: bold;
-        }
-        
-        .filter-section select {
-            background: #000;
-            color: #00ff00;
-            border: 1px solid #00ff00;
-            padding: 5px 10px;
-            border-radius: 3px;
-            font-family: 'Courier New', monospace;
-            cursor: pointer;
-        }
-        
-        .filter-section select:focus {
-            outline: none;
-            border-color: #00aa00;
-        }
-        
-        .filter-section button {
-            background: #00ff00;
-            color: #000;
-            border: none;
-            padding: 5px 10px;
-            border-radius: 3px;
-            margin-left: 10px;
-            font-family: 'Courier New', monospace;
-            cursor: pointer;
-            font-weight: bold;
-        }
-        
-        .filter-section button:hover {
-            background: #00aa00;
-        }
-        
-        .no-logs {
-            color: #00aa00;
-            text-align: center;
-            font-style: italic;
-            padding: 40px;
-        }
-        
-        .scrollbar {
-            scrollbar-width: thin;
-            scrollbar-color: #00ff00 #000000;
-        }
-        
-        .scrollbar::-webkit-scrollbar {
-            width: 8px;
-        }
-        
-        .scrollbar::-webkit-scrollbar-track {
-            background: #000000;
-        }
-        
-        .scrollbar::-webkit-scrollbar-thumb {
-            background: #00ff00;
-            border-radius: 4px;
-        }
-        
-        .scrollbar::-webkit-scrollbar-thumb:hover {
-            background: #00aa00;
-        }
+    background-color: #121212;
+    color: #d4a373;
+    font-family: 'Courier New', monospace;
+    margin: 0;
+    padding: 20px;
+    overflow-x: auto;
+}
+
+.terminal-header {
+    border-bottom: 2px solid #d4a373;
+    padding-bottom: 10px;
+    margin-bottom: 20px;
+}
+
+.terminal-header h1 {
+    margin: 0;
+    color: #d4a373;
+    font-size: 24px;
+}
+
+.terminal-header p {
+    margin: 5px 0 0 0;
+    color: #a68c6d;
+}
+
+.logs-container {
+    background-color: #1a1a1a;
+    border: 1px solid #d4a373;
+    padding: 20px;
+    border-radius: 5px;
+    max-height: 70vh;
+    overflow-y: auto;
+}
+
+.log-entry {
+    margin-bottom: 15px;
+    padding: 10px;
+    border-left: 3px solid #d4a373;
+    background-color: #1a1a1a;
+}
+
+.log-timestamp {
+    color: #d4a373;
+    font-size: 12px;
+    margin-bottom: 5px;
+}
+
+.log-username {
+    font-weight: bold;
+    margin-right: 10px;
+}
+
+.log-username.superadmin {
+    color: #ff4c4c;
+}
+
+.log-username.normal {
+    color: #4c9aff;
+}
+
+.log-action {
+    color: #d4a373;
+}
+
+.log-details {
+    color: #bfae9c;
+    font-style: italic;
+    margin-top: 5px;
+    margin-left: 20px;
+}
+
+.back-button {
+    background-color: #d4a373;
+    color: #1a1a1a;
+    border: none;
+    padding: 10px 20px;
+    font-family: 'Courier New', monospace;
+    font-weight: bold;
+    cursor: pointer;
+    border-radius: 3px;
+    margin-bottom: 20px;
+}
+
+.back-button:hover {
+    background-color: #c6975b;
+}
+
+.filter-section {
+    margin-bottom: 20px;
+    padding: 15px;
+    background-color: #1a1a1a;
+    border: 1px solid #d4a373;
+    border-radius: 5px;
+}
+
+.filter-section label {
+    font-weight: bold;
+}
+
+.filter-section select {
+    background: #1a1a1a;
+    color: #d4a373;
+    border: 1px solid #d4a373;
+    padding: 5px 10px;
+    border-radius: 3px;
+    font-family: 'Courier New', monospace;
+    cursor: pointer;
+}
+
+.filter-section select:focus {
+    outline: none;
+    border-color: #b07d4f;
+}
+
+.filter-section button {
+    background: #d4a373;
+    color: #1a1a1a;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 3px;
+    margin-left: 10px;
+    font-family: 'Courier New', monospace;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.filter-section button:hover {
+    background: #c6975b;
+}
+
+.no-logs {
+    color: #d4a373;
+    text-align: center;
+    font-style: italic;
+    padding: 40px;
+}
+
+.scrollbar {
+    scrollbar-width: thin;
+    scrollbar-color: #d4a373 #1a1a1a;
+}
+
+.scrollbar::-webkit-scrollbar {
+    width: 8px;
+}
+
+.scrollbar::-webkit-scrollbar-track {
+    background: #1a1a1a;
+}
+
+.scrollbar::-webkit-scrollbar-thumb {
+    background: #d4a373;
+    border-radius: 4px;
+}
+
+.scrollbar::-webkit-scrollbar-thumb:hover {
+    background: #c6975b;
+}
+
     </style>
 </head>
 <body>

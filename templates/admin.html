@@ -242,13 +242,14 @@
 
   <div class="admin-container">
     <a href="/" class="back-btn"><i class="fas fa-arrow-left"></i> Back to Dashboard</a>
+    <a href="/admin/logs" style="display: inline-block; margin: 15px; padding: 10px 20px; background: #d4a373; color: #000; text-decoration: none; border-radius: 5px; font-weight: bold; font-family: 'Courier New', monospace;">
+        <i class="fas fa-terminal"></i> View Activity Logs
+      </a>
 
     <div class="admin-header">
       <h1>Admin Panel</h1>
       <p>View all authorized users</p>
-      <a href="/admin/logs" style="display: inline-block; margin-top: 15px; padding: 10px 20px; background: #00ff00; color: #000; text-decoration: none; border-radius: 5px; font-weight: bold; font-family: 'Courier New', monospace;">
-        <i class="fas fa-terminal"></i> View Activity Logs
-      </a>
+      
     </div>
 
     {% with messages = get_flashed_messages(with_categories=true) %}
