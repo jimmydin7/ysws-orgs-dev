@@ -7,14 +7,13 @@ from datetime import datetime
 import os
 import secrets
 import json
-from dotenv import load_dotenv
 
-load_dotenv()
+
 
 app = Flask(__name__)
-app.secret_key = os.environ.get('SECRET_KEY', 'your-secret-key-here')
+app.secret_key = '6294d6140ad5b58e8352a1e620d2d845'
 SLACK_CLIENT_ID = "2210535565.9420943297447"
-SLACK_CLIENT_SECRET = os.environ.get('SLACK_CLIENT_SECRET')
+SLACK_CLIENT_SECRET = "79d47d9bc2c7785396e12f104e3d96bf"
 SLACK_REDIRECT_URI = "https://ysws.jimdinias.dev/auth/slack/callback"
 
 def load_authorized_users():
