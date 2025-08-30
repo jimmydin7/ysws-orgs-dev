@@ -1,82 +1,166 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>YSWS Project Finder</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Panel - YSWS Organizer</title>
   <link href="https://fonts.googleapis.com/css2?family=Fira+Code&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="static/css/index.css" />
-  <link rel="stylesheet" href="static\css\catalog.css">
+  <link rel="stylesheet" href="static/css/index.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <style>
+    .admin-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+    
+    .admin-header {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+    
+    .admin-header h1 {
+      color: #333;
+      margin-bottom: 10px;
+    }
+    
+    .admin-header p {
+      color: #666;
+      font-size: 16px;
+    }
+    
+    .users-table {
+      width: 100%;
+      border-collapse: collapse;
+      background: white;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+    
+    .users-table th {
+      background: #f8f9fa;
+      padding: 15px;
+      text-align: left;
+      font-weight: 600;
+      color: #333;
+      border-bottom: 2px solid #dee2e6;
+    }
+    
+    .users-table td {
+      padding: 15px;
+      border-bottom: 1px solid #dee2e6;
+      color: #555;
+    }
+    
+    .users-table tr:hover {
+      background: #f8f9fa;
+    }
+    
+    .status-badge {
+      padding: 4px 8px;
+      border-radius: 12px;
+      font-size: 12px;
+      font-weight: 500;
+      text-transform: uppercase;
+    }
+    
+    .status-admin {
+      background: #d4edda;
+      color: #155724;
+    }
+    
+    .status-superuser {
+      background: #cce5ff;
+      color: #004085;
+    }
+    
+    .back-btn {
+      display: inline-block;
+      margin-bottom: 20px;
+      padding: 10px 20px;
+      background: #007bff;
+      color: white;
+      text-decoration: none;
+      border-radius: 5px;
+      transition: background 0.3s;
+    }
+    
+    .back-btn:hover {
+      background: #0056b3;
+    }
+    
+    .no-users {
+      text-align: center;
+      padding: 40px;
+      color: #666;
+      font-style: italic;
+    }
+  </style>
 </head>
-<script>
-  setTimeout(() => {
-    document.querySelectorAll('.flash').forEach(el => {
-      el.style.transition = "opacity 0.3s ease";
-      el.style.opacity = "0";
-      setTimeout(() => el.remove(), 300); 
-    });
-  }, 3000);
-</script>
-{% if is_admin %}
 <body>
-  <div class="form-container">
-      {% with messages = get_flashed_messages(with_categories=true) %}
-        {% if messages %}
-          <div class="flash-messages">
-            {% for category, message in messages %}
-              <div class="flash {{ category }}">{{ message }}</div>
-            {% endfor %}
-          </div>
-          <br>
-        {% endif %}
-      {% endwith %}
-    <div class="nav-links">
-      <a href="/">← Back to Home</a>
-      <a href="/logout">Logout</a>
+  <nav class="navbar">
+    <div class="brand">YSWS Organizer Panel</div>
+    <div class="account">
+      <i class="fas fa-user" style="font-size: 1.5rem;"></i>
+      <span>{{ username }}</span>
+      <a href="/logout" class="logout-btn">Logout</a>
     </div>
+  </nav>
 
-    <h1>YSWS Admin Panel Users</h1>
-    <p>Check, change, and view users admin keys. This is the users page. More options may be added.</p>
-
-    {% if error %}
-      <div class="error">{{ error }}</div>
-    {% else %}
-        <div class="result-section">
-        <table>
+  <div class="admin-container">
+    <a href="/" class="back-btn">
+      <i class="fas fa-arrow-left"></i> Back to Dashboard
+    </a>
+    
+    <div class="admin-header">
+      <h1>Admin Panel</h1>
+      <p>View all authorized users and their access information</p>
+    </div>
+    
+    {% if authorized_users %}
+      <table class="users-table">
+        <thead>
           <tr>
-            <th style="color: #000000;">User</th>
-            <th style="color: #000000;">Login Key</th>
-            <th style="color: #000000;">Actions</th>
+            <th>Slack ID</th>
+            <th>Username</th>
+            <th>Admin Status</th>
+            <th>Superuser Status</th>
           </tr>
-          {% for user in users %}
+        </thead>
+        <tbody>
+          {% for slack_id, user_info in authorized_users.items() %}
             <tr>
-              <td style="color: #000000;">
-                <form method="POST" action="/admin" style="display:inline;">
-                  <input type="hidden" name="username" value="{{ user.username }}">
-                  {{ user.username }}
+              <td><code>{{ slack_id }}</code></td>
+              <td>{{ user_info.username }}</td>
+              <td>
+                {% if user_info.admin %}
+                  <span class="status-badge status-admin">Admin</span>
+                {% else %}
+                  <span class="status-badge">No</span>
+                {% endif %}
               </td>
               <td>
-                  <input type="text" name="password" value="{{ user.password }}">
-                  {% if is_superuser %}
-                  <input type="checkbox" name="is_admin" value="true" {% if user.admin %}checked{% endif %}>
-                  {% endif %}
-              </td>
-              <td>
-                  <button type="submit" name="action" value="update">Update</button>
-                  <button type="submit" name="action" value="remove">Remove</button>
-                </form>
+                {% if user_info.superuser %}
+                  <span class="status-badge status-superuser">Superuser</span>
+                {% else %}
+                  <span class="status-badge">No</span>
+                {% endif %}
               </td>
             </tr>
-            {% endfor %}
-        </table>
-        </div>
-        {% endif %}
-    </div>
+          {% endfor %}
+        </tbody>
+      </table>
+    {% else %}
+      <div class="no-users">
+        <i class="fas fa-users" style="font-size: 3rem; color: #ddd; margin-bottom: 20px;"></i>
+        <p>No authorized users found.</p>
+      </div>
+    {% endif %}
+  </div>
+
+  <footer>
+    made with <3 by <a href="https://hackclub.slack.com/team/U07G0C6JZME"><b>jim</b></a>
+  </footer>
 </body>
 </html>
-{% else %}
-<body>
-  <h1>Access Denied</h1>
-  <p>You do not have permission to view this page.</p>
-</body>
-{% endif %}

@@ -1,36 +1,65 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Login - YSWS Organizer Panel</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login - YSWS Organizer</title>
   <link href="https://fonts.googleapis.com/css2?family=Fira+Code&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="static/css/index.css" />
+  <link rel="stylesheet" href="static/css/index.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <style>
+    .login-container {
+      max-width: 400px;
+      margin: 100px auto;
+      padding: 40px;
+      background: white;
+      border-radius: 10px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+      text-align: center;
+    }
+    
+    .login-header h1 {
+      color: #333;
+      margin-bottom: 10px;
+    }
+    
+    .login-header p {
+      color: #666;
+      margin-bottom: 30px;
+    }
+    
+    .slack-login-btn {
+      display: inline-block;
+      padding: 15px 30px;
+      background: #4A154B;
+      color: white;
+      text-decoration: none;
+      border-radius: 8px;
+      font-size: 16px;
+      font-weight: 500;
+      transition: background 0.3s;
+    }
+    
+    .slack-login-btn:hover {
+      background: #3a0f3a;
+    }
+    
+    .slack-icon {
+      margin-right: 10px;
+    }
+  </style>
 </head>
 <body>
-  <div class="container">
-    <div class="content">
-      <p>WEBSITE CURRENLTY DOWN!</p>
-      {% if error %}
-        <p class="error">{{ error }}</p>
-      {% endif %}
+  <div class="login-container">
+    <div class="login-header">
+      <h1>YSWS Organizer</h1>
+      <p>Sign in with your Slack account to continue</p>
     </div>
     
-    <!--<form action="/login" class="form" method="POST">
-      <input type="text" name="username" placeholder="enter your username" class="search-box" required />
-      <input type="password" name="password" placeholder="enter your password" class="search-box" required />
-      <button class="btn" type="submit">Login</button>
-    </form>
-    <br>-->
-    <div class="oauth-section">
-      <a href="/auth/slack" class="btn slack-btn">
-        Sign in with Slack
-      </a>
-    </div>
-    
-    <!--<div class="links">
-      <a href="/new">New user? Sign up here</a>
-    </div>-->
+    <a href="/auth/slack" class="slack-login-btn">
+      <i class="fab fa-slack slack-icon"></i>
+      Sign in with Slack
+    </a>
   </div>
 
   <footer>

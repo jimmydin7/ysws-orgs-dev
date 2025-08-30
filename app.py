@@ -1,7 +1,5 @@
 from flask import Flask, render_template, request, redirect, url_for, session, flash
 import requests
-from config import SECRET_KEY, KEYS_FILE, USERS_FILE
-from utils import load_json_file, save_json_file, login_required
 from tools.ysws_catalog import generate_yml
 from tools.commits import get_commit_count
 from tools.aicheck import get_readme_from_github, detect_ai_probability
@@ -14,12 +12,10 @@ from dotenv import load_dotenv
 load_dotenv()
 
 app = Flask(__name__)
-app.secret_key = SECRET_KEY
+app.secret_key = os.environ.get('SECRET_KEY', 'your-secret-key-here')
 SLACK_CLIENT_ID = "2210535565.9420943297447"
-SLACK_CLIENT_SECRET = os.environ.get('SLACK_CLIENT_SECRET')  # Set this in your environment
-SLACK_REDIRECT_URI = "https://ysws.peleg2210.hackclub.app/auth/slack/callback"
-
-NEST_PORT = 44195
+SLACK_CLIENT_SECRET = os.environ.get('SLACK_CLIENT_SECRET')
+SLACK_REDIRECT_URI = "https://ysws.jimdinias.dev/auth/slack/callback"
 
 def load_authorized_users():
     try:
@@ -29,12 +25,26 @@ def load_authorized_users():
     except FileNotFoundError:
         return {}
 
-@app.route("/", methods=['GET', 'POST'])
-@login_required
+def login_required(f):
+    def decorated_function(*args, **kwargs):
+        if 'username' not in session:
+            return redirect(url_for('slack_auth'))
+        return f(*args, **kwargs)
+    decorated_function.__name__ = f.__name__
+    return decorated_function
+
+@app.route("/")
 def main():
-    print(session['is_admin'])
-    error = None
-    return render_template('index.html', username=session['username'], is_admin=session.get('is_admin', False), error=error)
+    if 'username' not in session:
+        return redirect(url_for('login'))
+    
+    return render_template('index.html', username=session['username'])
+
+@app.route("/login")
+def login():
+    if 'username' in session:
+        return redirect(url_for('main'))
+    return render_template('login.html')
 
 @app.route("/ysws-catalog", methods=['GET', 'POST'])
 @login_required
@@ -229,7 +239,7 @@ def fraud_checker():
                                    username=session['username'],
                                    error="Please fill in the user ID")
 
-        url = f"https://hackatime.hackclub.com/api/v1/users/{user_id}/stats"
+        url = f"https://hackatime.hackclub.com/api/v1/users/stats"
 
         response = requests.get(url)
         if response.status_code == 200:
@@ -251,165 +261,23 @@ def fraud_checker():
                            trust_value=trust_value,
                            show_result=hackatime_data is not None)
 
-@app.route("/new", methods=['POST', 'GET'])
-def new():
-    if request.method == 'POST':
-        username = request.form.get('username')
-        name = username
-        username = username.lower()
-        admin_key = request.form.get('admin_key')
-        
-        if username and admin_key:
-            available_keys = load_json_file(KEYS_FILE)
-            users = load_json_file(USERS_FILE)
-
-            if any(u["username"] == username for u in users):
-                return render_template('new.html', error="User already exists!")
-
-
-            if admin_key in available_keys:
-                available_keys.remove(admin_key)
-                save_json_file(KEYS_FILE, available_keys)
-                
-                users = load_json_file(USERS_FILE)
-                user_data = {
-                    'username': username.lower(),
-                    'password': admin_key
-                }
-                users.append(user_data)
-                save_json_file(USERS_FILE, users)
-                
-                session['username'] = name
-                return redirect(url_for('main'))
-            else:
-                return render_template('new.html', error="Invalid admin key!")
-        
-    return render_template('new.html')
-
-@app.route("/login", methods=['POST', 'GET'])
-def login():
-    if request.method == 'POST':
-        username = request.form.get('username')
-        raw_name = username
-        username = username.lower()
-        password = request.form.get('password')
-        
-        print(f"Login attempt - Username: {raw_name}, Password: {password}")
-        
-        if username and password:
-            users = load_json_file(USERS_FILE)
-            print(f"Loaded users: {users}")
-            
-            user = next((u for u in users if u['username'] == username and u['password'] == password), None)
-            
-            if user:
-                session['username'] = raw_name
-                session['is_admin'] = user.get('admin', False)
-                session['is_superuser'] = user.get('superuser', False)
-                print(f"Session set: {session}")
-                return redirect(url_for('main'))
-            else:
-                return render_template('login.html', error="Invalid username or password!")
-    
-    return render_template('login.html')
-
-@app.route("/admin", methods=['POST', 'GET'])
+@app.route("/admin")
 @login_required
 def admin():
-    name = session['username']
-    users = load_json_file(USERS_FILE)
-    is_admin = session.get('is_admin', False)
-
-
-    if not is_admin:
-        flash("You must be an admin to access that page!", "error")
-        return redirect(url_for('main'))
-
-# POST
-
-    if request.method == 'POST':
-        action = request.form.get('action')
-        username = request.form.get('username')
-
-        if action == "remove":
-            users = load_json_file(USERS_FILE)
-            new_users = [u for u in users if u["username"] != username]
-            if len(new_users) < len(users):
-                save_json_file(USERS_FILE, new_users)
-                flash(f"User {username} removed.", "success")
-            else:
-                flash(f"User {username} not found!", "error")
-            return redirect(url_for('admin'))
-
-        if action == "update":
-            username = request.form.get('username')
-
-            password = request.form.get('password')
-            is_admin = True if request.form.get('is_admin') == "true" else False
-            for user in users:
-                if user["username"] == username:
-                    user["password"] = password
-                    user["admin"] = is_admin
-                    user["superuser"] = user.get("superuser", False)
-                    break
-            save_json_file(USERS_FILE, users)
-            flash(f"Updated user {username}.", "success")
-
-        return redirect(url_for('admin'))
-
-#GET
-
-    is_superuser = session.get('is_superuser', False)
-    return render_template('admin.html',
-                           username=name,
-                           users=users,
-                           is_admin=is_admin,
-                           is_superuser=is_superuser)
-
-
-@app.route("/admin/remove", methods=["GET", "POST"])
-@login_required
-def remove_user():
-    
-    if request.method == "GET":
-        name = session['username']
-        is_admin = session.get('is_admin', False)
-
-        if not is_admin:
-            flash("You must be an admin to access that page!", "error")
-            return redirect(url_for('main'))
-        else:
-            flash("Invalid request method!", "error")
-            return redirect(url_for('main'))
-
-    print("Running remove_user")
-    users = load_json_file(USERS_FILE)
-    username = request.form.get("username")
-
-    new_users = [user for user in users if user["username"] != username]
-
-    if len(new_users) < len(users):
-        save_json_file(USERS_FILE, new_users)
-        flash(f"User {username} removed.", "success")
-    else:
-        flash(f"User {username} not found!", "error")
-
-    return redirect(url_for("admin"))
-
-@app.route("/debug")
-def debug():
-    users = load_json_file(USERS_FILE)
-    return f"Users: {users}<br>Session: {dict(session)}"
+    authorized_users = load_authorized_users()
+    return render_template('admin.html', 
+                          username=session['username'],
+                          authorized_users=authorized_users)
 
 @app.route("/logout")
 def logout():
-    session.pop('username', None)
+    session.clear()
     return redirect(url_for('login'))
+
 @app.route("/terminology")
 @login_required 
 def terminology():
     return render_template('terminology.html', username=session['username'])
-
 
 @app.route("/airtable-automation-hackatime")
 @login_required
@@ -467,8 +335,7 @@ def slack_callback():
         user_info = authorized_users[slack_user_id]
         
         session['username'] = user_info['username']
-        session['is_admin'] = user_info['admin']
-        session['is_superuser'] = user_info['superuser']
+        session['slack_user_id'] = slack_user_id
         
         session.pop('oauth_state', None)
         
@@ -477,6 +344,5 @@ def slack_callback():
     return "Failed to get user info", 400
 
 if __name__ == "__main__":
-    
     app.run(debug=True, port=44195)
 
