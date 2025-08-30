@@ -43,8 +43,13 @@ def generate_key():
 
 def is_superadmin(username):
     users = load_users()
+    print(f"Debug: Checking superadmin for username: {username}")
+    print(f"Debug: Loaded users: {users}")
     user = next((u for u in users if u['username'] == username), None)
-    return user and user.get('superadmin', False)
+    print(f"Debug: Found user: {user}")
+    result = user and user.get('superadmin', False)
+    print(f"Debug: Is superadmin: {result}")
+    return result
 
 def login_required(f):
     def decorated_function(*args, **kwargs):
@@ -68,11 +73,15 @@ def login():
         
         if admin_key:
             keys = load_admin_keys()
+            print(f"Debug: Admin key entered: {admin_key}")
+            print(f"Debug: Available keys: {keys}")
             key_data = next((k for k in keys if k['key'] == admin_key), None)
+            print(f"Debug: Found key data: {key_data}")
             
             if key_data:
                 session['username'] = key_data['name']
                 session['admin_key'] = admin_key
+                print(f"Debug: Session username set to: {session['username']}")
                 return redirect(url_for('main'))
             else:
                 flash('Invalid admin key', 'error')
