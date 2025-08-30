@@ -93,6 +93,49 @@
             background-color: #00aa00;
         }
         
+        .filter-section {
+            margin-bottom: 20px;
+            padding: 15px;
+            background-color: #000000;
+            border: 1px solid #00ff00;
+            border-radius: 5px;
+        }
+        
+        .filter-section label {
+            font-weight: bold;
+        }
+        
+        .filter-section select {
+            background: #000;
+            color: #00ff00;
+            border: 1px solid #00ff00;
+            padding: 5px 10px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+            cursor: pointer;
+        }
+        
+        .filter-section select:focus {
+            outline: none;
+            border-color: #00aa00;
+        }
+        
+        .filter-section button {
+            background: #00ff00;
+            color: #000;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 3px;
+            margin-left: 10px;
+            font-family: 'Courier New', monospace;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        
+        .filter-section button:hover {
+            background: #00aa00;
+        }
+        
         .no-logs {
             color: #00aa00;
             text-align: center;
@@ -132,10 +175,21 @@
     
     <button class="back-button" onclick="window.location.href='/admin'">← Back to Admin Panel</button>
     
+    <div class="filter-section">
+        <label for="userFilter">Filter by user:</label>
+        <select id="userFilter" onchange="filterLogs()">
+            <option value="">All users</option>
+            {% for user in users %}
+                <option value="{{ user.username }}">{{ user.username }}</option>
+            {% endfor %}
+        </select>
+        <button onclick="clearFilter()">Clear Filter</button>
+    </div>
+    
     <div class="logs-container scrollbar">
         {% if logs %}
             {% for log in logs %}
-                <div class="log-entry">
+                <div class="log-entry" data-username="{{ log.username }}">
                     <div class="log-timestamp">{{ log.timestamp }}</div>
                     <div>
                         <span class="log-username {% if log.is_superadmin %}superadmin{% else %}normal{% endif %}">
@@ -160,6 +214,27 @@
         
         function scrollToBottom() {
             logsContainer.scrollTop = logsContainer.scrollHeight;
+        }
+        
+        function filterLogs() {
+            const selectedUser = document.getElementById('userFilter').value;
+            const logEntries = document.querySelectorAll('.log-entry');
+            
+            logEntries.forEach(entry => {
+                const username = entry.getAttribute('data-username');
+                if (selectedUser === '' || username === selectedUser) {
+                    entry.style.display = 'block';
+                } else {
+                    entry.style.display = 'none';
+                }
+            });
+            
+            scrollToBottom();
+        }
+        
+        function clearFilter() {
+            document.getElementById('userFilter').value = '';
+            filterLogs();
         }
         
         scrollToBottom();
