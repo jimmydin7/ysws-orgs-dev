@@ -309,10 +309,11 @@ def admin():
     keys = load_admin_keys()
     is_super = is_superadmin(session['username'])
     
-
+    if is_super:
+        # Superadmins see full key management
         return render_template('admin.html', username=session['username'], keys=keys, is_superadmin=True)
     else:
-
+        # Normal users see only usernames
         usernames = [key['name'] for key in keys]
         return render_template('admin.html', username=session['username'], usernames=usernames, is_superadmin=False)
 
