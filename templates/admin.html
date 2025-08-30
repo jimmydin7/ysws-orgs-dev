@@ -305,13 +305,14 @@
 
     <!-- User List Section - Both superadmins and normal users can see this -->
     <div class="users-list-section">
-      <h3>Authorized Users</h3>
+      <h3>All Users</h3>
       {% if users %}
         <table class="keys-table">
           <thead>
             <tr>
               <th>Username</th>
               <th>Role</th>
+              <th>Registration Date</th>
               {% if is_superadmin %}
                 <th>Actions</th>
               {% endif %}
@@ -322,6 +323,7 @@
               <tr class="{% if user.is_superadmin %}superadmin-row{% endif %}">
                 <td>{{ user.username }}</td>
                 <td>{{ 'Superadmin' if user.is_superadmin else 'Viewer' }}</td>
+                <td>{{ user.registration_date if user.registration_date else 'N/A' }}</td>
                 {% if is_superadmin and not user.is_superadmin %}
                   <td>
                     <form method="POST" action="/admin/promote" style="display: inline;">
@@ -338,7 +340,7 @@
         </table>
       {% else %}
         <div class="no-users">
-          <p>No authorized users found.</p>
+          <p>No users found.</p>
         </div>
       {% endif %}
     </div>

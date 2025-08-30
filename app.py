@@ -310,12 +310,17 @@ def admin():
     users = load_users()
     is_super = is_superadmin(session['username'])
     
-    # Create user list with superadmin status
+    # Create user list with superadmin status and registration dates
     user_list = []
     for user in users:
+        # Get registration date from keys if available, otherwise use a default
+        key_data = next((k for k in keys if k['name'] == user['username']), None)
+        registration_date = key_data['generated_at'] if key_data else 'N/A'
+        
         user_list.append({
             'username': user['username'],
-            'is_superadmin': user.get('superadmin', False)
+            'is_superadmin': user.get('superadmin', False),
+            'registration_date': registration_date
         })
     
     # Sort: superadmins first (in red), then normal users
@@ -344,6 +349,15 @@ def generate_admin_key():
         
         keys.append(key_data)
         save_admin_keys(keys)
+        
+        # Also create a user entry if it doesn't exist
+        users = load_users()
+        if not any(u['username'] == name for u in users):
+            users.append({
+                'username': name,
+                'superadmin': False
+            })
+            save_users(users)
         
         flash(f'New admin key generated for {name}: {new_key}', 'success')
     
