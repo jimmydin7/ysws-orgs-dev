@@ -271,10 +271,9 @@
       </div>
     {% endif %}
 
-    <!-- Admin Keys Table - Everyone can see, but only superadmins can modify -->
     {% if keys %}
       <div class="keys-section">
-        <h3>Admin Keys</h3>
+        <h3>All users</h3>
         <table class="keys-table">
           <thead>
             <tr>
@@ -315,9 +314,9 @@
       <div class="no-keys"><p>No admin keys found.</p></div>
     {% endif %}
 
-    <!-- User List Section - Both superadmins and normal users can see this -->
+
     <div class="users-list-section">
-      <h3>All Users</h3>
+      <h3>Superadmins</h3>
       {% if users %}
         <table class="keys-table">
           <thead>
