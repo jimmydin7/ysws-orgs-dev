@@ -1,0 +1,14 @@
+{
+  "authorized_users": {
+    "U07G0C6JZME": {
+      "username": "jim",
+      "admin": true,
+      "superuser": true
+    },
+    "U1234567890": {
+      "username": "peleg",
+      "admin": true,
+      "superuser": true
+    }
+  }
+}

@@ -6,11 +6,25 @@ from tools.ysws_catalog import generate_yml
 from tools.commits import get_commit_count
 from tools.aicheck import get_readme_from_github, detect_ai_probability
 from datetime import datetime
+import os
+import secrets
+import json
 
 app = Flask(__name__)
 app.secret_key = SECRET_KEY
+SLACK_CLIENT_ID = "2210535565.9420943297447"
+SLACK_CLIENT_SECRET = os.environ.get('SLACK_CLIENT_SECRET')  # Set this in your environment
+SLACK_REDIRECT_URI = "https://ysws.peleg2210.hackclub.app/auth/slack/callback"
 
 NEST_PORT = 44195
+
+def load_authorized_users():
+    try:
+        with open('slack_users.json', 'r') as f:
+            data = json.load(f)
+            return data.get('authorized_users', {})
+    except FileNotFoundError:
+        return {}
 
 @app.route("/", methods=['GET', 'POST'])
 @login_required
@@ -398,6 +412,69 @@ def terminology():
 @login_required
 def automation_hackatime():
     return render_template('airtable_automation_hackatime_peleg.html', username=session['username'])
+
+@app.route('/auth/slack')
+def slack_auth():
+    state = secrets.token_urlsafe(32)
+    session['oauth_state'] = state
+    
+    slack_auth_url = (
+        f"https://slack.com/openid/connect/authorize"
+        f"?response_type=code"
+        f"&scope=openid%20profile%20email"
+        f"&client_id={SLACK_CLIENT_ID}"
+        f"&redirect_uri={SLACK_REDIRECT_URI}"
+        f"&state={state}"
+    )
+    return redirect(slack_auth_url)
+
+@app.route('/auth/slack/callback')
+def slack_callback():
+    if request.args.get('state') != session.get('oauth_state'):
+        return "Invalid state parameter", 400
+    
+    code = request.args.get('code')
+    if not code:
+        return "No authorization code received", 400
+    
+    token_response = requests.post('https://slack.com/api/openid.connect.token', data={
+        'client_id': SLACK_CLIENT_ID,
+        'client_secret': SLACK_CLIENT_SECRET,
+        'code': code,
+        'redirect_uri': SLACK_REDIRECT_URI
+    })
+    
+    token_data = token_response.json()
+    if not token_data.get('ok'):
+        return "Failed to get access token", 400
+    
+    access_token = token_data['access_token']
+    
+    user_response = requests.get('https://slack.com/api/openid.connect.userInfo', 
+                                headers={'Authorization': f'Bearer {access_token}'})
+    user_data = user_response.json()
+    
+    if user_data.get('ok'):
+        slack_user_id = user_data['sub']
+        authorized_users = load_authorized_users()
+        
+        if slack_user_id not in authorized_users:
+            return "Access denied. You are not authorized to use this application.", 403
+        
+        user_info = authorized_users[slack_user_id]
+        
+        session['user'] = {
+            'id': slack_user_id,
+            'username': user_info['username'],
+            'email': user_data.get('email'),
+            'admin': user_info['admin'],
+            'superuser': user_info['superuser']
+        }
+        session['logged_in'] = True
+        return redirect('/')
+    
+    return "Failed to get user info", 400
+
 if __name__ == "__main__":
     
     app.run(debug=True, port=44195)
