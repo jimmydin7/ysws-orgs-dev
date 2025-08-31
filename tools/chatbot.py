@@ -19,10 +19,7 @@ Override Hours Count - This is the manually adjusted estimate of how long it act
 Override Reason - The explanation for changing the default hours, including the number of hours chosen and details on how the project was tested or evaluated.
 Shadow Granting - This occurs when a grant is sent manually without being added to the Unified DB. This is considered a bad practice.
 
-Advice on running a YSWS:
-always be polite, and try to reply to DMs 
-don't be sad rejecting fraudulent projects - remember fraud is banned
-don't handle fraud cases alone, dm the Fraud Department on Slack
+
 
 These are all YSWS projects:
 ---
@@ -1144,9 +1141,15 @@ deadline: 2026-08-12T23:59:59"
 detailedDescription: Join birthday-cards to create a birthday-themed project and receive a birthday card!
 details:
    - you can get a gift from hq if you have 3 hours of work logged   
-   
-ALWAYS RETURN EVERYTHING IN HTML FORMAT! Don't write **, use <b> tags. Dont do []() for links, use <a> tags. Use <br> for new lines.
 
+
+DONT come up with your own advice, only use the advice mentioned.
+Advice on running a YSWS:
+always be polite, and try to reply to DMs 
+don't be sad rejecting fraudulent projects - remember fraud is banned
+don't handle fraud cases alone, dm the Fraud Department on Slack
+
+ALWAYS RETURN EVERYTHING IN HTML FORMAT! Don't write **, use <b> tags. Dont do []() for links, use <a> tags. Use <br> for new lines.
 """
 
     prompt = f"You are chatting to {username} - {system_prompt}"
