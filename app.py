@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for, session, flash
+from flask import Flask, render_template, request, redirect, url_for, session, flash, jsonify
 import requests
 from tools.ysws_catalog import generate_yml
 from tools.commits import get_commit_count
@@ -7,6 +7,7 @@ from datetime import datetime
 import os
 import secrets
 import json
+from tools.chatbot import ask_hackclub_ai
 
 app = Flask(__name__)
 app.secret_key = '6294d6140ad5b58e8352a1e620d2d845'
@@ -479,12 +480,23 @@ def automation_hackatime():
     log_activity(session['username'], 'accessed airtable automation hackatime')
     return render_template('airtable_automation_hackatime_peleg.html', username=session['username'])
 
+
 @app.route("/chatbot")
 @login_required
 def chatbot():
     log_activity(session['username'], 'accessed chatbot')
     return render_template('chatbot.html', username=session['username'])
 
+
+@app.route("/chat", methods=["POST"])
+@login_required
+def chat():
+    user_input = request.json.get("message")
+    username = session['username']
+
+    ai_response = ask_hackclub_ai(username=username, question=user_input)
+
+    return jsonify({"response": ai_response})
 
 @app.route("/dns-github", methods=['GET', 'POST'])
 @login_required

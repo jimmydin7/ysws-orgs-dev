@@ -35,7 +35,7 @@ def ask_hackclub_ai(username: str, question: str, tune_file: str = "ai_tune.txt"
         return f"Error: {e}\nRaw response: {response.text}"
 
 
-def format_ai_response_generic(raw_text: str) -> str:
+def format_ai_response_generic(raw_text: str) -> str: #doesnt work for now
 
     text = re.sub(r"<think>.*?</think>", "", raw_text, flags=re.DOTALL)
     

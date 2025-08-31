@@ -115,35 +115,32 @@
   </div>
 
   <script>
-    function handleChat(event) {
-      event.preventDefault();
-      const input = document.getElementById('userInput');
-      const chatWindow = document.getElementById('chatWindow');
+    async function handleChat(event) {
+    event.preventDefault();
+    const input = document.getElementById('userInput');
+    const chatWindow = document.getElementById('chatWindow');
 
-      const userMessage = document.createElement('div');
-      userMessage.className = 'chat-message user';
-      userMessage.textContent = input.value;
-      chatWindow.appendChild(userMessage);
+    const userMessage = document.createElement('div');
+    userMessage.className = 'chat-message user';
+    userMessage.textContent = input.value;
+    chatWindow.appendChild(userMessage);
 
-      const botMessage = document.createElement('div');
-      botMessage.className = 'chat-message bot';
-      botMessage.textContent = generateBotResponse(input.value);
-      chatWindow.appendChild(botMessage);
+    const res = await fetch('/chat', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({message: input.value})
+    });
+    const data = await res.json();
 
-      input.value = '';
-      chatWindow.scrollTop = chatWindow.scrollHeight;
-    }
 
-    function generateBotResponse(message) {
-      const lower = message.toLowerCase();
-      if (lower.includes('readme')) {
-        return "The README AI Check tool analyzes your repo's README for completeness and clarity.";
-      } else if (lower.includes('fraud')) {
-        return "The Fraud Checker tool helps identify suspicious activity based on trust levels.";
-      } else {
-        return "Still waiting for Jim to finish coding me properly.";
-      }
-    }
+    const botMessage = document.createElement('div');
+    botMessage.className = 'chat-message bot';
+    botMessage.innerHTML = data.response;  
+    chatWindow.appendChild(botMessage);
+
+    input.value = '';
+    chatWindow.scrollTop = chatWindow.scrollHeight;
+  }
   </script>
 </body>
 </html>
