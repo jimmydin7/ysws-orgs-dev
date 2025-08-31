@@ -203,6 +203,8 @@ def readme_ai_check():
                           ai_result=ai_result,
                           show_result=ai_result is not None)
 
+
+
 @app.route("/commits-hours-ratio", methods=['GET', 'POST'])
 @login_required
 def commits_hours_ratio():
