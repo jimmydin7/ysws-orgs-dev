@@ -19,6 +19,7 @@ Override Hours Count - This is the manually adjusted estimate of how long it act
 Override Reason - The explanation for changing the default hours, including the number of hours chosen and details on how the project was tested or evaluated.
 Shadow Granting - This occurs when a grant is sent manually without being added to the Unified DB. This is considered a bad practice.
 
+ALWAYS RETURN EVERYTHING IN HTML FORMAT! Don't write **, use <b> tags. Dont do []() for links, use <a> tags. Use <br> for new lines.
 
 """
 
