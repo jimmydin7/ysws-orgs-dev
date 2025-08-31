@@ -274,5 +274,539 @@
     "username": "jim",
     "action": "accessed admin logs",
     "details": null
+  },
+  {
+    "timestamp": "2025-08-31 18:03:47.714261",
+    "username": "jim",
+    "action": "accessed admin panel",
+    "details": null
+  },
+  {
+    "timestamp": "2025-08-31 18:03:56.579276",
+    "username": "jim",
+    "action": "opened the app",
+    "details": null
+  },
+  {
+    "timestamp": "2025-08-31 18:11:15.441207",
+    "username": "jim",
+    "action": "accessed hour finder",
+    "details": null
+  },
+  {
+    "timestamp": "2025-08-31 18:11:22.952471",
+    "username": "jim",
+    "action": "opened the app",
+    "details": null
+  },
+  {
+    "timestamp": "2025-08-31 18:16:28.303832",
+    "username": "jim",
+    "action": "accessed hour finder",
+    "details": null
+  },
+  {
+    "timestamp": "2025-08-31 18:16:29.586318",
+    "username": "jim",
+    "action": "opened the app",
+    "details": null
+  },
+  {
+    "timestamp": "2025-08-31 18:17:07.670750",
+    "username": "jim",
+    "action": "opened the app",
+    "details": null
+  },
+  {
+    "timestamp": "2025-08-31 18:17:09.040501",
+    "username": "jim",
+    "action": "accessed hour finder",
+    "details": null
+  },
+  {
+    "timestamp": "2025-08-31 18:17:33.834290",
+    "username": "jim",
+    "action": "searched up user on hour finder",
+    "details": "user_id: U091HBJLQS2, project: all"
+  },
+  {
+    "timestamp": "2025-08-31 18:17:36.815792",
+    "username": "jim",
+    "action": "opened the app",
+    "details": null
+  },
+  {
+    "timestamp": "2025-08-31 18:17:38.405498",
+    "username": "jim",
+    "action": "accessed hour finder",
+    "details": null
+  },
+  {
+    "timestamp": "2025-08-31 18:18:20.576490",
+    "username": "jim",
+    "action": "accessed project summary",
+    "details": null
+  },
+  {
+    "timestamp": "2025-08-31 18:18:21.647780",
+    "username": "jim",
+    "action": "accessed project summary",
+    "details": null
+  },
+  {
+    "timestamp": "2025-08-31 18:18:21.980190",
+    "username": "jim",
+    "action": "accessed project summary",
+    "details": null
+  },
+  {
+    "timestamp": "2025-08-31 18:18:47.360883",
+    "username": "jim",
+    "action": "accessed project summary",
+    "details": null
+  },
+  {
+    "timestamp": "2025-08-31 18:18:47.908074",
+    "username": "jim",
+    "action": "accessed project summary",
+    "details": null
+  },
+  {
+    "timestamp": "2025-08-31 18:18:50.301486",
+    "username": "jim",
+    "action": "accessed project summary",
+    "details": null
+  },
+  {
+    "timestamp": "2025-08-31 18:18:50.811945",
+    "username": "jim",
+    "action": "accessed project summary",
+    "details": null
+  },
+  {
+    "timestamp": "2025-08-31 18:19:04.444575",
+    "username": "jim",
+    "action": "accessed project summary",
+    "details": null
+  },
+  {
+    "timestamp": "2025-08-31 18:19:19.054750",
+    "username": "jim",
+    "action": "searched up user on hour finder",
+    "details": "user_id: U091HBJLQS2, project: all"
+  },
+  {
+    "timestamp": "2025-08-31 18:21:18.437812",
+    "username": "jim",
+    "action": "searched up user on hour finder",
+    "details": "user_id: U091HBJLQS2, project: all"
+  },
+  {
+    "timestamp": "2025-08-31 18:21:35.794500",
+    "username": "jim",
+    "action": "searched up user on hour finder",
+    "details": "user_id: U091HBJLQS2, project: all"
+  },
+  {
+    "timestamp": "2025-08-31 18:21:49.024448",
+    "username": "jim",
+    "action": "searched up user on hour finder",
+    "details": "user_id: U091HBJLQS2, project: all"
+  },
+  {
+    "timestamp": "2025-08-31 18:26:44.450679",
+    "username": "jim",
+    "action": "accessed project summary",
+    "details": null
+  },
+  {
+    "timestamp": "2025-08-31 18:26:47.752993",
+    "username": "jim",
+    "action": "accessed project summary",
+    "details": null
+  },
+  {
+    "timestamp": "2025-08-31 18:27:43.844034",
+    "username": "jim",
+    "action": "accessed project summary",
+    "details": null
+  },
+  {
+    "timestamp": "2025-08-31 18:27:44.377330",
+    "username": "jim",
+    "action": "accessed project summary",
+    "details": null
+  },
+  {
+    "timestamp": "2025-08-31 18:27:44.650083",
+    "username": "jim",
+    "action": "accessed project summary",
+    "details": null
+  },
+  {
+    "timestamp": "2025-08-31 18:27:44.889027",
+    "username": "jim",
+    "action": "accessed project summary",
+    "details": null
+  },
+  {
+    "timestamp": "2025-08-31 18:29:14.201056",
+    "username": "jim",
+    "action": "accessed project summary",
+    "details": null
+  },
+  {
+    "timestamp": "2025-08-31 18:30:08.896763",
+    "username": "jim",
+    "action": "accessed project summary",
+    "details": null
+  },
+  {
+    "timestamp": "2025-08-31 18:30:34.240775",
+    "username": "jim",
+    "action": "searched up user on hour finder",
+    "details": "user_id: U091HBJLQS2, project: all"
+  },
+  {
+    "timestamp": "2025-08-31 18:31:06.786654",
+    "username": "jim",
+    "action": "searched up user on hour finder",
+    "details": "user_id: U091HBJLQS2, project: all"
+  },
+  {
+    "timestamp": "2025-08-31 18:31:23.582905",
+    "username": "jim",
+    "action": "searched up user on hour finder",
+    "details": "user_id: U091HBJLQS2, project: all"
+  },
+  {
+    "timestamp": "2025-08-31 18:31:37.557336",
+    "username": "jim",
+    "action": "searched up user on hour finder",
+    "details": "user_id: U091HBJLQS2, project: all"
+  },
+  {
+    "timestamp": "2025-08-31 18:31:39.217549",
+    "username": "jim",
+    "action": "accessed project summary",
+    "details": null
+  },
+  {
+    "timestamp": "2025-08-31 18:31:41.046335",
+    "username": "jim",
+    "action": "searched up user on hour finder",
+    "details": "user_id: U091HBJLQS2, project: all"
+  },
+  {
+    "timestamp": "2025-08-31 18:32:06.980757",
+    "username": "jim",
+    "action": "opened the app",
+    "details": null
+  },
+  {
+    "timestamp": "2025-08-31 18:32:08.519391",
+    "username": "jim",
+    "action": "accessed project summary",
+    "details": null
+  },
+  {
+    "timestamp": "2025-08-31 18:32:15.568931",
+    "username": "jim",
+    "action": "searched up user on hour finder",
+    "details": "user_id: U091HBJLQS2, project: all"
+  },
+  {
+    "timestamp": "2025-08-31 18:33:25.999887",
+    "username": "jim",
+    "action": "searched up user on hour finder",
+    "details": "user_id: U091HBJLQS2, project: all"
+  },
+  {
+    "timestamp": "2025-08-31 18:33:26.830769",
+    "username": "jim",
+    "action": "accessed project summary",
+    "details": null
+  },
+  {
+    "timestamp": "2025-08-31 18:33:29.350999",
+    "username": "jim",
+    "action": "accessed project summary",
+    "details": null
+  },
+  {
+    "timestamp": "2025-08-31 18:33:44.845445",
+    "username": "jim",
+    "action": "logged out",
+    "details": null
+  },
+  {
+    "timestamp": "2025-08-31 18:33:52.296848",
+    "username": "jim",
+    "action": "logged in",
+    "details": null
+  },
+  {
+    "timestamp": "2025-08-31 18:33:52.300310",
+    "username": "jim",
+    "action": "opened the app",
+    "details": null
+  },
+  {
+    "timestamp": "2025-08-31 18:33:54.232683",
+    "username": "jim",
+    "action": "accessed project summary",
+    "details": null
+  },
+  {
+    "timestamp": "2025-08-31 18:33:59.564734",
+    "username": "jim",
+    "action": "searched up user on hour finder",
+    "details": "user_id: U091HBJLQS2, project: all"
+  },
+  {
+    "timestamp": "2025-08-31 18:37:09.643018",
+    "username": "jim",
+    "action": "accessed project summary",
+    "details": null
+  },
+  {
+    "timestamp": "2025-08-31 18:37:11.866136",
+    "username": "jim",
+    "action": "accessed project summary",
+    "details": null
+  },
+  {
+    "timestamp": "2025-08-31 18:37:42.984633",
+    "username": "jim",
+    "action": "accessed project summary",
+    "details": null
+  },
+  {
+    "timestamp": "2025-08-31 18:37:43.559225",
+    "username": "jim",
+    "action": "accessed project summary",
+    "details": null
+  },
+  {
+    "timestamp": "2025-08-31 18:37:44.197798",
+    "username": "jim",
+    "action": "accessed project summary",
+    "details": null
+  },
+  {
+    "timestamp": "2025-08-31 18:38:05.052833",
+    "username": "jim",
+    "action": "accessed project summary",
+    "details": null
+  },
+  {
+    "timestamp": "2025-08-31 18:38:08.192438",
+    "username": "jim",
+    "action": "logged out",
+    "details": null
+  },
+  {
+    "timestamp": "2025-08-31 18:38:19.152845",
+    "username": "jim",
+    "action": "logged in",
+    "details": null
+  },
+  {
+    "timestamp": "2025-08-31 18:38:19.156818",
+    "username": "jim",
+    "action": "opened the app",
+    "details": null
+  },
+  {
+    "timestamp": "2025-08-31 18:38:19.361348",
+    "username": "jim",
+    "action": "accessed airtable automation hackatime",
+    "details": null
+  },
+  {
+    "timestamp": "2025-08-31 18:38:20.996854",
+    "username": "jim",
+    "action": "opened the app",
+    "details": null
+  },
+  {
+    "timestamp": "2025-08-31 18:38:22.381376",
+    "username": "jim",
+    "action": "accessed project summary",
+    "details": null
+  },
+  {
+    "timestamp": "2025-08-31 18:38:29.853535",
+    "username": "jim",
+    "action": "searched up user on hour finder",
+    "details": "user_id: U091HBJLQS2, project: all"
+  },
+  {
+    "timestamp": "2025-08-31 18:47:03.954398",
+    "username": "jim",
+    "action": "accessed project summary",
+    "details": null
+  },
+  {
+    "timestamp": "2025-08-31 18:47:05.255453",
+    "username": "jim",
+    "action": "opened the app",
+    "details": null
+  },
+  {
+    "timestamp": "2025-08-31 18:47:05.971329",
+    "username": "jim",
+    "action": "opened the app",
+    "details": null
+  },
+  {
+    "timestamp": "2025-08-31 18:47:06.907042",
+    "username": "jim",
+    "action": "opened the app",
+    "details": null
+  },
+  {
+    "timestamp": "2025-08-31 18:47:11.375278",
+    "username": "jim",
+    "action": "accessed terminology",
+    "details": null
+  },
+  {
+    "timestamp": "2025-08-31 18:47:11.594773",
+    "username": "jim",
+    "action": "opened the app",
+    "details": null
+  },
+  {
+    "timestamp": "2025-08-31 18:47:37.161625",
+    "username": "jim",
+    "action": "opened the app",
+    "details": null
+  },
+  {
+    "timestamp": "2025-08-31 18:47:37.867150",
+    "username": "jim",
+    "action": "opened the app",
+    "details": null
+  },
+  {
+    "timestamp": "2025-08-31 18:47:53.897549",
+    "username": "jim",
+    "action": "opened the app",
+    "details": null
+  },
+  {
+    "timestamp": "2025-08-31 18:47:59.275413",
+    "username": "jim",
+    "action": "opened the app",
+    "details": null
+  },
+  {
+    "timestamp": "2025-08-31 18:48:04.828070",
+    "username": "jim",
+    "action": "opened the app",
+    "details": null
+  },
+  {
+    "timestamp": "2025-08-31 18:48:33.108857",
+    "username": "jim",
+    "action": "accessed terminology",
+    "details": null
+  },
+  {
+    "timestamp": "2025-08-31 18:48:33.337227",
+    "username": "jim",
+    "action": "accessed terminology",
+    "details": null
+  },
+  {
+    "timestamp": "2025-08-31 18:48:34.218502",
+    "username": "jim",
+    "action": "opened the app",
+    "details": null
+  },
+  {
+    "timestamp": "2025-08-31 18:48:34.778786",
+    "username": "jim",
+    "action": "opened the app",
+    "details": null
+  },
+  {
+    "timestamp": "2025-08-31 18:49:07.777720",
+    "username": "jim",
+    "action": "opened the app",
+    "details": null
+  },
+  {
+    "timestamp": "2025-08-31 18:49:28.480573",
+    "username": "jim",
+    "action": "opened the app",
+    "details": null
+  },
+  {
+    "timestamp": "2025-08-31 18:49:33.179465",
+    "username": "jim",
+    "action": "opened the app",
+    "details": null
+  },
+  {
+    "timestamp": "2025-08-31 18:49:39.497393",
+    "username": "jim",
+    "action": "opened the app",
+    "details": null
+  },
+  {
+    "timestamp": "2025-08-31 18:49:45.201581",
+    "username": "jim",
+    "action": "opened the app",
+    "details": null
+  },
+  {
+    "timestamp": "2025-08-31 18:49:48.889315",
+    "username": "jim",
+    "action": "opened the app",
+    "details": null
+  },
+  {
+    "timestamp": "2025-08-31 18:50:07.024933",
+    "username": "jim",
+    "action": "opened the app",
+    "details": null
+  },
+  {
+    "timestamp": "2025-08-31 18:50:13.986477",
+    "username": "jim",
+    "action": "opened the app",
+    "details": null
+  },
+  {
+    "timestamp": "2025-08-31 18:50:24.473663",
+    "username": "jim",
+    "action": "opened the app",
+    "details": null
+  },
+  {
+    "timestamp": "2025-08-31 18:50:38.858268",
+    "username": "jim",
+    "action": "opened the app",
+    "details": null
+  },
+  {
+    "timestamp": "2025-08-31 18:51:00.135945",
+    "username": "jim",
+    "action": "accessed project summary",
+    "details": null
+  },
+  {
+    "timestamp": "2025-08-31 18:51:04.541682",
+    "username": "jim",
+    "action": "opened the app",
+    "details": null
+  },
+  {
+    "timestamp": "2025-08-31 18:51:08.456803",
+    "username": "jim",
+    "action": "accessed admin logs",
+    "details": null
   }
 ]

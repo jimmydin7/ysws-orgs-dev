@@ -197,3 +197,15 @@
     grid-column: span 1;
   }
 }
+
+.tool-card-broken {
+  background-color: #222;
+  border: 2px dotted #f38f3d;
+  border-radius: 8px;
+  padding: 20px;
+}
+
+.tool-card-broken h3 {
+    margin-top: 0;
+    color: #ff9100;
+}

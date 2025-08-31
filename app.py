@@ -498,6 +498,75 @@ def chat():
 
     return ai_response
 
+@app.route("/project_summary", methods=['GET', 'POST'])
+@login_required
+def project_summary():
+    try:
+        if trust_value is None:
+            trust_value = None
+    except NameError:
+        trust_value = None
+    if 'project_summary' not in session:
+        session['project_summary'] = None
+    project_summary = session['project_summary']
+    if 'show_result' not in session:
+        session['show_result'] = 1
+    if request.method == 'POST':
+        if session['show_result'] == 1:
+            user_id = request.form.get('id')
+            # projectname = request.form.get('projectname')
+            projectname = None
+
+            if not user_id:
+                return render_template('project_summary.html', 
+                                    username=session['username'],
+                                    error="Please fill in the user ID")
+
+            url = f"https://hackatime.hackclub.com/api/v1/users/{user_id}/stats?features=projects"
+            if projectname:
+                url += f"&filter_by_project={projectname}"
+
+            response = requests.get(url)
+            if response.status_code == 200:
+                project_summary = response.json()
+                trust_value_int = project_summary.get('trust_factor', {}).get('trust_value', 0)
+                trust_value = True if trust_value_int == 1 else False
+                log_activity(session['username'], 'searched up user on hour finder', f'user_id: {user_id}, project: {projectname or "all"}')
+            else:
+                project_summary = {"error": f"HTTP {response.status_code}"}
+            session['show_result'] = 2
+
+            session['project_summary'] = project_summary
+            return render_template('project_summary.html', 
+                           username=session['username'],
+                           summary=project_summary,
+                           trust_value=trust_value,
+                           show_result=session['show_result'])
+
+        elif session['show_result'] == 2:
+            projectname = request.form.get('projectname')
+            project_summary = project_summary
+            session['show_result'] = 3
+
+            session['project_summary'] = project_summary
+            return render_template('project_summary.html', 
+                username=session['username'],
+                summary=project_summary,
+                trust_value=trust_value,
+                show_result=session['show_result'])
+
+        print(session['show_result'])
+
+    if request.method == 'GET':
+        log_activity(session['username'], 'accessed project summary')
+
+    print(session['show_result'])
+    return render_template('project_summary.html', 
+                           username=session['username'],
+                           summary=project_summary,
+                           trust_value=trust_value,
+                           show_result=session['show_result'])
+
 @app.route("/dns-github", methods=['GET', 'POST'])
 @login_required
 def dns_github():
