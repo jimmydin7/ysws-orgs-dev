@@ -120,27 +120,30 @@
     const input = document.getElementById('userInput');
     const chatWindow = document.getElementById('chatWindow');
 
+ 
     const userMessage = document.createElement('div');
     userMessage.className = 'chat-message user';
     userMessage.textContent = input.value;
     chatWindow.appendChild(userMessage);
 
-    const res = await fetch('/chat', {
-      method: 'POST',
-      headers: {'Content-Type': 'application/json'},
-      body: JSON.stringify({message: input.value})
-    });
-    const data = await res.json();
 
+    const res = await fetch('/chat', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({message: input.value})
+    });
+    const text = await res.text(); 
 
     const botMessage = document.createElement('div');
     botMessage.className = 'chat-message bot';
-    botMessage.innerHTML = data.response;  
+    botMessage.textContent = text;  
     chatWindow.appendChild(botMessage);
+
 
     input.value = '';
     chatWindow.scrollTop = chatWindow.scrollHeight;
-  }
+}
+
   </script>
 </body>
 </html>

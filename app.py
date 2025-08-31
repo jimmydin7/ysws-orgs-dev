@@ -496,7 +496,7 @@ def chat():
 
     ai_response = ask_hackclub_ai(username=username, question=user_input)
 
-    return jsonify({"response": ai_response})
+    return ai_response
 
 @app.route("/dns-github", methods=['GET', 'POST'])
 @login_required
