@@ -214,5 +214,65 @@
     "username": "jim",
     "action": "accessed admin panel",
     "details": null
+  },
+  {
+    "timestamp": "2025-08-31 11:43:46.500796",
+    "username": "jim",
+    "action": "logged in",
+    "details": null
+  },
+  {
+    "timestamp": "2025-08-31 11:43:46.820768",
+    "username": "jim",
+    "action": "opened the app",
+    "details": null
+  },
+  {
+    "timestamp": "2025-08-31 11:43:51.792319",
+    "username": "jim",
+    "action": "accessed chatbot",
+    "details": null
+  },
+  {
+    "timestamp": "2025-08-31 11:46:24.256071",
+    "username": "jim",
+    "action": "accessed chatbot",
+    "details": null
+  },
+  {
+    "timestamp": "2025-08-31 11:47:57.062419",
+    "username": "jim",
+    "action": "accessed chatbot",
+    "details": null
+  },
+  {
+    "timestamp": "2025-08-31 11:49:47.140380",
+    "username": "jim",
+    "action": "accessed chatbot",
+    "details": null
+  },
+  {
+    "timestamp": "2025-08-31 11:49:56.419301",
+    "username": "jim",
+    "action": "opened the app",
+    "details": null
+  },
+  {
+    "timestamp": "2025-08-31 11:49:59.240281",
+    "username": "jim",
+    "action": "accessed admin panel",
+    "details": null
+  },
+  {
+    "timestamp": "2025-08-31 11:50:00.737934",
+    "username": "jim",
+    "action": "accessed admin logs",
+    "details": null
+  },
+  {
+    "timestamp": "2025-08-31 11:50:31.651110",
+    "username": "jim",
+    "action": "accessed admin logs",
+    "details": null
   }
 ]

@@ -477,6 +477,13 @@ def automation_hackatime():
     log_activity(session['username'], 'accessed airtable automation hackatime')
     return render_template('airtable_automation_hackatime_peleg.html', username=session['username'])
 
+@app.route("/chatbot")
+@login_required
+def chatbot():
+    log_activity(session['username'], 'accessed chatbot')
+    return render_template('chatbot.html', username=session['username'])
+
+
 @app.route("/dns-github", methods=['GET', 'POST'])
 @login_required
 def dns_github():

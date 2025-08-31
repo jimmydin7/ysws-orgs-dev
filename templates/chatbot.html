@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>YSWS Chatbot - YSWS Organizer Panel</title>
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code&display=swap" rel="stylesheet">
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Fira Code', monospace;
+      background-color: #000;
+      color: #fff;
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+    }
+
+    .form-container {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      padding: 20px;
+    }
+
+    .nav-links a {
+      color: #0ff;
+      text-decoration: none;
+      margin-right: 10px;
+    }
+
+    h1, p {
+      color: #fff;
+    }
+
+    .chat-window {
+      flex: 1;
+      border: 1px solid #0ff;
+      border-radius: 4px;
+      padding: 10px;
+      overflow-y: auto;
+      background-color: #000;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .chat-message {
+      margin-bottom: 10px;
+      white-space: pre-wrap;
+    }
+
+    .chat-message.user {
+      color: #0ff;
+      font-weight: bold;
+    }
+
+    .chat-message.bot {
+      color: #fff;
+      font-style: italic;
+    }
+
+    .chat-input {
+      display: flex;
+      padding: 10px;
+      border-top: 1px solid #0ff;
+      background-color: #000;
+      position: sticky;
+      bottom: 0;
+    }
+
+    .chat-input input {
+      flex: 1;
+      padding: 8px;
+      border: 1px solid #0ff;
+      border-radius: 4px;
+      background-color: #000;
+      color: #fff;
+    }
+
+    .chat-input button {
+      padding: 8px 16px;
+      margin-left: 10px;
+      border: 1px solid #0ff;
+      border-radius: 4px;
+      background-color: #000;
+      color: #0ff;
+      cursor: pointer;
+    }
+
+    .chat-input button:hover {
+      background-color: #000;
+      border-color: #fff;
+      color: #fff;
+    }
+  </style>
+</head>
+<body>
+  <div class="form-container">
+    <div class="nav-links">
+      <a href="/">← Back to Home</a>
+      <a href="/logout">Logout</a>
+    </div>
+
+    <h1>YSWS AI Chatbot</h1>
+    <p>Ask anything about YSWS tools, GitHub activity, productivity stats, or terminology.</p>
+
+    <div class="chat-window" id="chatWindow">
+      <div class="chat-message bot">Hi! I'm your YSWS assistant. What would you like to know?</div>
+    </div>
+
+    <form class="chat-input" onsubmit="handleChat(event)">
+      <input type="text" id="userInput" placeholder="Type your question..." required />
+      <button type="submit">Send</button>
+    </form>
+  </div>
+
+  <script>
+    function handleChat(event) {
+      event.preventDefault();
+      const input = document.getElementById('userInput');
+      const chatWindow = document.getElementById('chatWindow');
+
+      const userMessage = document.createElement('div');
+      userMessage.className = 'chat-message user';
+      userMessage.textContent = input.value;
+      chatWindow.appendChild(userMessage);
+
+      const botMessage = document.createElement('div');
+      botMessage.className = 'chat-message bot';
+      botMessage.textContent = generateBotResponse(input.value);
+      chatWindow.appendChild(botMessage);
+
+      input.value = '';
+      chatWindow.scrollTop = chatWindow.scrollHeight;
+    }
+
+    function generateBotResponse(message) {
+      const lower = message.toLowerCase();
+      if (lower.includes('readme')) {
+        return "The README AI Check tool analyzes your repo's README for completeness and clarity.";
+      } else if (lower.includes('fraud')) {
+        return "The Fraud Checker tool helps identify suspicious activity based on trust levels.";
+      } else {
+        return "Still waiting for Jim to finish coding me properly.";
+      }
+    }
+  </script>
+</body>
+</html>
