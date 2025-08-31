@@ -140,38 +140,46 @@
     </form>
   </div>
 
-  <script>
-    async function handleChat(event) {
-      event.preventDefault();
-      const input = document.getElementById('userInput');
-      const chatWindow = document.getElementById('chatWindow');
+<script>
+async function handleChat(event) {
+  event.preventDefault();
+  const input = document.getElementById('userInput');
+  const chatWindow = document.getElementById('chatWindow');
+
+ 
+  input.disabled = true;
+  input.style.opacity = '0.5';
+
+  const userMessage = document.createElement('div');
+  userMessage.className = 'chat-message user';
+  userMessage.textContent = input.value;
+  chatWindow.appendChild(userMessage);
+
+  chatWindow.scrollTop = chatWindow.scrollHeight;
 
 
-      input.disabled = true;
-      input.style.opacity = '0.3';
+  const res = await fetch('/chat', {
+    method: 'POST',
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify({message: input.value})
+  });
 
-      const userMessage = document.createElement('div');
-      userMessage.className = 'chat-message user';
-      userMessage.textContent = input.value;
-      chatWindow.appendChild(userMessage);
+  const text = await res.text();
 
-      chatWindow.scrollTop = chatWindow.scrollHeight;
 
-      const res = await fetch('/chat', {
-        method: 'POST',
-        headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify({message: input.value})
-      });
+  const botMessage = document.createElement('div');
+  botMessage.className = 'chat-message bot';
+  botMessage.innerHTML = text;
+  chatWindow.appendChild(botMessage);
 
-      const text = await res.text(); 
+  chatWindow.scrollTop = chatWindow.scrollHeight;
 
-      const botMessage = document.createElement('div');
-      botMessage.className = 'chat-message bot';
-      botMessage.innerHTML = text;
-      chatWindow.appendChild(botMessage);
+  input.value = '';
+  input.disabled = false;
+  input.style.opacity = '1';
+  input.focus();
+}
+</script>
 
-      chatWindow.scrollTop = chatWindow.scrollHeight;
-    }
-  </script>
 </body>
 </html>
