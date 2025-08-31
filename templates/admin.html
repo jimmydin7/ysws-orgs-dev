@@ -73,7 +73,7 @@
       font-size: 16px;
     }
 
-    .generate-key-section {
+    .generate-key-section, .invite-section {
       background: #1a1a1a;
       padding: 20px;
       border-radius: 8px;
@@ -81,11 +81,11 @@
       border: 1px solid #333;
     }
 
-    .generate-key-section h3 {
+    .generate-key-section h3, .invite-section h3 {
       color: #ff4d4d;
     }
 
-    .generate-key-form {
+    .generate-key-form, .invite-form {
       display: flex;
       gap: 15px;
       align-items: end;
@@ -106,7 +106,7 @@
       color: #eee;
     }
 
-    .generate-btn {
+    .generate-btn, .invite-btn {
       padding: 10px 20px;
       background: #ff4d4d;
       color: white;
@@ -116,8 +116,16 @@
       font-weight: bold;
     }
 
-    .generate-btn:hover {
+    .generate-btn:hover, .invite-btn:hover {
       background: #e60000;
+    }
+
+    .invite-btn {
+      background: #006600;
+    }
+
+    .invite-btn:hover {
+      background: #004d00;
     }
 
     .keys-table {
@@ -185,6 +193,23 @@
       background: #004d00;
     }
 
+    .status-badge {
+      padding: 4px 8px;
+      border-radius: 12px;
+      font-size: 12px;
+      font-weight: 500;
+    }
+
+    .status-pending {
+      background-color: #664400;
+      color: #ffcc66;
+    }
+
+    .status-used {
+      background-color: #004d00;
+      color: #66ff66;
+    }
+
     .flash-messages .flash {
       padding: 10px;
       border-radius: 5px;
@@ -204,7 +229,7 @@
       border: 1px solid #00cc00;
     }
 
-    .no-keys, .no-users {
+    .no-keys, .no-users, .no-invites {
       text-align: center;
       padding: 40px;
       color: #999;
@@ -263,6 +288,67 @@
     {% endwith %}
 
     {% if is_superadmin %}
+      <!-- Invite Management Section -->
+      <div class="invite-section">
+        <h3><i class="fas fa-envelope"></i> Invite Management</h3>
+        <p>Create invites for new users. Only users with valid invites can register via Slack.</p>
+        <form method="POST" action="/admin/invites/create" class="invite-form">
+          <div class="form-group">
+            <label for="invite_email">Email address to invite:</label>
+            <input type="email" id="invite_email" name="email" required placeholder="Enter email address">
+          </div>
+          <button style="margin: 0.5rem;" type="submit" class="invite-btn">Create Invite</button>
+        </form>
+      </div>
+
+      <!-- Existing Invites Table -->
+      {% if invites %}
+        <div class="keys-section">
+          <h3>Pending & Used Invites</h3>
+          <table class="keys-table">
+            <thead>
+              <tr>
+                <th>Email</th>
+                <th>Status</th>
+                <th>Invited By</th>
+                <th>Created</th>
+                <th>Used By</th>
+                <th>Used At</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for invite in invites %}
+                <tr>
+                  <td>{{ invite.email }}</td>
+                  <td>
+                    {% if invite.is_used %}
+                      <span class="status-badge status-used">Used</span>
+                    {% else %}
+                      <span class="status-badge status-pending">Pending</span>
+                    {% endif %}
+                  </td>
+                  <td>{{ invite.invited_by }}</td>
+                  <td>{{ invite.created_at[:16] if invite.created_at else 'N/A' }}</td>
+                  <td>{{ invite.used_by or '-' }}</td>
+                  <td>{{ invite.used_at[:16] if invite.used_at else '-' }}</td>
+                  <td>
+                    {% if not invite.is_used %}
+                      <form method="POST" action="/admin/invites/revoke" style="display: inline;">
+                        <input type="hidden" name="email" value="{{ invite.email }}">
+                        <button type="submit" class="revoke-btn" onclick="return confirm('Are you sure you want to revoke this invite?')">Revoke</button>
+                      </form>
+                    {% else %}
+                      <span style="color: #666; font-size: 12px;">No actions</span>
+                    {% endif %}
+                  </td>
+                </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      {% endif %}
+
       <div class="generate-key-section">
         <h3>Generate New Admin Key</h3>
         <p>Having access to this means you have high permissions. Make sure to be responsible, and only hand out keys to people who need the tool and are hosting a YSWS.</p>
@@ -321,13 +407,14 @@
 
 
     <div class="users-list-section">
-      <h3>Superadmins</h3>
+      <h3>User Management</h3>
       {% if users %}
         <table class="keys-table">
           <thead>
             <tr>
               <th>Username</th>
               <th>Role</th>
+              <th>Slack Email</th>
               {% if is_superadmin %}
                 <th>Actions</th>
               {% endif %}
@@ -337,16 +424,41 @@
             {% for user in users %}
               <tr class="{% if user.is_superadmin %}superadmin-row{% endif %}">
                 <td>{{ user.username }}</td>
-                <td>{{ 'Superadmin' if user.is_superadmin else 'Viewer' }}</td>
-                {% if is_superadmin and not user.is_superadmin %}
+                <td>
+                  {% if user.is_superadmin %}
+                    Superadmin
+                  {% elif user.is_admin %}
+                    Admin
+                  {% else %}
+                    Viewer
+                  {% endif %}
+                </td>
+                <td>{{ user.slack_email if user.slack_email else 'N/A' }}</td>
+                {% if is_superadmin %}
                   <td>
-                    <form method="POST" action="/admin/promote" style="display: inline;">
-                      <input type="hidden" name="username" value="{{ user.username }}">
-                      <button type="submit" class="promote-btn" onclick="return confirm('Promote {{ user.username }} to superadmin?')">Promote</button>
-                    </form>
+                    {% if not user.is_superadmin %}
+                      <form method="POST" action="/admin/promote" style="display: inline;">
+                        <input type="hidden" name="username" value="{{ user.username }}">
+                        <input type="hidden" name="role" value="superadmin">
+                        <button type="submit" class="promote-btn" style="background: #006600;" onclick="return confirm('Promote {{ user.username }} to superadmin?')">Make Superadmin</button>
+                      </form>
+                    {% endif %}
+                    
+                    {% if not user.is_admin and not user.is_superadmin %}
+                      <form method="POST" action="/admin/promote" style="display: inline; margin-left: 5px;">
+                        <input type="hidden" name="username" value="{{ user.username }}">
+                        <input type="hidden" name="role" value="admin">
+                        <button type="submit" class="promote-btn" style="background: #0066cc;" onclick="return confirm('Make {{ user.username }} an admin?')">Make Admin</button>
+                      </form>
+                    {% endif %}
+                    
+                    {% if user.is_admin or user.is_superadmin %}
+                      <form method="POST" action="/admin/demote" style="display: inline; margin-left: 5px;">
+                        <input type="hidden" name="username" value="{{ user.username }}">
+                        <button type="submit" class="revoke-btn" onclick="return confirm('Demote {{ user.username }} to regular user?')">Demote</button>
+                      </form>
+                    {% endif %}
                   </td>
-                {% elif is_superadmin %}
-                  <td><span style="color: #666;">Already Superadmin</span></td>
                 {% endif %}
               </tr>
             {% endfor %}

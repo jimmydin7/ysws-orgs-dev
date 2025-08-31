@@ -92,6 +92,49 @@
       background: #cc0000;
     }
 
+    .or-divider {
+      display: flex;
+      align-items: center;
+      margin: 20px 0;
+      color: #aaa;
+    }
+
+    .or-divider::before,
+    .or-divider::after {
+      content: "";
+      flex: 1;
+      height: 1px;
+      background: #333;
+      margin: 0 10px;
+    }
+
+    .slack-btn {
+      width: 100%;
+      padding: 12px;
+      background: #4A154B;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      font-size: 16px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: background 0.3s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-decoration: none;
+      margin-top: 10px;
+    }
+
+    .slack-btn:hover {
+      background: #611f69;
+    }
+
+    .slack-btn img {
+      height: 20px;
+      margin-right: 10px;
+    }
+
     .flash-messages {
       margin-bottom: 20px;
     }
@@ -120,7 +163,7 @@
   <div class="login-container">
     <div class="login-header">
       <h1>who's here?</h1>
-      <p>If you don't know what this is, better get out of here quickly.</p>
+      <p>If you don't know what this is, get out before I touch u</p>
     </div>
 
     {% with messages = get_flashed_messages(with_categories=true) %}
@@ -139,8 +182,15 @@
         <input type="text" id="admin_key" name="admin_key" required placeholder="dm @jim or ask your PoC to get this">
       </div>
 
-      <button type="submit" class="submit-btn">Login</button>
+      <button type="submit" class="submit-btn">Login with Admin Key</button>
     </form>
+    
+    <div class="or-divider">OR</div>
+    
+    <a href="/login/slack" class="slack-btn">
+      <img src="https://api.slack.com/img/sign_in_with_slack.png" alt="Sign in with Slack" height="20">
+      Sign in with Slack
+    </a>
   </div>
 </body>
 </html>

@@ -7,64 +7,24 @@ from datetime import datetime
 import os
 import secrets
 import json
+from dotenv import load_dotenv
+from db import (get_users, get_user_by_username, is_superadmin, is_admin, 
+               get_admin_keys, get_admin_key, add_admin_key, get_activity_logs, 
+               add_activity_log, create_user, update_user, get_user_by_slack_id)
+from slack_auth import setup_oauth, handle_slack_callback, get_slack_login_url
+import ssl
+
+load_dotenv()
 
 app = Flask(__name__)
-app.secret_key = '6294d6140ad5b58e8352a1e620d2d845'
-
-# File paths
-KEYS_FILE = 'admin_keys.json'
-USERS_FILE = 'users.json'
-LOGS_FILE = 'activity_logs.json'
+app.secret_key = os.getenv('FLASK_SECRET_KEY', '6294d6140ad5b58e8352a1e620d2d845')
+oauth = setup_oauth(app)
 
 def log_activity(username, action, details=None):
-    logs = load_json_file(LOGS_FILE)
-    log_entry = {
-        'timestamp': str(datetime.now()),
-        'username': username,
-        'action': action,
-        'details': details
-    }
-    logs.append(log_entry)
-    save_json_file(LOGS_FILE, logs)
-
-def load_json_file(filename):
-    try:
-        with open(filename, 'r') as f:
-            return json.load(f)
-    except FileNotFoundError:
-        return []
-
-def save_json_file(filename, data):
-    with open(filename, 'w') as f:
-        json.dump(data, f, indent=2)
-
-def load_admin_keys():
-    return load_json_file(KEYS_FILE)
-
-def load_users():
-    return load_json_file(USERS_FILE)
-
-def load_logs():
-    return load_json_file(LOGS_FILE)
-
-def save_admin_keys(keys):
-    save_json_file(KEYS_FILE, keys)
-
-def save_users(users):
-    save_json_file(USERS_FILE, users)
+    add_activity_log(username, action, details)
 
 def generate_key():
     return secrets.token_hex(16)
-
-def is_superadmin(username):
-    users = load_users()
-    print(f"Debug: Checking superadmin for username: {username}")
-    print(f"Debug: Loaded users: {users}")
-    user = next((u for u in users if u['username'] == username), None)
-    print(f"Debug: Found user: {user}")
-    result = user and user.get('superadmin', False)
-    print(f"Debug: Is superadmin: {result}")
-    return result
 
 def login_required(f):
     def decorated_function(*args, **kwargs):
@@ -88,22 +48,53 @@ def login():
         admin_key = request.form.get('admin_key')
         
         if admin_key:
-            keys = load_admin_keys()
             print(f"Debug: Admin key entered: {admin_key}")
-            print(f"Debug: Available keys: {keys}")
-            key_data = next((k for k in keys if k['key'] == admin_key), None)
+            key_data = get_admin_key(admin_key)
             print(f"Debug: Found key data: {key_data}")
             
             if key_data:
                 session['username'] = key_data['name']
                 session['admin_key'] = admin_key
                 print(f"Debug: Session username set to: {session['username']}")
-                log_activity(key_data['name'], 'logged in')
+                log_activity(key_data['name'], 'logged in with admin key')
                 return redirect(url_for('main'))
             else:
                 flash('Invalid admin key', 'error')
     
     return render_template('login.html')
+
+@app.route("/login/slack")
+def login_slack():
+    """Redirect to Slack OAuth authorization page"""
+    return get_slack_login_url(oauth)
+
+@app.route("/slack/callback")
+def slack_callback():
+    """Handle the callback from Slack OAuth"""
+    user_info, error = handle_slack_callback(oauth)
+    
+    if error:
+        flash(error, 'error')
+        return redirect(url_for('login'))
+    
+    user = get_user_by_slack_id(user_info['user_id'])
+    
+    if not user:
+        existing_user = get_user_by_username(user_info['username'])
+        
+        if existing_user:
+            update_user(user_info['username'], {
+                'slack_id': user_info['user_id'],
+                'slack_email': user_info.get('email')
+            })
+        else:
+            create_user(
+                username=user_info['username'],
+                slack_id=user_info['user_id'],
+                slack_email=user_info.get('email')
+            )
+    
+    return redirect(url_for('main'))
 
 @app.route("/ysws-catalog", methods=['GET', 'POST'])
 @login_required
@@ -346,9 +337,15 @@ def fraud_checker():
 @app.route("/admin")
 @login_required
 def admin():
-    keys = load_admin_keys()
-    users = load_users()
+    keys = get_admin_keys()
+    users = get_users()
     is_super = is_superadmin(session['username'])
+    
+    # Get invites for superadmins
+    invites = []
+    if is_super:
+        from db import get_all_invites
+        invites = get_all_invites()
     
     log_activity(session['username'], 'accessed admin panel')
     
@@ -356,19 +353,75 @@ def admin():
     for user in users:
         user_list.append({
             'username': user['username'],
-            'is_superadmin': user.get('superadmin', False)
+            'is_superadmin': user.get('superadmin', False),
+            'is_admin': user.get('is_admin', False),
+            'slack_email': user.get('slack_email', None)
         })
     
-    user_list.sort(key=lambda x: (not x['is_superadmin'], x['username']))
+    # Sort by role (superadmin first, then admin, then regular users) and then by username
+    user_list.sort(key=lambda x: (not x['is_superadmin'], not x['is_admin'], x['username']))
     
-    return render_template('admin.html', username=session['username'], keys=keys, users=user_list, is_superadmin=is_super)
+    return render_template('admin.html', 
+                          username=session['username'], 
+                          keys=keys, 
+                          users=user_list, 
+                          is_superadmin=is_super,
+                          invites=invites)
+    
+    
+@app.route("/admin/invites/create", methods=['POST'])
+@login_required
+def create_invite_route():
+    if not is_superadmin(session['username']):
+        flash('Access denied. Superadmin privileges required.', 'error')
+        return redirect(url_for('admin'))
+    
+    email = request.form.get('email')
+    if not email:
+        flash('Email is required', 'error')
+        return redirect(url_for('admin'))
+    
+    from db import create_invite
+    invite_code = create_invite(email, session['username'])
+    
+    if invite_code:
+        log_activity(session['username'], 'created invite', f'email: {email}')
+        flash(f'Invite created for {email}', 'success')
+    else:
+        flash(f'Invite already exists for {email}', 'error')
+    
+    return redirect(url_for('admin'))
+
+@app.route("/admin/invites/revoke", methods=['POST'])
+@login_required
+def revoke_invite_route():
+    if not is_superadmin(session['username']):
+        flash('Access denied. Superadmin privileges required.', 'error')
+        return redirect(url_for('admin'))
+    
+    email = request.form.get('email')
+    if not email:
+        flash('Email is required', 'error')
+        return redirect(url_for('admin'))
+    
+    from db import revoke_invite
+    success = revoke_invite(email)
+    
+    if success:
+        log_activity(session['username'], 'revoked invite', f'email: {email}')
+        flash(f'Invite revoked for {email}', 'success')
+    else:
+        flash(f'No pending invite found for {email}', 'error')
+    
+    return redirect(url_for('admin'))
+
 
 @app.route("/admin/logs")
 @login_required
 def admin_logs():
-    logs = load_logs()
-    users = load_users()
-    admin_keys = load_admin_keys()
+    logs = get_activity_logs()
+    users = get_users()
+    admin_keys = get_admin_keys()
     
     log_activity(session['username'], 'accessed admin logs')
     
@@ -402,17 +455,9 @@ def generate_admin_key():
     name = request.form.get('name')
     if name:
         new_key = generate_key()
-        keys = load_admin_keys()
+        generated_at = str(datetime.now())
         
-        key_data = {
-            'name': name,
-            'key': new_key,
-            'generated_by': session['username'],
-            'generated_at': str(datetime.now())
-        }
-        
-        keys.append(key_data)
-        save_admin_keys(keys)
+        add_admin_key(name, new_key, session['username'], generated_at)
         
         log_activity(session['username'], 'generated admin key', f'for user: {name}')
         flash(f'New admin key generated for {name}: {new_key}', 'success')
@@ -421,23 +466,47 @@ def generate_admin_key():
 
 @app.route("/admin/promote", methods=['POST'])
 @login_required
-def promote_to_superadmin():
+def promote_user():
+    if not is_superadmin(session['username']):
+        flash('Access denied. Superadmin privileges required.', 'error')
+        return redirect(url_for('admin'))
+    
+    username = request.form.get('username')
+    role = request.form.get('role', 'admin')
+    
+    if username:
+        try:
+            if role == 'superadmin':
+                from db import promote_to_superadmin
+                promote_to_superadmin(username)
+                log_activity(session['username'], 'promoted user to superadmin', f'user: {username}')
+                flash(f'{username} has been promoted to superadmin!', 'success')
+            else:
+                from db import promote_to_admin
+                promote_to_admin(username)
+                log_activity(session['username'], 'promoted user to admin', f'user: {username}')
+                flash(f'{username} has been promoted to admin!', 'success')
+        except Exception as e:
+            flash(f'Error promoting user: {str(e)}', 'error')
+    
+    return redirect(url_for('admin'))
+
+@app.route("/admin/demote", methods=['POST'])
+@login_required
+def demote_user():
     if not is_superadmin(session['username']):
         flash('Access denied. Superadmin privileges required.', 'error')
         return redirect(url_for('admin'))
     
     username = request.form.get('username')
     if username:
-        users = load_users()
-        for user in users:
-            if user['username'] == username:
-                user['superadmin'] = True
-                save_users(users)
-                log_activity(session['username'], 'promoted user to superadmin', f'user: {username}')
-                flash(f'{username} has been promoted to superadmin!', 'success')
-                break
-        else:
-            flash(f'User {username} not found.', 'error')
+        try:
+            from db import demote_user as demote
+            demote(username)
+            log_activity(session['username'], 'demoted user', f'user: {username}')
+            flash(f'{username} has been demoted to regular user!', 'success')
+        except Exception as e:
+            flash(f'Error demoting user: {str(e)}', 'error')
     
     return redirect(url_for('admin'))
 
@@ -446,15 +515,17 @@ def promote_to_superadmin():
 def revoke_admin_key():
     if not is_superadmin(session['username']):
         flash('Access denied. Superadmin privileges required.', 'error')
-        return redirect(url_for('main'))
+        return redirect(url_for('admin'))
     
     key_to_revoke = request.form.get('key')
     if key_to_revoke:
-        keys = load_admin_keys()
-        keys = [k for k in keys if k['key'] != key_to_revoke]
-        save_admin_keys(keys)
-        log_activity(session['username'], 'revoked admin key', f'key: {key_to_revoke[:8]}...')
-        flash('Admin key revoked successfully', 'success')
+        try:
+            from db import revoke_admin_key
+            revoke_admin_key(key_to_revoke)
+            log_activity(session['username'], 'revoked admin key', f'key: {key_to_revoke[:8]}...')
+            flash('Admin key revoked successfully', 'success')
+        except Exception as e:
+            flash(f'Error revoking key: {str(e)}', 'error')
     
     return redirect(url_for('admin'))
 
@@ -517,30 +588,41 @@ def dns_github():
     log_activity(session['username'], 'accessed dns github generator')
     return render_template('dns_github.html', username=session['username'])
 
-if __name__ == "__main__":
-    if not os.path.exists(KEYS_FILE):
-        initial_keys = [
-            {
-                'name': 'jim',
-                'key': 'ill-change-this-ofc',
-                'generated_by': 'system',
-                'generated_at': '2024-01-01'
-            }
-        ]
-        save_admin_keys(initial_keys)
+if __name__ == '__main__':
+    import argparse
     
-    if not os.path.exists(USERS_FILE):
-        initial_users = [
-            {
-                'username': 'jim',
-                'superadmin': True
-            }
-        ]
-        save_users(initial_users)
+    parser = argparse.ArgumentParser(description='Run the Grounded Tracker application')
+    parser.add_argument('--port', type=int, default=5000, help='Port to run the server on')
+    args = parser.parse_args()
     
-    if not os.path.exists(LOGS_FILE):
-        initial_logs = []
-        save_json_file(LOGS_FILE, initial_logs)
+    port = args.port
     
-    app.run(debug=True, port=44195)
-
+    print("\n" + "=" * 50)
+    print("HTTPS CONFIGURATION")
+    print("=" * 50)
+    
+    try:
+        context = ssl.SSLContext(ssl.PROTOCOL_TLS_SERVER)
+        
+        cert_file = 'cert.pem'
+        key_file = 'key.pem'
+        
+        if os.path.exists(cert_file) and os.path.exists(key_file):
+            context.load_cert_chain(cert_file, key_file)
+            print("✓ SSL certificates found")
+            print(f"🚀 Starting HTTPS server at https://127.0.0.1:{port}")
+            app.run(debug=True, port=port, ssl_context=context)
+        else:
+            print("⚠️  SSL certificates not found!")
+            print("To generate self-signed certificates, run:")
+            print("openssl req -x509 -newkey rsa:4096 -keyout key.pem -out cert.pem -days 365 -nodes")
+            print("\nAlternatively, running on HTTP for now...")
+            print(f"🚀 Starting HTTP server at https://localhost:{port}")
+            app.run(debug=True, port=port)
+            
+    except Exception as e:
+        print(f"❌ SSL setup failed: {e}")
+        print(f"🚀 Starting HTTP server at https://localhost:{port}")
+        app.run(debug=True, port=port)
+        
+        
