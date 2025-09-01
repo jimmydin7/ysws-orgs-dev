@@ -572,30 +572,66 @@ def project_summary():
 def dns_github():
     if request.method == 'POST':
         subdomain_name = request.form.get('name')
-        github_pages_url = request.form.get('website')
+        website_link = request.form.get('website')
         ttl = request.form.get('slack')
         
-        if all([subdomain_name, github_pages_url, ttl]):
-            try:
-                yml_code = f"""# {subdomain_name}.hackclub.com
-{subdomain_name}:
-  - type: CNAME
-    value: {github_pages_url}.
-    ttl: {ttl}"""
-                
-                log_activity(session['username'], 'generated dns config', f'subdomain: {subdomain_name}.hackclub.com')
-                return render_template('dns_github.html', 
-                                    username=session['username'],
-                                    yml_code=yml_code,
-                                    show_result=True,subdomain_name=subdomain_name)
-            except Exception as e:
-                return render_template('dns_github.html', 
-                                    username=session['username'],
-                                    error=f"Error generating DNS: {str(e)}")
-        else:
+        if not all([subdomain_name, website_link, ttl]):
             return render_template('dns_github.html', 
                                 username=session['username'],
                                 error="Please fill in all fields")
+        
+        try:
+            # Auto-detect provider based on input format
+            if 'github.io' in website_link or 'githubusercontent.com' in website_link:
+                # GitHub Pages
+                provider = 'github'
+                # Clean up the URL - remove https:// if present and ensure proper format
+                clean_url = website_link.replace('https://', '').replace('http://', '')
+                if not clean_url.endswith('.'):
+                    clean_url += '.'
+                
+                yml_code = f"""# {subdomain_name}.hackclub.com
+{subdomain_name}:
+  - type: CNAME
+    value: {clean_url}
+    ttl: {ttl}"""
+                log_activity(session['username'], 'generated dns config', f'subdomain: {subdomain_name}.hackclub.com (GitHub Pages)')
+                
+            elif 'vercel' in website_link or 'vercel-dns.com' in website_link:
+                # Vercel - always use cname.vercel-dns.com
+                provider = 'vercel'
+                
+                yml_code = f"""# {subdomain_name}.hackclub.com
+{subdomain_name}:
+  - type: CNAME
+    value: cname.vercel-dns.com.
+    ttl: {ttl}"""
+                log_activity(session['username'], 'generated dns config', f'subdomain: {subdomain_name}.hackclub.com (Vercel)')
+                
+            else:
+                # Default to treating as CNAME
+                provider = 'other'
+                clean_link = website_link.replace('https://', '').replace('http://', '')
+                if not clean_link.endswith('.'):
+                    clean_link += '.'
+                
+                yml_code = f"""# {subdomain_name}.hackclub.com
+{subdomain_name}:
+  - type: CNAME
+    value: {clean_link}
+    ttl: {ttl}"""
+                log_activity(session['username'], 'generated dns config', f'subdomain: {subdomain_name}.hackclub.com')
+            
+            return render_template('dns_github.html', 
+                                username=session['username'],
+                                yml_code=yml_code,
+                                show_result=True,
+                                subdomain_name=subdomain_name,
+                                provider=provider)
+        except Exception as e:
+            return render_template('dns_github.html', 
+                                username=session['username'],
+                                error=f"Error generating DNS: {str(e)}")
     
     log_activity(session['username'], 'accessed dns github generator')
     return render_template('dns_github.html', username=session['username'])
