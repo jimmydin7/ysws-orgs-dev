@@ -16,7 +16,7 @@
     </div>
 
     <h1>Generate DNS for subdomain</h1>
-    <p>Move your <b>Github</b> pages website to a hackclub subdomain with this tool!<p>
+    <p>Move your <b>GitHub Pages</b> or <b>Vercel</b> website to a hackclub subdomain with this tool!<p>
 
     {% if error %}
       <div class="error">{{ error }}</div>
@@ -28,22 +28,35 @@
         <p>
            add the name of the sub-domain. So if the name was "authly" then the subdomain would be "authly.hackclub.com"
         </p>
+        
+        <div class="form-group">
+          <label for="platform">Hosting Platform *</label>
+          <div style="margin-top: 8px;">
+            <input type="radio" id="github" name="platform" value="github" checked>
+            <label for="github" style="margin-left: 8px; margin-right: 20px;">GitHub Pages</label>
+            <input type="radio" id="vercel" name="platform" value="vercel">
+            <label for="vercel" style="margin-left: 8px;">Vercel</label>
+          </div>
+        </div>
+
         <div class="form-group">
           <label for="name">subdomain raw name</label>
           <input type="text" id="name" name="name" required placeholder="authly">
         </div>
 
-
         <div class="form-group">
-          <label for="website">github pages link</label>
+          <label for="website" id="website-label">website link</label>
           <input type="url" id="website" name="website" required placeholder="">
+          <small id="website-help" style="display: block; margin-top: 4px; color: #666;">
+            For GitHub Pages: your-username.github.io/repo-name<br>
+            For Vercel: your-project.vercel.app or custom domain
+          </small>
         </div>
 
         <div class="form-group">
           <label for="slack">TTL *</label>
           <input type="text" id="slack" name="slack" required placeholder="(Time to live) - write 600 if you don't know what ts is">
         </div>
-
 
         <button type="submit" class="btn-primary">Generate DNS</button>
       </form>
@@ -63,15 +76,49 @@
             <li><strong>Create a pull request</strong> to merge your changes</li>
             <li><strong>Wait for review and approval</strong> from the maintainers</li>
           </ol>
-          <h3 style="color: #000000;">Important:</h3>
+          
+          {% if platform == 'github' %}
+          <h3 style="color: #000000;">Important (GitHub Pages):</h3>
           <ol style="color: #000000;">
             <li><strong>Create a file named <b>CNAME</b> in your github repository</strong></li>
             <li><strong>Paste the link (as is): <b>{{ subdomain_name }}.hackclub.com</b></strong></li>
           </ol>
+          {% elif platform == 'vercel' %}
+          <h3 style="color: #000000;">Important (Vercel):</h3>
+          <ol style="color: #000000;">
+            <li><strong>Go to your Vercel project settings</strong></li>
+            <li><strong>Add custom domain: <b>{{ subdomain_name }}.hackclub.com</b></strong></li>
+            <li><strong>Vercel will automatically handle the DNS verification</strong></li>
+          </ol>
+          {% endif %}
         </div>
         
       </div>
     {% endif %}
   </div>
+  
+  <script>
+    // Update form labels based on platform selection
+    const githubRadio = document.getElementById('github');
+    const vercelRadio = document.getElementById('vercel');
+    const websiteLabel = document.getElementById('website-label');
+    const websiteInput = document.getElementById('website');
+    
+    function updateFormLabels() {
+      if (githubRadio.checked) {
+        websiteLabel.textContent = 'github pages link';
+        websiteInput.placeholder = 'your-username.github.io/repo-name';
+      } else if (vercelRadio.checked) {
+        websiteLabel.textContent = 'vercel deployment link';
+        websiteInput.placeholder = 'your-project.vercel.app';
+      }
+    }
+    
+    githubRadio.addEventListener('change', updateFormLabels);
+    vercelRadio.addEventListener('change', updateFormLabels);
+    
+    // Set initial state
+    updateFormLabels();
+  </script>
 </body>
 </html>

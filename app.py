@@ -572,22 +572,25 @@ def project_summary():
 def dns_github():
     if request.method == 'POST':
         subdomain_name = request.form.get('name')
-        github_pages_url = request.form.get('website')
+        website_url = request.form.get('website')
         ttl = request.form.get('slack')
+        platform = request.form.get('platform')
         
-        if all([subdomain_name, github_pages_url, ttl]):
+        if all([subdomain_name, website_url, ttl, platform]):
             try:
                 yml_code = f"""# {subdomain_name}.hackclub.com
 {subdomain_name}:
   - type: CNAME
-    value: {github_pages_url}.
+    value: {website_url}.
     ttl: {ttl}"""
                 
-                log_activity(session['username'], 'generated dns config', f'subdomain: {subdomain_name}.hackclub.com')
+                log_activity(session['username'], 'generated dns config', f'subdomain: {subdomain_name}.hackclub.com, platform: {platform}')
                 return render_template('dns_github.html', 
                                     username=session['username'],
                                     yml_code=yml_code,
-                                    show_result=True,subdomain_name=subdomain_name)
+                                    show_result=True,
+                                    subdomain_name=subdomain_name,
+                                    platform=platform)
             except Exception as e:
                 return render_template('dns_github.html', 
                                     username=session['username'],

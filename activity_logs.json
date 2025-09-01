@@ -886,5 +886,59 @@
     "username": "dev",
     "action": "accessed dns github generator",
     "details": null
+  },
+  {
+    "timestamp": "2025-09-01 02:44:54.734763",
+    "username": "dev",
+    "action": "accessed dns github generator",
+    "details": null
+  },
+  {
+    "timestamp": "2025-09-01 02:45:22.697333",
+    "username": "dev",
+    "action": "accessed dns github generator",
+    "details": null
+  },
+  {
+    "timestamp": "2025-09-01 02:46:19.123366",
+    "username": "dev",
+    "action": "generated dns config",
+    "details": "subdomain: test-subdomain.hackclub.com, platform: github"
+  },
+  {
+    "timestamp": "2025-09-01 02:46:28.436800",
+    "username": "dev",
+    "action": "opened the app",
+    "details": null
+  },
+  {
+    "timestamp": "2025-09-01 02:46:37.073666",
+    "username": "dev",
+    "action": "accessed dns github generator",
+    "details": null
+  },
+  {
+    "timestamp": "2025-09-01 02:47:11.270625",
+    "username": "dev",
+    "action": "generated dns config",
+    "details": "subdomain: test-vercel.hackclub.com, platform: vercel"
+  },
+  {
+    "timestamp": "2025-09-01 02:47:28.105944",
+    "username": "dev",
+    "action": "accessed dns github generator",
+    "details": null
+  },
+  {
+    "timestamp": "2025-09-01 02:47:54.799817",
+    "username": "dev",
+    "action": "generated dns config",
+    "details": "subdomain: github-test.hackclub.com, platform: github"
+  },
+  {
+    "timestamp": "2025-09-01 02:48:10.892199",
+    "username": "dev",
+    "action": "accessed dns github generator",
+    "details": null
   }
 ]
