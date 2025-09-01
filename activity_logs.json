@@ -868,5 +868,23 @@
     "username": "SuperNinjaCat5",
     "action": "Called upon the cat gods power to strike down those who insult svelte",
     "details": "By all that is fluffy, for meow for meow, I call upon thei for thi mighty pawer"
+  },
+  {
+    "timestamp": "2025-09-01 02:42:28.963256",
+    "username": "dev",
+    "action": "logged in",
+    "details": null
+  },
+  {
+    "timestamp": "2025-09-01 02:42:28.967749",
+    "username": "dev",
+    "action": "opened the app",
+    "details": null
+  },
+  {
+    "timestamp": "2025-09-01 02:42:36.183792",
+    "username": "dev",
+    "action": "accessed dns github generator",
+    "details": null
   }
 ]
