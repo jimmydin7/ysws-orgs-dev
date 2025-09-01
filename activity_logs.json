@@ -994,5 +994,23 @@
     "username": "dev",
     "action": "opened the app",
     "details": null
+  },
+  {
+    "timestamp": "2025-09-01 13:48:05.615400",
+    "username": "dev",
+    "action": "logged in",
+    "details": null
+  },
+  {
+    "timestamp": "2025-09-01 13:48:05.655170",
+    "username": "dev",
+    "action": "opened the app",
+    "details": null
+  },
+  {
+    "timestamp": "2025-09-01 13:48:15.084971",
+    "username": "dev",
+    "action": "accessed project summary",
+    "details": null
   }
 ]
