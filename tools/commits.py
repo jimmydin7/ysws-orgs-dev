@@ -7,7 +7,7 @@ def get_commit_count(github_url):
         owner = parts[-2]
         repo = parts[-1]
     except IndexError:
-        return "Invalid GitHub URL"
+        return "ooooopsie you passed an invalid github link"
 
 
     api_url = f"https://api.github.com/repos/{owner}/{repo}/commits?per_page=1"

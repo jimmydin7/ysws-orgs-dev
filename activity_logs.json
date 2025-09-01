@@ -922,5 +922,77 @@
     "username": "dev",
     "action": "accessed dns github generator",
     "details": null
+  },
+  {
+    "timestamp": "2025-09-01 13:11:39.496031",
+    "username": "dev",
+    "action": "logged in",
+    "details": null
+  },
+  {
+    "timestamp": "2025-09-01 13:11:39.542671",
+    "username": "dev",
+    "action": "opened the app",
+    "details": null
+  },
+  {
+    "timestamp": "2025-09-01 13:11:46.649517",
+    "username": "dev",
+    "action": "accessed admin panel",
+    "details": null
+  },
+  {
+    "timestamp": "2025-09-01 13:11:51.825461",
+    "username": "dev",
+    "action": "accessed admin logs",
+    "details": null
+  },
+  {
+    "timestamp": "2025-09-01 13:12:15.284911",
+    "username": "dev",
+    "action": "accessed admin panel",
+    "details": null
+  },
+  {
+    "timestamp": "2025-09-01 13:12:16.554556",
+    "username": "dev",
+    "action": "opened the app",
+    "details": null
+  },
+  {
+    "timestamp": "2025-09-01 13:12:17.873900",
+    "username": "dev",
+    "action": "accessed github commits",
+    "details": null
+  },
+  {
+    "timestamp": "2025-09-01 13:12:21.906414",
+    "username": "dev",
+    "action": "opened the app",
+    "details": null
+  },
+  {
+    "timestamp": "2025-09-01 13:28:02.382399",
+    "username": "dev",
+    "action": "opened the app",
+    "details": null
+  },
+  {
+    "timestamp": "2025-09-01 13:29:48.105407",
+    "username": "dev",
+    "action": "opened the app",
+    "details": null
+  },
+  {
+    "timestamp": "2025-09-01 13:30:10.378833",
+    "username": "dev",
+    "action": "accessed admin panel",
+    "details": null
+  },
+  {
+    "timestamp": "2025-09-01 13:30:13.844254",
+    "username": "dev",
+    "action": "opened the app",
+    "details": null
   }
 ]

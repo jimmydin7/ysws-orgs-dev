@@ -106,6 +106,11 @@ def login():
     
     return render_template('login.html')
 
+@app.route("/team")
+@login_required
+def team():
+    return render_template('team.html')
+
 @app.route("/ysws-catalog", methods=['GET', 'POST'])
 @login_required
 def ysws_catalog():

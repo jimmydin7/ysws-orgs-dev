@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Team</title>
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="static/css/index.css" />
+  <link rel="stylesheet" href="static/css/catalog.css">
+
+  <style>
+    body {
+      font-family: 'Fira Code', monospace;
+      background: #111;
+      margin: 0;
+      padding: 0;
+    }
+
+    .form-container {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 2rem;
+    }
+
+    .nav-links {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 1.5rem;
+    }
+
+    .nav-links a {
+      text-decoration: none;
+      color: cyan;
+      font-weight: bold;
+    }
+
+    h1 {
+      font-size: 2rem;
+      margin-bottom: 0.5rem;
+      color: cyan;
+    }
+
+    p {
+      margin-bottom: 1rem;
+      color: #ccc;
+    }
+
+    dl {
+      margin: 20px 0;
+      padding: 0;
+    }
+
+    dt {
+      font-weight: bold;
+      font-size: 1.2rem;
+      margin-top: 20px;
+      color: cyan;
+    }
+
+    dd {
+      margin-left: 20px;
+      margin-bottom: 15px;
+      line-height: 1.6;
+      color: white;
+    }
+
+  </style>
+</head>
+<body>
+  <div class="form-container">
+    <div class="nav-links">
+      <a href="/">← Back to Home</a>
+      <a href="/logout">Logout</a>
+    </div>
+   
+    <h1>Team</h1>
+    <p>You can see who did what while deving this platform!</p>
+    <hr>
+
+    <dl>
+      <dt>jim</dt>
+      <dd>came up with the idea, organized everyone, made the channels for dev, built: auth system with superadmins and keys, catalog entry tool, github commit counter, readme ai check, commits/hour ratio, github dns generator, ai chatbot - hosted the first version on nest (i hate linux)</dd>
+
+      <dt>aaravJ ("the shark boy /hj")</dt>
+      <dd>created the glorious auth system that includes slack auth and supabase migration, will manage hosting on HQ coolify VPS for the future + connect us with the fraud team for more tools </dd>
+
+      <dt>rushil (rushmore)</dt>
+      <dd>managing the channel, kinda overlooking the project and giving advice, connecting us with hq. made the new terminology page + vercel dns generator</dd>
+
+      <dt>superninja</dt>
+      <dd>coded (the hackatime api wrappers) project hour finder, fraud status checker, and is working on more cool tools.</dd>
+
+      <dt>peleg</dt>
+      <dd>implementation of (currently) unused slack auth, made the super cool airtable-hackatime automation</dd>
+    </dl>
+  </div>
+</body>
+</html>
