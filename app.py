@@ -300,6 +300,9 @@ def find_hackatime():
     if request.method == 'GET':
         log_activity(session['username'], 'accessed hour finder')
 
+    if hackatime_data is None:
+        hackatime_data = {"error": f"Smth went wrong, try inputing another user ID or project name!"}
+
     return render_template('hour_finder.html', 
                            username=session['username'],
                            hackatime_data=hackatime_data,
@@ -559,6 +562,10 @@ def project_summary():
 
     if request.method == 'GET':
         log_activity(session['username'], 'accessed project summary')
+        session['project_summary'] = None
+        session['show_result'] = 1
+        session['hackatime_data'] = None
+        session['trust_value'] = None
 
     print(session['show_result'])
     return render_template('project_summary.html', 
