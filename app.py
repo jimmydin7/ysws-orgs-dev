@@ -597,9 +597,9 @@ def dns_github():
                 
                 yml_code = f"""# {subdomain_name}.hackclub.com
 {subdomain_name}:
-  - type: CNAME
-    value: {clean_url}
-    ttl: {ttl}"""
+  - ttl: {ttl}
+    type: CNAME
+    value: {clean_url}"""
                 log_activity(session['username'], 'generated dns config', f'subdomain: {subdomain_name}.hackclub.com (GitHub Pages)')
                 
             elif 'vercel' in website_link or 'vercel-dns.com' in website_link:
@@ -608,9 +608,9 @@ def dns_github():
                 
                 yml_code = f"""# {subdomain_name}.hackclub.com
 {subdomain_name}:
-  - type: CNAME
-    value: cname.vercel-dns.com.
-    ttl: {ttl}"""
+  - ttl: {ttl}
+    type: CNAME
+    value: cname.vercel-dns.com."""
                 log_activity(session['username'], 'generated dns config', f'subdomain: {subdomain_name}.hackclub.com (Vercel)')
                 
             else:
@@ -622,9 +622,9 @@ def dns_github():
                 
                 yml_code = f"""# {subdomain_name}.hackclub.com
 {subdomain_name}:
-  - type: CNAME
-    value: {clean_link}
-    ttl: {ttl}"""
+  - ttl: {ttl}
+    type: CNAME
+    value: {clean_link}"""
                 log_activity(session['username'], 'generated dns config', f'subdomain: {subdomain_name}.hackclub.com')
             
             return render_template('dns_github.html', 
