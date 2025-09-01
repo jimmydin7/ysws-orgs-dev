@@ -572,30 +572,60 @@ def project_summary():
 def dns_github():
     if request.method == 'POST':
         subdomain_name = request.form.get('name')
-        github_pages_url = request.form.get('website')
+        provider = request.form.get('provider')
         ttl = request.form.get('slack')
         
-        if all([subdomain_name, github_pages_url, ttl]):
-            try:
+        # Get provider-specific fields
+        github_pages_url = request.form.get('website')
+        vercel_cname = request.form.get('cname')
+        
+        if not all([subdomain_name, provider, ttl]):
+            return render_template('dns_github.html', 
+                                username=session['username'],
+                                error="Please fill in all required fields")
+        
+        try:
+            if provider == 'github':
+                if not github_pages_url:
+                    return render_template('dns_github.html', 
+                                        username=session['username'],
+                                        error="GitHub Pages link is required for GitHub provider")
+                
                 yml_code = f"""# {subdomain_name}.hackclub.com
 {subdomain_name}:
   - type: CNAME
     value: {github_pages_url}.
     ttl: {ttl}"""
+                log_activity(session['username'], 'generated dns config', f'subdomain: {subdomain_name}.hackclub.com (GitHub Pages)')
                 
-                log_activity(session['username'], 'generated dns config', f'subdomain: {subdomain_name}.hackclub.com')
+            elif provider == 'vercel':
+                if not vercel_cname:
+                    return render_template('dns_github.html', 
+                                        username=session['username'],
+                                        error="Vercel CNAME is required for Vercel provider")
+                
+                yml_code = f"""# {subdomain_name}.hackclub.com
+{subdomain_name}:
+  - type: CNAME
+    value: {vercel_cname}.
+    ttl: {ttl}"""
+                log_activity(session['username'], 'generated dns config', f'subdomain: {subdomain_name}.hackclub.com (Vercel)')
+                
+            else:
                 return render_template('dns_github.html', 
                                     username=session['username'],
-                                    yml_code=yml_code,
-                                    show_result=True,subdomain_name=subdomain_name)
-            except Exception as e:
-                return render_template('dns_github.html', 
-                                    username=session['username'],
-                                    error=f"Error generating DNS: {str(e)}")
-        else:
+                                    error="Invalid provider selected")
+            
             return render_template('dns_github.html', 
                                 username=session['username'],
-                                error="Please fill in all fields")
+                                yml_code=yml_code,
+                                show_result=True,
+                                subdomain_name=subdomain_name,
+                                provider=provider)
+        except Exception as e:
+            return render_template('dns_github.html', 
+                                username=session['username'],
+                                error=f"Error generating DNS: {str(e)}")
     
     log_activity(session['username'], 'accessed dns github generator')
     return render_template('dns_github.html', username=session['username'])

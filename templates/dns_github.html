@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>YSWS Catalog - YSWS Organizer Panel</title>
+  <title>DNS Generator - YSWS Organizer Panel</title>
   <link href="https://fonts.googleapis.com/css2?family=Fira+Code&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="static/css/index.css" />
   <link rel="stylesheet" href="static\css\catalog.css">
@@ -16,7 +16,7 @@
     </div>
 
     <h1>Generate DNS for subdomain</h1>
-    <p>Move your <b>Github</b> pages website to a hackclub subdomain with this tool!<p>
+    <p>Move your <b>GitHub Pages</b> or <b>Vercel</b> website to a hackclub subdomain with this tool!<p>
 
     {% if error %}
       <div class="error">{{ error }}</div>
@@ -26,27 +26,69 @@
 
       <form method="POST" action="/dns-github">
         <p>
-           add the name of the sub-domain. So if the name was "authly" then the subdomain would be "authly.hackclub.com"
+           Add the name of the sub-domain. So if the name was "authly" then the subdomain would be "authly.hackclub.com"
         </p>
+        
         <div class="form-group">
-          <label for="name">subdomain raw name</label>
+          <label for="provider">Hosting Provider *</label>
+          <select id="provider" name="provider" required onchange="toggleProviderFields()">
+            <option value="">Select hosting provider...</option>
+            <option value="github">GitHub Pages</option>
+            <option value="vercel">Vercel</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="name">Subdomain raw name *</label>
           <input type="text" id="name" name="name" required placeholder="authly">
         </div>
 
+        <div class="form-group" id="github-field" style="display: none;">
+          <label for="website">GitHub Pages link *</label>
+          <input type="url" id="website" name="website" placeholder="https://username.github.io/repository">
+        </div>
 
-        <div class="form-group">
-          <label for="website">github pages link</label>
-          <input type="url" id="website" name="website" required placeholder="">
+        <div class="form-group" id="vercel-field" style="display: none;">
+          <label for="cname">Vercel CNAME *</label>
+          <input type="text" id="cname" name="cname" placeholder="cname.vercel-dns.com">
+          <small style="color: #888;">Enter the CNAME value provided by Vercel (e.g., cname.vercel-dns.com)</small>
         </div>
 
         <div class="form-group">
           <label for="slack">TTL *</label>
-          <input type="text" id="slack" name="slack" required placeholder="(Time to live) - write 600 if you don't know what ts is">
+          <input type="text" id="slack" name="slack" required placeholder="600" value="600">
+          <small style="color: #888;">Time to live in seconds (600 is recommended)</small>
         </div>
-
 
         <button type="submit" class="btn-primary">Generate DNS</button>
       </form>
+
+      <script>
+        function toggleProviderFields() {
+          const provider = document.getElementById('provider').value;
+          const githubField = document.getElementById('github-field');
+          const vercelField = document.getElementById('vercel-field');
+          const websiteInput = document.getElementById('website');
+          const cnameInput = document.getElementById('cname');
+          
+          if (provider === 'github') {
+            githubField.style.display = 'block';
+            vercelField.style.display = 'none';
+            websiteInput.required = true;
+            cnameInput.required = false;
+          } else if (provider === 'vercel') {
+            githubField.style.display = 'none';
+            vercelField.style.display = 'block';
+            websiteInput.required = false;
+            cnameInput.required = true;
+          } else {
+            githubField.style.display = 'none';
+            vercelField.style.display = 'none';
+            websiteInput.required = false;
+            cnameInput.required = false;
+          }
+        }
+      </script>
     {% else %}
       <div class="result-section">
         <h2 style="color: #000000;">Generated YAML Code</h2>
@@ -63,11 +105,23 @@
             <li><strong>Create a pull request</strong> to merge your changes</li>
             <li><strong>Wait for review and approval</strong> from the maintainers</li>
           </ol>
-          <h3 style="color: #000000;">Important:</h3>
+          
+          {% if provider == 'github' %}
+          <h3 style="color: #000000;">GitHub Pages Setup:</h3>
           <ol style="color: #000000;">
-            <li><strong>Create a file named <b>CNAME</b> in your github repository</strong></li>
+            <li><strong>Create a file named <b>CNAME</b> in your GitHub repository</strong></li>
             <li><strong>Paste the link (as is): <b>{{ subdomain_name }}.hackclub.com</b></strong></li>
+            <li><strong>Enable GitHub Pages</strong> in your repository settings</li>
           </ol>
+          {% elif provider == 'vercel' %}
+          <h3 style="color: #000000;">Vercel Setup:</h3>
+          <ol style="color: #000000;">
+            <li><strong>Go to your Vercel project dashboard</strong></li>
+            <li><strong>Navigate to Settings → Domains</strong></li>
+            <li><strong>Add the custom domain: <b>{{ subdomain_name }}.hackclub.com</b></strong></li>
+            <li><strong>Vercel will provide you with a CNAME value</strong> (which should match what you entered above)</li>
+          </ol>
+          {% endif %}
         </div>
         
       </div>
