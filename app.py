@@ -597,18 +597,14 @@ def dns_github():
     ttl: {ttl}"""
                 log_activity(session['username'], 'generated dns config', f'subdomain: {subdomain_name}.hackclub.com (GitHub Pages)')
                 
-            elif 'vercel' in website_link or '.com' in website_link:
-                # Vercel or other CNAME
+            elif 'vercel' in website_link or 'vercel-dns.com' in website_link:
+                # Vercel - always use cname.vercel-dns.com
                 provider = 'vercel'
-                # Clean up the CNAME - ensure proper format
-                clean_cname = website_link.replace('https://', '').replace('http://', '')
-                if not clean_cname.endswith('.'):
-                    clean_cname += '.'
                 
                 yml_code = f"""# {subdomain_name}.hackclub.com
 {subdomain_name}:
   - type: CNAME
-    value: {clean_cname}
+    value: cname.vercel-dns.com.
     ttl: {ttl}"""
                 log_activity(session['username'], 'generated dns config', f'subdomain: {subdomain_name}.hackclub.com (Vercel)')
                 

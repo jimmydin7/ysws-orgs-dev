@@ -71,13 +71,29 @@
             <li><strong>Paste the link (as is): <b>{{ subdomain_name }}.hackclub.com</b></strong></li>
           </ol>
           {% elif provider == 'vercel' %}
-          <h3 style="color: #000000;">Vercel Setup:</h3>
-          <ol style="color: #000000;">
-            <li><strong>Go to your Vercel project dashboard</strong></li>
-            <li><strong>Navigate to Settings → Domains</strong></li>
-            <li><strong>Add the custom domain: <b>{{ subdomain_name }}.hackclub.com</b></strong></li>
-            <li><strong>Use the CNAME value you entered above</strong></li>
-          </ol>
+          <h3 style="color: #000000;">Vercel Setup (2 Steps Required):</h3>
+          <div style="background-color: #f0f8ff; padding: 15px; border-left: 4px solid #007acc; margin: 10px 0;">
+            <h4 style="color: #000000; margin-top: 0;">Step 1: Add CNAME to Hack Club DNS</h4>
+            <ol style="color: #000000;">
+              <li><strong>Copy the YAML code above</strong></li>
+              <li><strong>Go to:</strong> <a href="https://github.com/hackclub/dns" target="_blank">https://github.com/hackclub/dns</a></li>
+              <li><strong>Edit hackclub.com.yaml</strong> and paste your YAML code</li>
+              <li><strong>Create a pull request</strong></li>
+            </ol>
+          </div>
+          
+          <div style="background-color: #fff8f0; padding: 15px; border-left: 4px solid #ff8c00; margin: 10px 0;">
+            <h4 style="color: #000000; margin-top: 0;">Step 2: Add Domain Verification to Hack Club DNS</h4>
+            <ol style="color: #000000;">
+              <li><strong>Go to your Vercel project dashboard</strong></li>
+              <li><strong>Navigate to Settings → Domains</strong></li>
+              <li><strong>Add custom domain:</strong> <b>{{ subdomain_name }}.hackclub.com</b></li>
+              <li><strong>Vercel will show you a TXT record</strong> like: <code>vc-domain-verify={{ subdomain_name }}.hackclub.com,XXXXX</code></li>
+              <li><strong>Add this TXT record</strong> to the same hackclub.com.yaml file under the <code>_vercel:</code> section</li>
+            </ol>
+          </div>
+          
+          <p style="color: #666; font-style: italic;">Note: Both the CNAME and TXT records are required for Vercel domains to work properly.</p>
           {% else %}
           <h3 style="color: #000000;">Important:</h3>
           <ol style="color: #000000;">
