@@ -176,8 +176,10 @@ async function handleChat(event) {
   const input = document.getElementById('userInput');
   const chatWindow = document.getElementById('chatWindow');
 
+  // disable input + quick buttons
   input.disabled = true;
   input.style.opacity = '0.5';
+  toggleQuickButtons(true);
 
   const userMessage = document.createElement('div');
   userMessage.className = 'chat-message user';
@@ -188,8 +190,8 @@ async function handleChat(event) {
 
   const res = await fetch('/chat', {
     method: 'POST',
-    headers: {'Content-Type': 'application/json'},
-    body: JSON.stringify({message: input.value})
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ message: input.value })
   });
 
   const text = await res.text();
@@ -201,21 +203,29 @@ async function handleChat(event) {
 
   chatWindow.scrollTop = chatWindow.scrollHeight;
 
+  // reset input
   input.value = '';
   input.disabled = false;
   input.style.opacity = '1';
   input.focus();
+
+  toggleQuickButtons(false);
 }
 
 function sendQuickQuestion(question) {
-  const quickactionbuts = document.getElementsByClassName('quick-questions')
-  quickactionbuts.disabled = true;
-  quickactionbuts.style.opacity = '0.5';
   document.getElementById('userInput').value = question;
   document.querySelector('.chat-input button').click();
-  quickactionbuts.disabled = false;
-  quickactionbuts.style.opacity = '1';
 }
+
+function toggleQuickButtons(disable) {
+  const quickButtons = document.querySelectorAll('.quick-questions button');
+  quickButtons.forEach(btn => {
+    btn.disabled = disable;
+    btn.style.opacity = disable ? '0.5' : '1';
+    btn.style.cursor = disable ? 'not-allowed' : 'pointer';
+  });
+}
+
 </script>
 
 </body>
