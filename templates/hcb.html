@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Create HCB Org - YSWS Organizer Panel</title>
+	<link href="https://fonts.googleapis.com/css2?family=Fira+Code&display=swap" rel="stylesheet">
+	<link rel="stylesheet" href="static/css/index.css">
+	<link rel="stylesheet" href="static/css/catalog.css">
+  <style>
+    body {
+      background-color: #0f0f0f;
+      color: #ffffff;
+      font-family: 'Fira Code', monospace;
+    }
+    .iframe-wrapper {
+      width: 100%;
+      min-height: 700px;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 1px 8px rgba(0,0,0,0.06);
+      margin-bottom: 32px;
+    }
+    .iframe-wrapper iframe {
+      width: 100%;
+      height: 700px;
+      border: none;
+    }
+    .nav-links a {
+      color: #4ECCC3; /* cyan man */
+      text-decoration: none;
+      margin-right: 12px;
+    }
+    .nav-links a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+	<div class="form-container">
+		<div class="nav-links">
+			<a href="/">← Back to Home</a>
+			<a href="/logout">Logout</a>
+		</div>
+
+		<h1>Create a HCB Organization</h1>
+		<p>Use the tool below to apply for setting up your HCB organization quickly and securely.</p>
+
+		<div class="iframe-wrapper">
+			<iframe src="https://nonprofit.new" title="Create HCB Org"></iframe>
+		</div>
+	</div>
+</body>
+</html>

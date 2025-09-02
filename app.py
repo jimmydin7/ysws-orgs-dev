@@ -641,6 +641,13 @@ def dns_github():
     log_activity(session['username'], 'accessed dns github generator')
     return render_template('dns_github.html', username=session['username'])
 
+
+@app.route("/hcb")
+@login_required
+def hcb():
+    log_activity(session['username'], 'accessed hcb org creator')
+    return render_template('hcb.html', username=session['username'])
+
 if __name__ == "__main__":
     if not os.path.exists(KEYS_FILE):
         initial_keys = [

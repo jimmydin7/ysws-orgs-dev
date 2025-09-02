@@ -1084,5 +1084,107 @@
     "username": "dev",
     "action": "generated dns config",
     "details": "subdomain: test.hackclub.com"
+  },
+  {
+    "timestamp": "2025-09-01 20:10:44.059285",
+    "username": "dev",
+    "action": "logged in",
+    "details": null
+  },
+  {
+    "timestamp": "2025-09-01 20:10:44.097571",
+    "username": "dev",
+    "action": "opened the app",
+    "details": null
+  },
+  {
+    "timestamp": "2025-09-01 20:13:26.613170",
+    "username": "dev",
+    "action": "opened the app",
+    "details": null
+  },
+  {
+    "timestamp": "2025-09-01 20:14:31.886585",
+    "username": "dev",
+    "action": "accessed hcb org creator",
+    "details": null
+  },
+  {
+    "timestamp": "2025-09-01 20:14:33.365558",
+    "username": "dev",
+    "action": "opened the app",
+    "details": null
+  },
+  {
+    "timestamp": "2025-09-01 20:14:35.619453",
+    "username": "dev",
+    "action": "accessed chatbot",
+    "details": null
+  },
+  {
+    "timestamp": "2025-09-01 20:14:37.720300",
+    "username": "dev",
+    "action": "opened the app",
+    "details": null
+  },
+  {
+    "timestamp": "2025-09-01 20:14:40.156374",
+    "username": "dev",
+    "action": "accessed hcb org creator",
+    "details": null
+  },
+  {
+    "timestamp": "2025-09-01 20:16:57.549846",
+    "username": "dev",
+    "action": "accessed hcb org creator",
+    "details": null
+  },
+  {
+    "timestamp": "2025-09-01 20:16:59.489857",
+    "username": "dev",
+    "action": "opened the app",
+    "details": null
+  },
+  {
+    "timestamp": "2025-09-01 20:17:00.458681",
+    "username": "dev",
+    "action": "accessed ysws catalog",
+    "details": null
+  },
+  {
+    "timestamp": "2025-09-01 20:17:01.514072",
+    "username": "dev",
+    "action": "opened the app",
+    "details": null
+  },
+  {
+    "timestamp": "2025-09-01 20:17:04.169846",
+    "username": "dev",
+    "action": "accessed hcb org creator",
+    "details": null
+  },
+  {
+    "timestamp": "2025-09-01 20:17:09.567115",
+    "username": "dev",
+    "action": "accessed hcb org creator",
+    "details": null
+  },
+  {
+    "timestamp": "2025-09-01 20:17:12.961064",
+    "username": "dev",
+    "action": "opened the app",
+    "details": null
+  },
+  {
+    "timestamp": "2025-09-01 20:17:16.528658",
+    "username": "dev",
+    "action": "accessed hcb org creator",
+    "details": null
+  },
+  {
+    "timestamp": "2025-09-01 20:17:21.079437",
+    "username": "dev",
+    "action": "opened the app",
+    "details": null
   }
 ]
