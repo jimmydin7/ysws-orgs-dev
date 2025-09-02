@@ -1159,6 +1159,9 @@ grants are in the form of virtual cards, so users can purchase the reward themse
 you have to add allowed merchant ids for the virtual cards, so users can't fraud and buy anything - so they are limited to the reward
 to get merchant ids, try to make a declined transcactions on the website of your reward, and after seeing that it gets declined the merchant id should be shown in the details. 
 then you can modify the HCB organization settings to add allowed ids
+
+Hack Club Internship:
+This is how to get hack club internship: Build really cool things, contribute to Hack Club through open source or through running a great and actually good Hack Club / hackathon, be a kind and model member of the community, and staff will eventually start to loop you in on projects. Those projects may turn into internships. This is usually a 1-2 year process.
 """
 
     prompt = f"If the person who you are replying to asks you what is his name, say {username} - {system_prompt}"

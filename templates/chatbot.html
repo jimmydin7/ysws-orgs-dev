@@ -78,6 +78,29 @@
       background-color: rgba(255, 255, 255, 0.05);
     }
 
+    .quick-questions {
+      display: flex;
+      gap: 10px;
+      margin-top: 10px;
+      flex-wrap: wrap;
+    }
+
+    .quick-questions button {
+      padding: 8px 14px;
+      border: 1px solid #0ff;
+      border-radius: 6px;
+      background-color: #000;
+      color: #0ff;
+      font-size: 0.9rem;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .quick-questions button:hover {
+      border-color: #fff;
+      color: #fff;
+    }
+
     .chat-input {
       display: flex;
       gap: 10px;
@@ -132,6 +155,13 @@
 
     <div class="chat-window" id="chatWindow">
       <div class="chat-message bot">Hi <b>{{ username }}</b>! I'm your YSWS assistant. What would you like to know?</div>
+
+
+      <div class="quick-questions">
+        <button onclick="sendQuickQuestion('How to setup HCB allowed merchant IDs')">How to setup HCB allowed merchant IDs</button>
+        <button onclick="sendQuickQuestion('What is the authly YSWS about')">What is the authly YSWS about</button>
+        <button onclick="sendQuickQuestion('How to get a hackclub internship?')">How to get a hackclub internship?</button>
+      </div>
     </div>
 
     <form class="chat-input" onsubmit="handleChat(event)">
@@ -146,7 +176,6 @@ async function handleChat(event) {
   const input = document.getElementById('userInput');
   const chatWindow = document.getElementById('chatWindow');
 
- 
   input.disabled = true;
   input.style.opacity = '0.5';
 
@@ -157,7 +186,6 @@ async function handleChat(event) {
 
   chatWindow.scrollTop = chatWindow.scrollHeight;
 
-
   const res = await fetch('/chat', {
     method: 'POST',
     headers: {'Content-Type': 'application/json'},
@@ -165,7 +193,6 @@ async function handleChat(event) {
   });
 
   const text = await res.text();
-
 
   const botMessage = document.createElement('div');
   botMessage.className = 'chat-message bot';
@@ -178,6 +205,11 @@ async function handleChat(event) {
   input.disabled = false;
   input.style.opacity = '1';
   input.focus();
+}
+
+function sendQuickQuestion(question) {
+  document.getElementById('userInput').value = question;
+  document.querySelector('.chat-input button').click();
 }
 </script>
 
