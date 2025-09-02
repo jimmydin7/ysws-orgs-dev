@@ -26,7 +26,12 @@ def log_activity(username, action, details=None):
         'details': details
     }
     logs.append(log_entry)
+
+    if len(logs) > 200:
+        logs = logs[-200:]
+
     save_json_file(LOGS_FILE, logs)
+
 
 def load_json_file(filename):
     try:
@@ -34,6 +39,7 @@ def load_json_file(filename):
             return json.load(f)
     except FileNotFoundError:
         return []
+
 
 def save_json_file(filename, data):
     with open(filename, 'w') as f:
