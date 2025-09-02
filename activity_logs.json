@@ -1012,5 +1012,77 @@
     "username": "dev",
     "action": "accessed project summary",
     "details": null
+  },
+  {
+    "timestamp": "2025-09-01 19:48:10.510273",
+    "username": "dev",
+    "action": "logged in",
+    "details": null
+  },
+  {
+    "timestamp": "2025-09-01 19:48:10.515421",
+    "username": "dev",
+    "action": "opened the app",
+    "details": null
+  },
+  {
+    "timestamp": "2025-09-01 19:48:17.387086",
+    "username": "dev",
+    "action": "accessed dns github generator",
+    "details": null
+  },
+  {
+    "timestamp": "2025-09-01 19:48:43.522142",
+    "username": "dev",
+    "action": "generated dns config",
+    "details": "subdomain: swoop.hackclub.com (Vercel)"
+  },
+  {
+    "timestamp": "2025-09-01 19:49:01.052939",
+    "username": "dev",
+    "action": "accessed dns github generator",
+    "details": null
+  },
+  {
+    "timestamp": "2025-09-01 19:49:25.809031",
+    "username": "dev",
+    "action": "generated dns config",
+    "details": "subdomain: arsenic.hackclub.com (GitHub Pages)"
+  },
+  {
+    "timestamp": "2025-09-01 19:50:21.656661",
+    "username": "dev",
+    "action": "accessed dns github generator",
+    "details": null
+  },
+  {
+    "timestamp": "2025-09-01 19:50:47.770479",
+    "username": "dev",
+    "action": "generated dns config",
+    "details": "subdomain: swoop.hackclub.com (Vercel)"
+  },
+  {
+    "timestamp": "2025-09-01 19:51:04.245074",
+    "username": "dev",
+    "action": "accessed dns github generator",
+    "details": null
+  },
+  {
+    "timestamp": "2025-09-01 19:51:29.665922",
+    "username": "dev",
+    "action": "generated dns config",
+    "details": "subdomain: arsenic.hackclub.com (GitHub Pages)"
+  },
+  {
+    "timestamp": "2025-09-01 19:52:26.554943",
+    "username": "dev",
+    "action": "accessed dns github generator",
+    "details": null
+  },
+  {
+    "timestamp": "2025-09-01 19:52:54.228797",
+    "username": "dev",
+    "action": "generated dns config",
+    "details": "subdomain: test.hackclub.com"
   }
 ]
