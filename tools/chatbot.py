@@ -1162,8 +1162,6 @@ then you can modify the HCB organization settings to add allowed ids
 For help, go to the slack channel #hcb on slack.
 
 
-
-
 Hack Club Internship:
 This is how to get hack club internship: Build really cool things, contribute to Hack Club through open source or through running a great and actually good Hack Club / hackathon, be a kind and model member of the community, and staff will eventually start to loop you in on projects. Those projects may turn into internships. This is usually a 1-2 year process.
 """

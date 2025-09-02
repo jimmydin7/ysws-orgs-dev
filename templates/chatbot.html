@@ -165,7 +165,7 @@
     </div>
 
     <form class="chat-input" onsubmit="handleChat(event)">
-      <input type="text" id="userInput" placeholder="Type  your question..." required />
+      <input type="text" id="userInput" placeholder="Type your question..." required />
       <button type="submit">Send</button>
     </form>
   </div>
@@ -176,17 +176,24 @@ async function handleChat(event) {
   const input = document.getElementById('userInput');
   const chatWindow = document.getElementById('chatWindow');
 
-  // disable input + quick buttons
   input.disabled = true;
   input.style.opacity = '0.5';
   toggleQuickButtons(true);
+
 
   const userMessage = document.createElement('div');
   userMessage.className = 'chat-message user';
   userMessage.textContent = input.value;
   chatWindow.appendChild(userMessage);
-
   chatWindow.scrollTop = chatWindow.scrollHeight;
+
+
+  const typingMessage = document.createElement('div');
+  typingMessage.className = 'chat-message bot';
+  typingMessage.textContent = "Typing...";
+  chatWindow.appendChild(typingMessage);
+  chatWindow.scrollTop = chatWindow.scrollHeight;
+
 
   const res = await fetch('/chat', {
     method: 'POST',
@@ -196,14 +203,9 @@ async function handleChat(event) {
 
   const text = await res.text();
 
-  const botMessage = document.createElement('div');
-  botMessage.className = 'chat-message bot';
-  botMessage.innerHTML = text;
-  chatWindow.appendChild(botMessage);
 
-  chatWindow.scrollTop = chatWindow.scrollHeight;
+  typingMessage.textContent = text;
 
-  // reset input
   input.value = '';
   input.disabled = false;
   input.style.opacity = '1';
@@ -213,8 +215,9 @@ async function handleChat(event) {
 }
 
 function sendQuickQuestion(question) {
-  document.getElementById('userInput').value = question;
-  document.querySelector('.chat-input button').click();
+  const input = document.getElementById('userInput');
+  input.value = question;
+  handleChat(new Event("submit")); // trigger the same flow
 }
 
 function toggleQuickButtons(disable) {
@@ -225,7 +228,6 @@ function toggleQuickButtons(disable) {
     btn.style.cursor = disable ? 'not-allowed' : 'pointer';
   });
 }
-
 </script>
 
 </body>
