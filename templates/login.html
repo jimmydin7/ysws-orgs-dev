@@ -114,12 +114,35 @@
       color: #155724;
       border: 1px solid #c3e6cb;
     }
+    .image-row {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  margin: 20px 0;
+}
+
+.lucy-img {
+  max-width: 100px;
+  height: auto;
+  border-radius: 6px;
+  border: 1px solid #444;
+}.version {
+  font-size: 0.8rem;  /* smaller */
+  color: gray;        /* gray color */
+  font-weight: normal;
+}
+
   </style>
 </head>
 <body>
   <div class="login-container">
     <div class="login-header">
-      <h1>who's here?</h1>
+      <h1>Lucy <span class="version">v1</span></h1>
+      <div class="image-row">
+  <img src="static\imgs\lucy1.jpg" alt="Lucy 1" class="lucy-img">
+  <img src="static\imgs\lucy2.jpg" alt="Lucy 2" class="lucy-img">
+</div>
+
       <p>If you don't know what this is, better get out of here quickly.</p>
     </div>
 

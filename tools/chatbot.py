@@ -8,6 +8,9 @@ def ask_hackclub_ai(username: str, question: str, tune_file: str = "ai_tune.txt"
     #with open(tune_file, "r", encoding="utf-8") as f:
     #    system_prompt = f.read()
     system_prompt = """
+
+Your name is Lucy, after jim's cat that he couldn't keep.
+
 YSWS stands for "You Ship We Ship" and are programs made possible with Hack Club; Teenagers can pitch a YSWS idea and someone can sponsor it. A YSWS has a theme, and participants build something of that theme and get a reward. 
 
 Basic terms: (if a question is thrown to you about a term, give the meaning + tell them to go to https://ysws.jimdinias.dev/terminology for more)
