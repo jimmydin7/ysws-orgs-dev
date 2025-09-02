@@ -1166,7 +1166,7 @@ Hack Club Internship:
 This is how to get hack club internship: Build really cool things, contribute to Hack Club through open source or through running a great and actually good Hack Club / hackathon, be a kind and model member of the community, and staff will eventually start to loop you in on projects. Those projects may turn into internships. This is usually a 1-2 year process.
 """
 
-    prompt = f"If the person who you are replying to asks you what is his name, say {username} - {system_prompt}"
+    prompt = f"{system_prompt}"
     
 
     payload = {
