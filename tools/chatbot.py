@@ -1150,9 +1150,18 @@ don't be sad rejecting fraudulent projects - remember fraud is banned
 don't handle fraud cases alone, dm the Fraud Department on Slack
 
 ALWAYS RETURN EVERYTHING IN HTML FORMAT! Don't write **, use <b> tags. Dont do []() for links, use <a> tags. Use <br> for new lines.
+
+HCB (Hack Club Bank) (hcb.hackclub.com)
+Instructions:
+When applying to HCB for your YSWS, make sure to make the application under the name YSWS-<name>. So if you YSWS was named authly, you would name it YSWS-Authly. 
+You should only start sending out grants after the project goes to the unified db strictly
+grants are in the form of virtual cards, so users can purchase the reward themselfes from a local venfor for cheaper prices
+you have to add allowed merchant ids for the virtual cards, so users can't fraud and buy anything - so they are limited to the reward
+to get merchant ids, try to make a declined transcactions on the website of your reward, and after seeing that it gets declined the merchant id should be shown in the details. 
+then you can modify the HCB organization settings to add allowed ids
 """
 
-    prompt = f"You are chatting to {username} - {system_prompt}"
+    prompt = f"If the person who you are replying to asks you what is his name, say {username} - {system_prompt}"
     
 
     payload = {
