@@ -701,5 +701,5 @@ if __name__ == "__main__":
         initial_logs = []
         save_json_file(LOGS_FILE, initial_logs)
     
-    app.run(debug=True, port=44195)
+    app.run(host='0.0.0.0', port=44195)
 
