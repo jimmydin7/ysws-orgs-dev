@@ -245,6 +245,10 @@
     <a href="/admin/logs" style="display: inline-block; margin: 15px; padding: 10px 20px; background: #d4a373; color: #000; text-decoration: none; border-radius: 5px; font-weight: bold; font-family: 'Courier New', monospace;">
         <i class="fas fa-terminal"></i> View Activity Logs
       </a>
+      <div id="system-stats" 
+     style="display: inline-block; margin: 15px; padding: 10px 20px; background: #7f8c8d; color: #fff; border-radius: 5px; font-weight: bold; font-family: 'Courier New', monospace;">
+    <i class="fas fa-microchip"></i> Loading...
+</div>
 
     <div class="admin-header">
       <h1>Admin Panel</h1>
@@ -364,5 +368,17 @@
   <footer>
     made with <3 by <b>jim</b>
   </footer>
+  <script>
+    async function updateStats() {
+    const res = await fetch('/stats');
+    const data = await res.json();
+    document.getElementById('system-stats').innerHTML = 
+        `<i class="fas fa-microchip"></i> RAM: ${data.ram} | Temp: ${data.temp}`;
+}
+
+
+setInterval(updateStats, 2000);
+updateStats();
+  </script>
 </body>
 </html>

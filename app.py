@@ -8,6 +8,7 @@ import os
 import secrets
 import json
 from tools.chatbot import ask_hackclub_ai
+import psutil
 
 app = Flask(__name__)
 app.secret_key = '6294d6140ad5b58e8352a1e620d2d845'
@@ -16,6 +17,27 @@ app.secret_key = '6294d6140ad5b58e8352a1e620d2d845'
 KEYS_FILE = 'admin_keys.json'
 USERS_FILE = 'users.json'
 LOGS_FILE = 'activity_logs.json'
+
+def get_ram_usage():
+    ram = psutil.virtual_memory()
+    used = ram.used / (1024 ** 2)     
+    total = ram.total / (1024 ** 2)    
+    return f"{used:.0f} MB / {total:.0f} MB"
+
+def get_cpu_temp():
+    try:
+        with open("/sys/class/thermal/thermal_zone0/temp", "r") as f:
+            temp = int(f.read()) / 1000  
+        return f"{temp:.1f}°C"
+    except FileNotFoundError:
+        return "N/A"
+
+@app.route("/stats")
+def stats():
+    return jsonify({
+        "ram": get_ram_usage(),
+        "temp": get_cpu_temp()
+    })
 
 def log_activity(username, action, details=None):
     logs = load_json_file(LOGS_FILE)
