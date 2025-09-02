@@ -165,7 +165,7 @@
     </div>
 
     <form class="chat-input" onsubmit="handleChat(event)">
-      <input type="text" id="userInput" placeholder="Type your question..." required />
+      <input type="text" id="userInput" placeholder="Type  your question..." required />
       <button type="submit">Send</button>
     </form>
   </div>
@@ -208,8 +208,13 @@ async function handleChat(event) {
 }
 
 function sendQuickQuestion(question) {
+  const quickactionbuts = document.getElementsByClassName('quick-questions')
+  quickactionbuts.disabled = true;
+  quickactionbuts.style.opacity = '0.5';
   document.getElementById('userInput').value = question;
   document.querySelector('.chat-input button').click();
+  quickactionbuts.disabled = false;
+  quickactionbuts.style.opacity = '1';
 }
 </script>
 
