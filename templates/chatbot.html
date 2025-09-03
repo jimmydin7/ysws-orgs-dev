@@ -204,7 +204,7 @@ async function handleChat(event) {
   const text = await res.text();
 
 
-  typingMessage.textContent = text;
+  typingMessage.innerHTML = text;
 
   input.value = '';
   input.disabled = false;
