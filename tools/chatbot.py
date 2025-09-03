@@ -1,13 +1,16 @@
 import requests
 import json
 import re
+from utils.date import get_date
 
 def ask_hackclub_ai(username: str, question: str, tune_file: str = "ai_tune.txt") -> str:
 
 
     #with open(tune_file, "r", encoding="utf-8") as f:
     #    system_prompt = f.read()
-    system_prompt = """
+    system_prompt = f"""
+
+The current date is { get_date }!
 
 Your name is Lucy, after jim's cat that he couldn't keep.
 
