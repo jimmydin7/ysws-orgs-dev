@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Commits/Hours Ratio - YSWS Organizer Panel</title>
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="static/css/index.css">
+  <link rel="stylesheet" href="static/css/catalog.css">
+</head>
+<body>
+  <div class="form-container">
+    <div class="nav-links">
+      <a href="/">← Back to Home</a>
+      <a href="/logout">Logout</a>
+    </div>
+
+    <h1>FAQ response generator</h1>
+    <p>Generate responses based on your YSWS's FAQ in seconds</p>
+
+    <form method="POST" action="/faq">
+  <div class="form-group">
+    <label for="faq">FAQ *</label>
+  <textarea id="faq" name="faq" rows="15" required placeholder="paste your long silly FAQ that nobody reads here"style="width: 100%; padding: 10px; font-family: 'Fira Code', monospace; font-size: 14px;"></textarea>
+</div>
+
+  <div class="form-group">
+    <label for="question">User question *</label>
+    <input type="text" id="question" name="question" required placeholder="Is ts double dippable? What rewards can I get?">
+  </div>
+
+  <div class="form-group">
+    <label for="answer_type">Answer type *</label>
+    <select id="answer_type" name="answer_type" required>
+      <option value="professional">Professional</option>
+      <option value="funny">Funny</option>
+      <option value="unprofessional">Unprofessional</option>
+    </select>
+  </div>
+
+  <button type="submit" class="btn-primary">Generate response</button>
+</form>
+
+
+</body>
+</html>

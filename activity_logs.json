@@ -1,167 +1,5 @@
 [
   {
-    "timestamp": "2025-08-31 00:05:04.749310",
-    "username": "jim",
-    "action": "logged in",
-    "details": null
-  },
-  {
-    "timestamp": "2025-08-31 00:05:04.775202",
-    "username": "jim",
-    "action": "opened the app",
-    "details": null
-  },
-  {
-    "timestamp": "2025-08-31 00:05:09.527303",
-    "username": "jim",
-    "action": "accessed dns generator",
-    "details": null
-  },
-  {
-    "timestamp": "2025-08-31 00:18:17.475011",
-    "username": "jim",
-    "action": "opened the app",
-    "details": null
-  },
-  {
-    "timestamp": "2025-08-31 00:19:18.350373",
-    "username": "jim",
-    "action": "opened the app",
-    "details": null
-  },
-  {
-    "timestamp": "2025-08-31 00:26:31.659253",
-    "username": "jim",
-    "action": "opened the app",
-    "details": null
-  },
-  {
-    "timestamp": "2025-08-31 00:26:36.678392",
-    "username": "jim",
-    "action": "accessed dns github generator",
-    "details": null
-  },
-  {
-    "timestamp": "2025-08-31 00:27:10.336072",
-    "username": "jim",
-    "action": "generated dns config",
-    "details": "subdomain: authly.hackclub.com"
-  },
-  {
-    "timestamp": "2025-08-31 00:27:45.226958",
-    "username": "jim",
-    "action": "generated dns config",
-    "details": "subdomain: authly.hackclub.com"
-  },
-  {
-    "timestamp": "2025-08-31 00:29:56.386283",
-    "username": "jim",
-    "action": "generated dns config",
-    "details": "subdomain: authly.hackclub.com"
-  },
-  {
-    "timestamp": "2025-08-31 00:30:57.652301",
-    "username": "jim",
-    "action": "generated dns config",
-    "details": "subdomain: authly.hackclub.com"
-  },
-  {
-    "timestamp": "2025-08-31 00:40:54.202824",
-    "username": "jim",
-    "action": "opened the app",
-    "details": null
-  },
-  {
-    "timestamp": "2025-08-31 00:40:55.540331",
-    "username": "jim",
-    "action": "accessed admin logs",
-    "details": null
-  },
-  {
-    "timestamp": "2025-08-31 00:41:26.230027",
-    "username": "jim",
-    "action": "accessed admin logs",
-    "details": null
-  },
-  {
-    "timestamp": "2025-08-31 00:41:57.519892",
-    "username": "jim",
-    "action": "accessed admin logs",
-    "details": null
-  },
-  {
-    "timestamp": "2025-08-31 00:42:24.585505",
-    "username": "jim",
-    "action": "accessed admin logs",
-    "details": null
-  },
-  {
-    "timestamp": "2025-08-31 00:42:28.265393",
-    "username": "jim",
-    "action": "accessed admin panel",
-    "details": null
-  },
-  {
-    "timestamp": "2025-08-31 00:42:29.247348",
-    "username": "jim",
-    "action": "accessed admin logs",
-    "details": null
-  },
-  {
-    "timestamp": "2025-08-31 00:43:00.204048",
-    "username": "jim",
-    "action": "accessed admin logs",
-    "details": null
-  },
-  {
-    "timestamp": "2025-08-31 00:43:08.974454",
-    "username": "jim",
-    "action": "accessed admin logs",
-    "details": null
-  },
-  {
-    "timestamp": "2025-08-31 00:43:09.731341",
-    "username": "jim",
-    "action": "accessed admin panel",
-    "details": null
-  },
-  {
-    "timestamp": "2025-08-31 00:43:12.592787",
-    "username": "jim",
-    "action": "opened the app",
-    "details": null
-  },
-  {
-    "timestamp": "2025-08-31 00:43:14.145879",
-    "username": "jim",
-    "action": "accessed admin logs",
-    "details": null
-  },
-  {
-    "timestamp": "2025-08-31 00:43:15.956463",
-    "username": "jim",
-    "action": "accessed admin panel",
-    "details": null
-  },
-  {
-    "timestamp": "2025-08-31 00:43:24.688989",
-    "username": "jim",
-    "action": "accessed admin panel",
-    "details": null
-  },
-  {
-    "timestamp": "2025-08-31 00:43:26.237608",
-    "username": "jim",
-    "action": "accessed admin panel",
-    "details": null
-  },
-  {
-    "timestamp": "2025-08-31 00:43:26.557318",
-    "username": "jim",
-    "action": "accessed admin panel",
-    "details": null
-  },
-  {
     "timestamp": "2025-08-31 00:43:26.855333",
     "username": "jim",
     "action": "accessed admin panel",
@@ -1233,6 +1071,132 @@
     "timestamp": "2025-09-02 23:28:00.080337",
     "username": "dev",
     "action": "opened the app",
+    "details": null
+  },
+  {
+    "timestamp": "2025-09-03 13:36:20.750314",
+    "username": "dev",
+    "action": "logged in",
+    "details": null
+  },
+  {
+    "timestamp": "2025-09-03 13:36:20.758518",
+    "username": "dev",
+    "action": "opened the app",
+    "details": null
+  },
+  {
+    "timestamp": "2025-09-03 13:36:26.640473",
+    "username": "dev",
+    "action": "accessed faq answer generator",
+    "details": null
+  },
+  {
+    "timestamp": "2025-09-03 13:36:43.781604",
+    "username": "dev",
+    "action": "accessed faq answer generator",
+    "details": null
+  },
+  {
+    "timestamp": "2025-09-03 13:36:44.401934",
+    "username": "dev",
+    "action": "accessed faq answer generator",
+    "details": null
+  },
+  {
+    "timestamp": "2025-09-03 13:36:44.779879",
+    "username": "dev",
+    "action": "accessed faq answer generator",
+    "details": null
+  },
+  {
+    "timestamp": "2025-09-03 13:36:45.155265",
+    "username": "dev",
+    "action": "accessed faq answer generator",
+    "details": null
+  },
+  {
+    "timestamp": "2025-09-03 13:36:51.092659",
+    "username": "dev",
+    "action": "accessed faq answer generator",
+    "details": null
+  },
+  {
+    "timestamp": "2025-09-03 13:37:58.051685",
+    "username": "dev",
+    "action": "accessed faq answer generator",
+    "details": null
+  },
+  {
+    "timestamp": "2025-09-03 13:37:58.957289",
+    "username": "dev",
+    "action": "accessed faq answer generator",
+    "details": null
+  },
+  {
+    "timestamp": "2025-09-03 13:37:59.145112",
+    "username": "dev",
+    "action": "accessed faq answer generator",
+    "details": null
+  },
+  {
+    "timestamp": "2025-09-03 13:37:59.342409",
+    "username": "dev",
+    "action": "accessed faq answer generator",
+    "details": null
+  },
+  {
+    "timestamp": "2025-09-03 13:37:59.523076",
+    "username": "dev",
+    "action": "accessed faq answer generator",
+    "details": null
+  },
+  {
+    "timestamp": "2025-09-03 13:37:59.718258",
+    "username": "dev",
+    "action": "accessed faq answer generator",
+    "details": null
+  },
+  {
+    "timestamp": "2025-09-03 13:38:31.130469",
+    "username": "dev",
+    "action": "accessed faq answer generator",
+    "details": null
+  },
+  {
+    "timestamp": "2025-09-03 13:38:31.891664",
+    "username": "dev",
+    "action": "accessed faq answer generator",
+    "details": null
+  },
+  {
+    "timestamp": "2025-09-03 13:38:32.392566",
+    "username": "dev",
+    "action": "accessed faq answer generator",
+    "details": null
+  },
+  {
+    "timestamp": "2025-09-03 13:38:50.438395",
+    "username": "dev",
+    "action": "accessed faq answer generator",
+    "details": null
+  },
+  {
+    "timestamp": "2025-09-03 13:38:51.096529",
+    "username": "dev",
+    "action": "accessed faq answer generator",
+    "details": null
+  },
+  {
+    "timestamp": "2025-09-03 13:39:21.978031",
+    "username": "dev",
+    "action": "accessed faq answer generator",
+    "details": null
+  },
+  {
+    "timestamp": "2025-09-03 13:39:50.207466",
+    "username": "dev",
+    "action": "accessed faq answer generator",
     "details": null
   }
 ]

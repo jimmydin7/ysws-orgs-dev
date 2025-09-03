@@ -670,6 +670,12 @@ def dns_github():
     return render_template('dns_github.html', username=session['username'])
 
 
+@app.route("/faq")
+@login_required
+def faq():
+    log_activity(session['username'], 'accessed faq answer generator')
+    return render_template('faq_answer.html')
+
 @app.route("/hcb")
 @login_required
 def hcb():
