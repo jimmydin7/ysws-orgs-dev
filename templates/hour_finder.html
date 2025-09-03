@@ -6,7 +6,19 @@
   <title>YSWS Project Finder</title>
   <link href="https://fonts.googleapis.com/css2?family=Fira+Code&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="static/css/index.css" />
-  <link rel="stylesheet" href="static\css\catalog.css">
+  <link rel="stylesheet" href="static/css/catalog.css">
+  <style>
+    .hidden {
+      display: none;
+    }
+    .toggle-group {
+      margin: 15px 0;
+    }
+    .toggle-group label {
+      margin-right: 15px;
+      cursor: pointer;
+    }
+  </style>
 </head>
 <body>
   <div class="form-container">
@@ -16,7 +28,7 @@
     </div>
 
     <h1>YSWS Project Finder</h1>
-    <p>Enter a slack ID and get their project list and hours worked on each project.</p>
+    <p>Enter a slack ID and choose whether to fetch all projects or a specific project.</p>
 
     {% if error %}
       <div class="error">{{ error }}</div>
@@ -28,32 +40,57 @@
           <label for="id">Slack Id*</label>
           <input type="text" id="id" name="id" required placeholder="U091HBJLQS2">
         </div>
-        <div class="form-group">
-          <label for="projectname">Project Name</label>
-          <input type="text" id="projectname" name="projectname" placeholder="Ysws Admin Panel (leave blank to get all projects)">
+
+
+        <div class="form-group toggle-group">
+          <label>
+            <input type="radio" name="project_option" value="all" checked onclick="toggleProjectInput(false)">
+            Get all projects
+          </label>
+          <label>
+            <input type="radio" name="project_option" value="specific" onclick="toggleProjectInput(true)">
+            Get specific project
+          </label>
         </div>
+
+        <div class="form-group hidden" id="project-input">
+          <label for="projectname">Project Name</label>
+          <input type="text" id="projectname" name="projectname" placeholder="Ysws Admin Panel">
+        </div>
+
         <button type="submit" class="btn-primary">Get hackatime data</button>
       </form>
-    <p>{{ hackatime_data.error }}</p>
-        {% else %}
-        <div class="result-section">
-            <h2 style="color: #000000;">User: {{ hackatime_data.data.username }}</h2>
-            
-            <table>
-                <tr>
-                    <th style="color: #000000;">Project</th>
-                    <th style="color: #000000;">Hours</th>
-                </tr style="color: #000000;">
-                {% for project in hackatime_data.data.projects %}
-                <tr>
-                    <td style="color: #000000;">{{ project.name }}</td>
-                    <td style="color: #000000;">{{ project.text }}</td>
-                </tr>
-                {% endfor %}
-            </table>
-            
-        </div>
-        {% endif %}
-    </div>
+
+      <p>{{ hackatime_data.error }}</p>
+    {% else %}
+      <div class="result-section">
+          <h2 style="color: #000000;">User: {{ hackatime_data.data.username }}</h2>
+          
+          <table>
+              <tr>
+                  <th style="color: #000000;">Project</th>
+                  <th style="color: #000000;">Hours</th>
+              </tr>
+              {% for project in hackatime_data.data.projects %}
+              <tr>
+                  <td style="color: #000000;">{{ project.name }}</td>
+                  <td style="color: #000000;">{{ project.text }}</td>
+              </tr>
+              {% endfor %}
+          </table>
+      </div>
+    {% endif %}
+  </div>
+
+  <script>
+    function toggleProjectInput(show) {
+      const projectInput = document.getElementById("project-input");
+      if (show) {
+        projectInput.classList.remove("hidden");
+      } else {
+        projectInput.classList.add("hidden");
+      }
+    }
+  </script>
 </body>
 </html>
