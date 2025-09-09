@@ -114,7 +114,7 @@ def main():
 @app.route("/login", methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
-        admin_key = request.form.get('admin_key')
+        admin_key = request.form.get('admin_key', '').strip()
         
         if admin_key:
             keys = load_admin_keys()
