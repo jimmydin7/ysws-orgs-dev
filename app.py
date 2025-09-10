@@ -113,6 +113,9 @@ def main():
 
 @app.route("/login", methods=['GET', 'POST'])
 def login():
+
+    show_community_modal = "community" in request.args
+
     if request.method == 'POST':
         admin_key = request.form.get('admin_key', '').strip()
         
@@ -132,7 +135,7 @@ def login():
             else:
                 flash('Invalid admin key', 'error')
     
-    return render_template('login.html')
+    return render_template('login.html', show_community_modal=show_community_modal)
 
 @app.route("/team")
 @login_required
