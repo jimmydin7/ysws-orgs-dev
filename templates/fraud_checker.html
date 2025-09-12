@@ -1,42 +1,18 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <meta http-equiv="refresh" content="0;url=https://dash.fraud.land/">
+  <script>window.location.replace("https://dash.fraud.land/");</script>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Fraud Status Checker</title>
   <link href="https://fonts.googleapis.com/css2?family=Fira+Code&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="static/css/index.css" />
-  <link rel="stylesheet" href="static\css\catalog.css">
+  <link rel="stylesheet" href="static/css/catalog.css" />
 </head>
 <body>
-  <div class="form-container">
-    <div class="nav-links">
-      <a href="/">← Back to Home</a>
-      <a href="/logout">Logout</a>
-    </div>
-
-    <h1>YSWS Fraud Checker</h1>
-    <p>Enter a slack ID and get user's trust log</p>
-
-    {% if error %}
-      <div class="error">{{ error }}</div>
-    {% endif %}
-
-    {% if not show_result %}
-      <form method="POST" action="/fraud_checker">
-        <div class="form-group">
-          <label for="id">Slack Id*</label>
-          <input type="text" id="id" name="id" required placeholder="U091HBJLQS2 (you can get it on #what-is-my-slack-id)">
-        </div>
-        <button type="submit" class="btn-primary">Get Banned Status</button>
-      </form>
-    <p>{{ hackatime_data.error }}</p>
-        {% else %}
-        <div class="result-section">
-            <h2 style="color: #000000;">User: {{ hackatime_data.data.username }}</h2>
-            <h3 style="color: #000000;">Banned: {{ "Yes" if hackatime_data.trust_factor.trust_value == 1 else "No" }}</h3>
-        </div>
-        {% endif %}
-    </div>
+  <noscript>
+    <p>Redirecting to <a href="https://dash.fraud.land/">https://dash.fraud.land/</a>. If you are not redirected automatically, click the link.</p>
+  </noscript>
 </body>
 </html>
