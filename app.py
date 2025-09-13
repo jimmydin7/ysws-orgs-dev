@@ -520,7 +520,7 @@ def automation_hackatime():
 @app.route("/chatbot")
 @login_required
 def chatbot():
-    log_activity(session['username'], 'accessed chatbot')
+    log_activity(session['username'], 'accessed chatbot') #we somehow need to include the prompt in audit logs (FBI)
     return render_template('chatbot.html', username=session['username'])
 
 
@@ -528,6 +528,7 @@ def chatbot():
 @login_required
 def chat():
     user_input = request.json.get("message")
+    log_activity(session['username'], f'asked chatbot: {user_input}')
     username = session['username']
 
     ai_response = ask_hackclub_ai(username=username, question=user_input)
