@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Commits/Hours Ratio - YSWS Organizer Panel</title>
+  <title>Chatbot Creator</title>
   <link href="https://fonts.googleapis.com/css2?family=Fira+Code&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="static/css/index.css">
   <link rel="stylesheet" href="static/css/catalog.css">
@@ -15,32 +15,51 @@
       <a href="/logout">Logout</a>
     </div>
 
-    <h1>FAQ response generator</h1>
-    <p>Generate responses based on your YSWS's FAQ in seconds</p>
+    <h1>Chatbot Creator</h1>
+    <p>Create a chatbot trained on your YSWS's FAQ</p>
 
     <form method="POST" action="/faq">
   <div class="form-group">
     <label for="faq">FAQ *</label>
-  <textarea id="faq" name="faq" rows="15" required placeholder="paste your long silly FAQ that nobody reads here"style="width: 100%; padding: 10px; font-family: 'Fira Code', monospace; font-size: 14px;"></textarea>
-</div>
-
-  <div class="form-group">
-    <label for="question">User question *</label>
-    <input type="text" id="question" name="question" required placeholder="Is ts double dippable? What rewards can I get?">
+    <textarea id="faq" name="faq" rows="15" required placeholder="paste your long silly FAQ that nobody reads here" style="width: 100%; padding: 10px; font-family: 'Fira Code', monospace; font-size: 14px;"></textarea>
   </div>
 
   <div class="form-group">
-    <label for="answer_type">Answer type *</label>
-    <select id="answer_type" name="answer_type" required>
-      <option value="professional">Professional</option>
-      <option value="funny">Funny</option>
-      <option value="unprofessional">Unprofessional</option>
-    </select>
+    <label for="question">YSWS name *</label>
+    <input type="text" id="question" name="question" required placeholder="(this will be used for the public shareable link)">
   </div>
 
-  <button type="submit" class="btn-primary">Generate response</button>
+  <div class="form-group">
+    <label>Generated Link</label>
+    <div style="display: flex; align-items: center; gap: 8px; margin-top: 5px;">
+      <input type="text" id="generatedLink" readonly style="flex: 1; padding: 8px; font-family: 'Fira Code', monospace; font-size: 14px;">
+      <button type="button" onclick="copyLink()" style="padding: 8px 12px; cursor: pointer;">Copy</button>
+    </div>
+  </div>
+
+  <button type="submit" class="btn-primary">Next</button>
 </form>
 
+<script>
+  const input = document.getElementById("question");
+  const generatedLink = document.getElementById("generatedLink");
+
+  input.addEventListener("input", () => {
+    const value = input.value.trim();
+    if (value) {
+      generatedLink.value = `https://ysws.org/chatbot/${encodeURIComponent(value)}`;
+    } else {
+      generatedLink.value = "";
+    }
+  });
+
+  function copyLink() {
+    if (!generatedLink.value) return;
+    generatedLink.select();
+    document.execCommand("copy");
+    alert("Copied: " + generatedLink.value);
+  }
+</script>
 
 </body>
 </html>
