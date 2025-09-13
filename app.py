@@ -9,14 +9,22 @@ import secrets
 import json
 from tools.chatbot import ask_hackclub_ai
 import psutil
+import sys
 
 app = Flask(__name__)
 app.secret_key = '6294d6140ad5b58e8352a1e620d2d845'
 
 # File paths
-KEYS_FILE = '/home/jim/admin_keys.json'
-USERS_FILE = '/home/jim/users.json'
-LOGS_FILE = '/home/jim/activity_logs.json'
+
+if "--prod" in sys.argv:
+
+    KEYS_FILE = '/home/jim/admin_keys.json'
+    USERS_FILE = '/home/jim/users.json'
+    LOGS_FILE = '/home/jim/activity_logs.json'
+else:
+    KEYS_FILE = 'admin_keys.json'
+    USERS_FILE = 'users.json'
+    LOGS_FILE = 'activity_logs.json'
 
 def get_ram_usage():
     ram = psutil.virtual_memory()

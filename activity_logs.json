@@ -1,0 +1,50 @@
+[
+  {
+    "timestamp": "2025-09-13 23:46:11.242356",
+    "username": "dev",
+    "action": "opened the app",
+    "details": null
+  },
+  {
+    "timestamp": "2025-09-13 23:46:16.362471",
+    "username": "dev",
+    "action": "accessed admin panel",
+    "details": null
+  },
+  {
+    "timestamp": "2025-09-13 23:46:17.595580",
+    "username": "dev",
+    "action": "opened the app",
+    "details": null
+  },
+  {
+    "timestamp": "2025-09-13 23:46:39.689425",
+    "username": "dev",
+    "action": "opened the app",
+    "details": null
+  },
+  {
+    "timestamp": "2025-09-13 23:46:44.616345",
+    "username": "dev",
+    "action": "opened the app",
+    "details": null
+  },
+  {
+    "timestamp": "2025-09-13 23:46:54.063112",
+    "username": "dev",
+    "action": "opened the app",
+    "details": null
+  },
+  {
+    "timestamp": "2025-09-13 23:46:56.708427",
+    "username": "dev",
+    "action": "opened the app",
+    "details": null
+  },
+  {
+    "timestamp": "2025-09-13 23:47:02.314950",
+    "username": "dev",
+    "action": "opened the app",
+    "details": null
+  }
+]
