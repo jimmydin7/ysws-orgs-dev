@@ -16,7 +16,7 @@ app.secret_key = '6294d6140ad5b58e8352a1e620d2d845'
 
 # File paths
 
-if "--prod" in sys.argv:
+if "--dev" in sys.argv:
 
     
     KEYS_FILE = 'admin_keys.json'
