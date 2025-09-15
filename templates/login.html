@@ -192,9 +192,58 @@
     .modal-close:hover {
       background: #cc0000;
     }
+ #pageContent.blurred {
+  filter: blur(5px);
+  pointer-events: none;
+}
+
+.modal-backdrop#infoModal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.85);
+  display: none;
+  justify-content: center;
+  align-items: center;
+  z-index: 999;
+}
+
+.modal-content-custom {
+  position: relative;
+  background: #111;
+  padding: 30px;
+  border-radius: 10px;
+  max-width: 500px;
+  color: #fff;
+  text-align: center;
+  border: 1px solid #333;
+  z-index: 1000;
+}
+
+.modal-close-x {
+  position: absolute;
+  top: 15px;
+  right: 20px;
+  font-size: 20px;
+  color: red;
+  cursor: pointer;
+}
+
+.info-link {
+  color: gray;
+  text-decoration: underline;
+  font-size: 0.9rem;
+  cursor: pointer;
+  margin-bottom: 10px;
+}
+
+
   </style>
 </head>
 <body>
+<div id="pageContent"></div>
   <div class="login-container">
     <div class="login-header">
       <h1>Lucy <span class="version">v1</span></h1>
@@ -217,6 +266,7 @@
 
     <form method="POST">
       <div class="form-group">
+        <div class="info-link" onclick="openInfoModal()">What is this?</div>
         <label for="admin_key">Admin Key:</label>
         <input type="text" id="admin_key" name="admin_key" required placeholder="dm @jim or ask your PoC to get this">
       </div>
@@ -235,6 +285,15 @@
       <button class="modal-close" onclick="closeModal()">Got it</button>
     </div>
   </div>
+</div>
+  <div class="modal-backdrop" id="infoModal">
+  <div class="modal-content-custom">
+    <div class="modal-close-x" onclick="closeInfoModal()">&#10006;</div>
+    <h2>What is this?</h2>
+    <p>Lucy (ysws.org) is a tool collection for YSWS organizers & reviewers. It includes airtable and HCB automations, hackatime api wrappers, a chatbot finetuned on a 1.5k line prompt that can answer anything about YSWS, HCB and more! (lucy even has FBI audit logs to monitor everything). Around 31 people use this as of 16 Sep 2025 (um also yeah this is named after jim's cat which he couldn't keep)</p>
+  </div>
+</div>
+
 
   <script>
     function closeModal() {
@@ -244,6 +303,16 @@
     {% if show_community_modal %}
       document.getElementById('communityModal').style.display = 'flex';
     {% endif %}
+
+function openInfoModal() {
+  document.getElementById('infoModal').style.display = 'flex';
+  document.getElementById('pageContent').classList.add('blurred');
+}
+
+function closeInfoModal() {
+  document.getElementById('infoModal').style.display = 'none';
+  document.getElementById('pageContent').classList.remove('blurred');
+}
   </script>
 </body>
 </html>
